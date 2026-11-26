@@ -40,7 +40,7 @@
 
   <a class="skip-link" href="#main" data-i18n="skip">Zum Inhalt springen</a>
 
-  <header class="site-header on-hero">
+  <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="#top" aria-label="Rechenbox, zum Seitenanfang">
         <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="6" y="3" width="20" height="26" rx="3"/><rect class="u" x="10" y="8" width="12" height="3" rx="1"/><rect class="u" x="10" y="14" width="12" height="3" rx="1"/><rect class="u" x="10" y="20" width="12" height="3" rx="1"/></svg>
@@ -49,6 +49,7 @@
       <nav class="main-nav" aria-label="Hauptnavigation" data-i18n-attr="aria-label:nav.label">
         <a href="#box" data-i18n="nav.box">Die Box</a>
         <a href="#portal" data-i18n="nav.portal">Portal</a>
+        <a href="#umzug" data-i18n="nav.move">Umzug</a>
         <a href="#ablauf" data-i18n="nav.how">Ablauf</a>
         <a href="#preise" data-i18n="nav.pricing">Preise</a>
         <a href="#faq" data-i18n="nav.faq">Fragen</a>
@@ -252,8 +253,35 @@
       </div>
     </section>
 
+    <!-- MIGRATION -->
+    <section class="section section-alt" id="umzug">
+      <div class="container">
+        <h2 data-i18n="move.title">Umzug von Microsoft 365, Google Workspace oder Ihrem Server</h2>
+        <p class="section-lead" data-i18n="move.lead">Ihre Dateien ziehen auf die Box um. E-Mail und Kalender bleiben bei Ihrem heutigen Anbieter, denn die Box betreibt keinen Mailserver.</p>
+        <div class="compare-wrap moves-wrap" tabindex="0" role="region" aria-label="Was sich mit der Box ändert und was bleibt" data-i18n-attr="aria-label:move.caption">
+          <table class="compare moves">
+            <thead>
+              <tr><th scope="col" data-i18n="move.col.what">Bereich</th><th scope="col" data-i18n="move.col.now">Heute</th><th scope="col" data-i18n="move.col.then">Mit der Box</th></tr>
+            </thead>
+            <tbody>
+                <tr><th scope="row" data-i18n="move.r1">Dateien</th><td data-i18n="move.r1.now">OneDrive, SharePoint, Google Drive, Server oder NAS</td><td data-i18n="move.r1.then">Auf der Box in Ihrem Büro</td></tr>
+                <tr><th scope="row" data-i18n="move.r2">Dateien unterwegs und auf dem Handy</th><td data-i18n="move.r2.now">OneDrive- oder Google-Drive-App</td><td data-i18n="move.r2.then">Sync-App der Box für PC, Mac und Handy</td></tr>
+                <tr><th scope="row" data-i18n="move.r3">E-Mail, Kalender, Kontakte</th><td data-i18n="move.r3.now">Microsoft 365, Google Workspace oder ein anderer Mail-Anbieter</td><td data-i18n="move.r3.then">Bleibt bei Ihrem Anbieter</td></tr>
+                <tr><th scope="row" data-i18n="move.r4">Word, Excel, Outlook</th><td data-i18n="move.r4.now">Microsoft 365</td><td data-i18n="move.r4.then">Bleibt. Die Dateien öffnen Sie von der Box.</td></tr>
+                <tr><th scope="row" data-i18n="move.r5">Besprechungen und Chat</th><td data-i18n="move.r5.now">Teams oder Google Meet</td><td data-i18n="move.r5.then">Bleibt</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="move-notes">
+          <div><h3 data-i18n="move.b1.t">Die Dateien ziehen wir um</h3><p data-i18n="move.b1.d">Wir kopieren Ihre Dateien aus OneDrive, SharePoint, Google Drive oder vom bisherigen Server auf die Box, meist an einem Wochenende. Die Ordnerstruktur bleibt erhalten, die Zugriffsrechte richten wir mit Ihnen ein. Beim alten Anbieter bleiben die Daten liegen, bis Sie geprüft haben, dass alles da ist. Der Umzug ist in der Einrichtung enthalten.</p></div>
+          <div><h3 data-i18n="move.b2.t">E-Mail bleibt bei Ihrem Anbieter</h3><p data-i18n="move.b2.d">Postfächer, Kalender und Kontakte bleiben bei Microsoft 365, Google Workspace oder Ihrem Mail-Anbieter. Outlook und das Handy funktionieren wie bisher. Wenn Sie auch die E-Mails bei einem Schweizer Anbieter haben möchten, besprechen wir das in der Analyse.</p></div>
+          <div><h3 data-i18n="move.b3.t">Die Sync-App ersetzt OneDrive und Google Drive</h3><p data-i18n="move.b3.d">Die Sync-App hält die Ordner der Box auf PC, Mac und Handy aktuell, auch wenn Sie unterwegs sind. Einzelne Dateien oder Ordner geben Sie per Link frei. Den Speicher bei Microsoft oder Google brauchen Sie für Firmendaten danach nicht mehr.</p></div>
+        </div>
+      </div>
+    </section>
+
     <!-- HOW IT WORKS -->
-    <section class="section section-alt" id="ablauf">
+    <section class="section" id="ablauf">
       <div class="container">
         <h2 data-i18n="how.title">So läuft es ab</h2>
         <ol class="steps">
@@ -267,7 +295,7 @@
     </section>
 
     <!-- PRICING -->
-    <section class="section" id="preise">
+    <section class="section section-alt" id="preise">
       <div class="container">
         <h2 data-i18n="pricing.title">Ein fester Preis pro Monat</h2>
         <p class="section-lead" data-i18n="pricing.lead">Im Monatspreis sind Hardware, Software, Backup und Betrieb enthalten. Die Preise gelten exkl. MWST bei 36 Monaten Laufzeit. Pilotkunden erhalten 2027 im ersten Jahr 30&nbsp;% Rabatt.</p>
@@ -385,7 +413,7 @@
     </section>
 
     <!-- FAQ -->
-    <section class="section section-alt" id="faq">
+    <section class="section" id="faq">
       <div class="container narrow">
         <h2 data-i18n="faq.title">Fragen und Antworten</h2>
         <details data-faq="replaces"><summary data-i18n="faq.q1">Was ersetzt die Box?</summary><p data-i18n="faq.a1">Ihren Server, das NAS, die Backup-Lösung, die Firewall und den Wartungsvertrag dafür. Arbeitsplätze, Drucker und Telefonie betreut weiterhin Ihr IT-Partner.</p></details>
@@ -393,7 +421,7 @@
         <details data-faq="failure"><summary data-i18n="faq.q3">Was passiert bei einem Defekt oder Stromausfall?</summary><p data-i18n="faq.a3">Bei Business und Pro arbeiten Sie ohne Unterbruch weiter, und wir ersetzen den defekten Server. Bei Start schicken wir am nächsten Arbeitstag ein vorinstalliertes Ersatzgerät und stellen Ihre Daten aus dem Backup wieder her. Eine USV überbrückt kurze Stromausfälle.</p></details>
         <details data-faq="data"><summary data-i18n="faq.q4">Wo liegen unsere Daten?</summary><p data-i18n="faq.a4">In Ihrem Büro. Auf Wunsch liegt zusätzlich eine verschlüsselte Backup-Kopie in einem Rechenzentrum in der Schweiz. Wir sind vertraglich an Ihr Berufsgeheimnis gebunden.</p></details>
         <details data-faq="portal"><summary data-i18n="faq.q5">Wer richtet neue Mitarbeitende oder Zugriffe ein?</summary><p data-i18n="faq.a5">Sie selbst, im Web-Portal der Box. Eine neue Person anzulegen dauert etwa zwei Minuten. Wenn etwas nicht klappt, helfen wir.</p></details>
-        <details data-faq="m365"><summary data-i18n="faq.q6">Können wir Microsoft 365 behalten?</summary><p data-i18n="faq.a6">Ja. Outlook und Office laufen weiter wie bisher. Die Box übernimmt Dateiablage, Branchensoftware, Backup und Firewall.</p></details>
+        <details data-faq="m365"><summary data-i18n="faq.q6">Können wir Microsoft 365 behalten?</summary><p data-i18n="faq.a6">Ja. E-Mail, Outlook und Office laufen weiter wie bisher, die Box betreibt keinen Mailserver. Sie übernimmt Dateiablage, Branchensoftware, Backup und Firewall.</p></details>
         <details data-faq="setup"><summary data-i18n="faq.q7">Was deckt die Einrichtung ab?</summary><p data-i18n="faq.a7">Analyse, Planung, die fertig eingerichtete Box, Einbau, Datenumzug und zwei Wochen Begleitung danach. Am Montag nach der Umstellung arbeitet Ihr Büro normal weiter.</p></details>
         <details data-faq="noise"><summary data-i18n="faq.q8">Wie laut ist die Box, und was kostet der Strom?</summary><p data-i18n="faq.a8">In der Box arbeiten kompakte Rechner, die deutlich leiser sind als Rackserver. Sie ist auf rund 150 Watt im Betrieb ausgelegt, das sind etwa CHF 30 Strom im Monat.</p></details>
         <details data-faq="buy"><summary data-i18n="faq.q9">Müssen wir die Hardware kaufen?</summary><p data-i18n="faq.a9">Nein, sie ist im Monatspreis enthalten. Wer jährlich im Voraus zahlt, erhält 4&nbsp;% Rabatt. Wer die Hardware lieber kauft, zahlt danach einen tieferen Monatspreis.</p></details>
@@ -403,7 +431,7 @@
     </section>
 
     <!-- SIGNUP -->
-    <section class="section section-signup" id="anmelden">
+    <section class="section section-alt section-signup" id="anmelden">
       <div class="container narrow">
         <h2 data-i18n="form.title">Pilotplatz reservieren</h2>
         <p class="section-lead" data-i18n="form.lead">Die Reservation ist kostenlos und unverbindlich. Wir melden uns innert zwei Arbeitstagen und vereinbaren die Analyse bei Ihnen vor Ort.</p>

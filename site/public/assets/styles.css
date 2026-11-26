@@ -121,12 +121,10 @@ svg use { pointer-events: none; }
 /* ---------- Header ---------- */
 .site-header {
   position: sticky; top: 0; z-index: 50;
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-  backdrop-filter: saturate(1.3) blur(10px);
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: saturate(1.3) blur(14px);
   border-bottom: 1px solid var(--line);
 }
-.js .site-header.on-hero { background: transparent; border-bottom-color: transparent; backdrop-filter: none; }
-.site-header { transition: background-color 0.25s, border-color 0.25s; }
 .header-inner { display: flex; align-items: center; gap: var(--s5); min-height: 62px; }
 .brand { display: inline-flex; align-items: center; gap: var(--s2); font-weight: 720; font-size: 1.15rem; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; }
 .brand-mark { width: 26px; height: 26px; fill: var(--accent); }
@@ -395,13 +393,33 @@ h2 + .reasons, h2 + .steps { margin-top: var(--s7); }
   .portal-nav span { white-space: nowrap; }
 }
 
+/* ---------- Migration ---------- */
+.compare.moves { min-width: 560px; }
+.compare.moves thead th { color: var(--ink-2); font-size: 0.9rem; font-weight: 600; }
+.compare.moves td:nth-child(3) { color: var(--ink); font-weight: 550; }
+/* Phones: each row becomes a block, old place first, then where it lives with the box. */
+@media (max-width: 640px) {
+  .compare.moves { min-width: 0; }
+  .compare.moves thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); }
+  .compare.moves, .compare.moves tbody { display: block; }
+  .compare.moves tr { display: block; padding: var(--s3) var(--s4); border-top: 1px solid var(--line); }
+  .compare.moves tbody tr:first-child { border-top: 0; }
+  .compare.moves tbody th, .compare.moves td { display: block; width: auto; padding: 0; border: 0; background: none; }
+  .compare.moves td { margin-top: var(--s1); }
+  .compare.moves td:nth-child(3)::before { content: "\2192\00a0"; color: var(--ink-2); font-weight: 400; }
+}
+.move-notes { display: grid; gap: var(--s6); margin-top: var(--s7); }
+@media (min-width: 880px) { .move-notes { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s7); } }
+.move-notes h3 { margin-bottom: var(--s2); }
+.move-notes p { color: var(--ink-2); margin: 0; font-size: 0.98rem; }
+
 /* ---------- Steps ---------- */
 .steps { list-style: none; counter-reset: step; padding: 0; margin: 0; display: grid; gap: var(--s6); position: relative; }
 .steps li { counter-increment: step; position: relative; padding-left: 3.25rem; }
 .steps li::before {
   content: counter(step); position: absolute; left: 0; top: -0.15rem; width: 2.25rem; height: 2.25rem; border-radius: 50%;
   display: grid; place-items: center; font-weight: 700; font-variant-numeric: tabular-nums;
-  border: 1.5px solid var(--accent-text); color: var(--accent-text); background: var(--bg-alt);
+  border: 1.5px solid var(--accent-text); color: var(--accent-text); background: var(--bg);
 }
 .steps h3 { margin-bottom: var(--s2); }
 .steps p { color: var(--ink-2); margin: 0; font-size: 0.98rem; }
@@ -511,7 +529,6 @@ h2 + .reasons, h2 + .steps { margin-top: var(--s7); }
 }
 
 /* ---------- Forms ---------- */
-.section-signup { background: var(--bg); }
 form { display: grid; gap: var(--s5); }
 .field-row { display: grid; gap: var(--s5); }
 @media (min-width: 640px) { .field-row { grid-template-columns: 1fr 1fr; } }
