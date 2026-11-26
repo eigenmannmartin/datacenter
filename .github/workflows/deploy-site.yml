@@ -47,7 +47,7 @@ jobs:
 
       - name: Check JavaScript syntax
         run: |
-          for f in public/assets/*.js functions/api/*.js lib/*.js; do node --check "$f"; done
+          for f in public/assets/*.js functions/*.js functions/api/*.js lib/*.js; do node --check "$f"; done
 
       - name: Apply database schema (idempotent)
         run: npx --yes "wrangler@${WRANGLER_VERSION}" d1 execute rechenbox --remote --file=schema.sql --yes
@@ -60,15 +60,24 @@ jobs:
             --commit-hash "${GITHUB_SHA}" \
             --commit-message "$(git log -1 --pretty=%s | head -c 300)"
 
+      # While the pre-launch password gate is on (Pages secret SITE_PASSWORD), the site answers 401
+      # and robots.txt disallows everything; after launch it answers 200 and the API validates input.
       - name: Smoke test
         run: |
           url="https://rechenbox.pages.dev"
           for i in 1 2 3 4 5 6; do
-            code=$(curl -s -o /dev/null -w '%{http_code}' "$url/") && [ "$code" = "200" ] && break
+            code=$(curl -s -o /dev/null -w '%{http_code}' "$url/")
+            { [ "$code" = "200" ] || [ "$code" = "401" ]; } && break
             sleep 10
           done
           echo "Home page: $code"
-          [ "$code" = "200" ]
-          signup=$(curl -s -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d '{}' "$url/api/signup")
-          echo "Sign-up API with an empty form: $signup (expected 422)"
-          [ "$signup" = "422" ]
+          if [ "$code" = "401" ]; then
+            echo "Password gate is on"
+            curl -s "$url/robots.txt" | grep -q "Disallow: /"
+            curl -sI "$url/" | grep -qi "x-robots-tag: noindex"
+          else
+            [ "$code" = "200" ]
+            signup=$(curl -s -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d '{}' "$url/api/signup")
+            echo "Sign-up API with an empty form: $signup (expected 422)"
+            [ "$signup" = "422" ]
+          fi

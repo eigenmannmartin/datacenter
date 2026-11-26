@@ -3,11 +3,25 @@
 A German landing page (with an English toggle) at [rechenbox.ch](https://rechenbox.ch) that tests demand for Rechenbox before any hardware is bought. It shows real prices, lets visitors "reserve a pilot slot" (a fake door that says plainly it is a free, non-binding pilot reservation), and asks qualifying questions. The go/no-go thresholds are in the business plan, section 1b.
 
 - `public/`: static site: `index.html`, `datenschutz.html` (privacy and legal notice), `assets/`
+- `functions/_middleware.js`: pre-launch password gate and `noindex` (see below)
 - `functions/api/`: Cloudflare Pages Functions: `signup` (form step 1), `details` (optional answers, form step 2)
 - `lib/http.js`: shared helpers for the functions
 - `schema.sql`: D1 table `signups`
 
 No cookies. The Schibsted Grotesk font is self-hosted in `public/assets/fonts/` (SIL Open Font License, licence file alongside). Visitor statistics come from Cloudflare Web Analytics, which Cloudflare injects at the edge; the site code contains no tracking. Light and dark mode follow the system; the switch in the header overrides it for the current visit only.
+
+## Pre-launch password gate
+
+Until the marketing campaign starts, the whole site (both `rechenbox.ch` and `rechenbox.pages.dev`) asks for a password, sends `X-Robots-Tag: noindex, nofollow` and serves a `robots.txt` that disallows all crawlers. Any user name works; the password is the Pages secret `SITE_PASSWORD`.
+
+To launch:
+
+```sh
+cd site
+npx wrangler pages secret delete SITE_PASSWORD --project-name rechenbox
+```
+
+then redeploy (Actions → Deploy site → Run workflow). Without the secret the middleware does nothing. Also submit `https://rechenbox.ch` in Google Search Console once it is public.
 
 ## Reading the results
 
@@ -59,8 +73,9 @@ Set up in Cloudflare (account `a1121094b30551cad6cd3d7681e5018a`):
 - Zone `rechenbox.ch`, nameservers `apollo.ns.cloudflare.com` and `kate.ns.cloudflare.com`; always HTTPS, TLS 1.2 minimum, strict SSL
 - DNS: `rechenbox.ch` and `www` as proxied CNAMEs to `rechenbox.pages.dev`; a redirect rule sends `www.rechenbox.ch` to `rechenbox.ch` (301)
 - Web Analytics for `rechenbox.ch`, injected automatically
+- Mail at Infomaniak: MX `mta-gw.infomaniak.ch` (priority 5), SPF `include:spf.infomaniak.ch -all`, DMARC `p=reject`, `autodiscover`/`autoconfig` CNAMEs to `infomaniak.com` (all DNS only, not proxied). DKIM still to add from the Infomaniak Manager
 - D1 database `rechenbox` (EU jurisdiction)
-- Pages project `rechenbox` (production branch `main`) with the D1 binding and both custom domains
+- Pages project `rechenbox` (production branch `main`) with the D1 binding, both custom domains and the `SITE_PASSWORD` secret
 - Account API token `rechenbox-github-deploy` (Pages Write, D1 Write on this account only; expires 2027-11-26), stored as the repository secret `CLOUDFLARE_API_TOKEN` next to `CLOUDFLARE_ACCOUNT_ID`. Renew it before it expires: Manage Account → Account API Tokens.
 
 ## Run locally
