@@ -17,39 +17,39 @@
       themeToLight: "Helles Design einschalten",
       required: "Bitte füllen Sie die markierten Felder aus.",
       email: "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
-      consent: "Bitte bestätigen Sie die Einwilligung zur Datenspeicherung.",
+      consent: "Bitte bestätigen Sie, dass wir Ihre Angaben speichern dürfen.",
       network: "Die Übermittlung hat nicht geklappt. Bitte prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
-      server: "Die Übermittlung hat nicht geklappt. Bitte versuchen Sie es später erneut oder schreiben Sie uns eine E-Mail.",
+      server: "Die Übermittlung hat nicht geklappt. Bitte versuchen Sie es später erneut oder schreiben Sie uns an {email}.",
       sending: "Wird gesendet…",
-      skipped: "In Ordnung. Wir melden uns innert zwei Arbeitstagen.",
+      skipped: "In Ordnung, das klären wir im Gespräch.",
       calcCta: "Pilotplatz mit {plan} reservieren",
       typedName: "Anna Meier",
       rStart: "Ein Tag Ausfall ist für Sie verkraftbar. Dann genügt ein Server, den wir bei einem Defekt am nächsten Arbeitstag ersetzen.",
-      rSize: "Ab etwa 20 Mitarbeitenden lohnt sich die Ausfallsicherheit von drei Servern.",
+      rSize: "Mit mehr als 20 Mitarbeitenden lohnt sich die Ausfallsicherheit von drei Servern.",
       rDowntime: "Ein Ausfall kostet Sie Umsatz oder Arbeitszeit. Mit drei Servern arbeiten Sie weiter, wenn einer ausfällt.",
       rHours: "Bei Business reagieren wir am selben Arbeitstag.",
-      rNow: "Bei Pro werden wir rund um die Uhr alarmiert und reagieren am selben Tag, auch am Wochenende.",
-      rCritical: "Wenn Ihr Betrieb ohne IT stillsteht, zählt auch das Wochenende."
+      rNow: "Bei Pro erreichen uns Alarme rund um die Uhr, und wir reagieren am selben Tag, auch am Wochenende.",
+      rCritical: "Ihr Betrieb steht ohne IT still. Bei Pro ersetzen wir defekte Hardware innert eines Tages, auch am Wochenende."
     },
     en: {
       langToggle: "Auf Deutsch wechseln",
-      themeToDark: "Switch to dark design",
-      themeToLight: "Switch to light design",
+      themeToDark: "Switch to dark mode",
+      themeToLight: "Switch to light mode",
       required: "Please fill in the highlighted fields.",
       email: "Please enter a valid email address.",
-      consent: "Please confirm your consent to storing your details.",
+      consent: "Please confirm that we may store your details.",
       network: "Sending failed. Please check your connection and try again.",
-      server: "Sending failed. Please try again later or send us an email.",
+      server: "Sending failed. Please try again later or write to us at {email}.",
       sending: "Sending…",
-      skipped: "All right. We will get back to you within two working days.",
+      skipped: "All right, we will cover that in the call.",
       calcCta: "Reserve a pilot slot with {plan}",
       typedName: "Anna Meier",
       rStart: "You can cope with a day of downtime. One server is then enough, and we replace it on the next working day if it fails.",
-      rSize: "From about 20 staff, the failover of three servers pays off.",
+      rSize: "With more than 20 staff, the failover of three servers pays off.",
       rDowntime: "Downtime costs you revenue or working time. With three servers you keep working when one fails.",
       rHours: "With Business we respond on the same working day.",
-      rNow: "With Pro we are alerted around the clock and respond the same day, weekends included.",
-      rCritical: "If your business stops without IT, weekends count too."
+      rNow: "With Pro, alerts reach us around the clock and we respond the same day, weekends included.",
+      rCritical: "Your business stops without IT. With Pro we replace faulty hardware within a day, weekends included."
     }
   };
 
@@ -71,6 +71,7 @@
   function money(n) {
     return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, lang === "en" ? "," : "'");
   }
+  function serverMsg() { return MSG[lang].server.replace("{email}", CONFIG.contactEmail || "hallo@rechenbox.ch"); }
   function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
   function $(id) { return document.getElementById(id); }
 
@@ -188,7 +189,12 @@
     var r = done ? recommend(a) : null;
     recommendedPlan = r ? r.plan : "";
     document.querySelectorAll(".plan").forEach(function (card) {
-      card.classList.toggle("recommended", !!r && card.getAttribute("data-plan") === r.plan);
+      var plan = card.getAttribute("data-plan");
+      var lead = r ? plan === r.plan : plan === "business";
+      card.classList.toggle("recommended", !!r && plan === r.plan);
+      var btn = card.querySelector(".plan-btn");
+      btn.classList.toggle("btn-primary", lead);
+      btn.classList.toggle("btn-secondary", !lead);
     });
     if (!r) return;
 
@@ -355,7 +361,7 @@
         ok.focus();
       })
       .catch(function (err) {
-        showError(errorEl, err && err.message === "server" ? MSG[lang].server : MSG[lang].network);
+        showError(errorEl, err && err.message === "server" ? serverMsg() : MSG[lang].network);
       })
       .finally(function () { submitBtn.disabled = false; submitBtn.textContent = label; });
   });
@@ -368,7 +374,7 @@
   function finishDetails(text) {
     details.hidden = true;
     var done = $("details-done");
-    if (text) done.textContent = text;
+    if (text) { done.removeAttribute("data-i18n"); done.textContent = text; }
     done.hidden = false;
   }
 
@@ -391,7 +397,7 @@
     fetch("/api/details", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
       .then(function (res) { if (!res.ok) throw new Error("server"); })
       .then(function () { finishDetails(); })
-      .catch(function (err) { showError(detailsErr, err && err.message === "server" ? MSG[lang].server : MSG[lang].network); })
+      .catch(function (err) { showError(detailsErr, err && err.message === "server" ? serverMsg() : MSG[lang].network); })
       .finally(function () { detailsBtn.disabled = false; detailsBtn.textContent = label; });
   });
   $("details-skip").addEventListener("click", function () { finishDetails(MSG[lang].skipped); });
