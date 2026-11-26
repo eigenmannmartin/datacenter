@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rechenbox – Ihre Server-Box im Büro</title>
+  <meta name="description" content="Server, Ablage, Backup und Sicherheit in einer Box für Treuhand, Kanzleien, Praxen und Planungsbüros. Personen und Zugriffe verwalten Sie selbst im Web-Portal, den Betrieb übernehmen wir.">
+  <meta property="og:title" content="Rechenbox – Ihre Server-Box im Büro">
+  <meta property="og:description" content="Sie verwalten, wir betreiben. Ihre Daten bleiben im Büro, das Backup liegt verschlüsselt in der Schweiz.">
+  <meta property="og:type" content="website">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0e0f10" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='6' y='3' width='20' height='26' rx='3' fill='%23131416'/%3E%3Crect x='10' y='8' width='12' height='3' rx='1' fill='%23fff'/%3E%3Crect x='10' y='14' width='12' height='3' rx='1' fill='%23fff'/%3E%3Crect x='10' y='20' width='12' height='3' rx='1' fill='%23fff'/%3E%3C/svg%3E">
+  <link rel="preload" href="/assets/fonts/schibsted-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/styles.css">
+  <script>document.documentElement.classList.add("js")</script>
+</head>
+<body>
+  <!-- Icon set: line pictograms, drawn at 24×24 with a 1.6 stroke -->
+  <svg width="0" height="0" class="sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-small" viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="2.8" pathLength="1"/><path d="M3.5 19.5c0-3 2.5-5.5 5.5-5.5s5.5 2.5 5.5 5.5" pathLength="1"/><circle cx="16.5" cy="9" r="2.3" pathLength="1"/><path d="M15 14.3a4.6 4.6 0 0 1 6 4.4" pathLength="1"/></symbol>
+    <symbol id="i-medium" viewBox="0 0 24 24"><circle cx="12" cy="7.5" r="2.8" pathLength="1"/><path d="M6.5 19.5c0-3 2.5-5.5 5.5-5.5s5.5 2.5 5.5 5.5" pathLength="1"/><circle cx="5" cy="9.5" r="2" pathLength="1"/><path d="M1.5 18a3.6 3.6 0 0 1 4.4-3.5" pathLength="1"/><circle cx="19" cy="9.5" r="2" pathLength="1"/><path d="M22.5 18a3.6 3.6 0 0 0-4.4-3.5" pathLength="1"/></symbol>
+    <symbol id="i-large" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="1.5" pathLength="1"/><path d="M8 7h2M14 7h2M8 11h2M14 11h2M8 15h2M14 15h2M10.5 21v-3h3v3" pathLength="1"/></symbol>
+    <symbol id="i-ok" viewBox="0 0 24 24"><path d="M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V9z" pathLength="1"/><path d="M16 10.5h1.5a2.5 2.5 0 0 1 0 5H16" pathLength="1"/><path d="M8 3.5c0 1 1 1.5 1 2.5M12 3.5c0 1 1 1.5 1 2.5" pathLength="1"/></symbol>
+    <symbol id="i-costly" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2" pathLength="1"/><path d="M3 10h18M8 3v4M16 3v4M9.5 13.5l5 5M14.5 13.5l-5 5" pathLength="1"/></symbol>
+    <symbol id="i-critical" viewBox="0 0 24 24"><path d="M8.2 2.5h7.6l5.7 5.7v7.6l-5.7 5.7H8.2l-5.7-5.7V8.2z" pathLength="1"/><path d="M12 7.5v5.5" pathLength="1"/><circle cx="12" cy="16.5" r="0.7" fill="currentColor"/></symbol>
+    <symbol id="i-nextday" viewBox="0 0 24 24"><path d="M3 18h18M5.5 18a6.5 6.5 0 0 1 13 0M12 5v2.5M4.8 8.8l1.7 1.7M19.2 8.8l-1.7 1.7" pathLength="1"/></symbol>
+    <symbol id="i-hours" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" pathLength="1"/><path d="M12 7v5l3.5 2" pathLength="1"/></symbol>
+    <symbol id="i-ai" viewBox="0 0 24 24"><path d="M12 3l1.8 4.7 4.7 1.8-4.7 1.8L12 16l-1.8-4.7-4.7-1.8 4.7-1.8z" pathLength="1"/><path d="M18.5 15.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z" pathLength="1"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3M12 14.5v2"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M14.5 14h3v3h-3z"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7.5 3v5.5c0 4.6-3.2 8.3-7.5 9.5-4.3-1.2-7.5-4.9-7.5-9.5V6z"/><path d="M8.5 12.2l2.4 2.4 4.6-4.8"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></symbol>
+  </svg>
+
+  <a class="skip-link" href="#main" data-i18n="skip">Zum Inhalt springen</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="Rechenbox, zum Seitenanfang">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="6" y="3" width="20" height="26" rx="3"/><rect class="u" x="10" y="8" width="12" height="3" rx="1"/><rect class="u" x="10" y="14" width="12" height="3" rx="1"/><rect class="u" x="10" y="20" width="12" height="3" rx="1"/></svg>
+        <span>Rechenbox</span>
+      </a>
+      <nav class="main-nav" aria-label="Hauptnavigation" data-i18n-attr="aria-label:nav.label">
+        <a href="#box" data-i18n="nav.box">Die Box</a>
+        <a href="#portal" data-i18n="nav.portal">Portal</a>
+        <a href="#preise" data-i18n="nav.pricing">Preise</a>
+        <a href="#faq" data-i18n="nav.faq">Fragen</a>
+      </nav>
+      <div class="header-actions">
+        <button type="button" class="icon-btn" id="theme-toggle" aria-label="Dunkles Design einschalten">
+          <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-moon"/></svg>
+          <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sun"/></svg>
+        </button>
+        <button type="button" class="lang-toggle" id="lang-toggle" aria-label="Switch to English" lang="en">EN</button>
+        <a class="btn btn-primary btn-small" href="#anmelden" data-track-cta="header"><span class="label-long" data-i18n="cta.reserve">Pilotplatz reservieren</span><span class="label-short" data-i18n="cta.reserveNav">Reservieren</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HERO -->
+    <section class="hero" id="top" data-track="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="status-line"><span class="led-dot" aria-hidden="true"></span><span data-i18n="hero.status">Pilotplätze 2027 in der Region St. Gallen</span></p>
+          <h1 data-i18n="hero.title">Ihre Server-Box im Büro. Sie verwalten, wir betreiben.</h1>
+          <p class="lead" data-i18n="hero.lead">Für Treuhand, Kanzleien, Praxen und Planungsbüros mit 10–100 Mitarbeitenden: Server, Ablage, Backup und Sicherheit in einer Box. Personen und Zugriffe regeln Sie selbst im Web-Portal, den Betrieb übernehmen wir.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#anmelden" data-track-cta="hero" data-i18n="cta.reserve">Pilotplatz reservieren</a>
+            <a class="btn btn-secondary" href="#preise" data-track-cta="hero-pricing" data-i18n="cta.pricing">Preise ansehen</a>
+          </div>
+          <ul class="proof" aria-label="Das Wichtigste in Kürze" data-i18n-attr="aria-label:hero.proofLabel">
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="hero.proof1">Ihre Daten bleiben im Büro</span></li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="hero.proof2">Fester Monatspreis ab CHF&nbsp;790</span></li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="hero.proof3">Personen und Zugriffe selbst verwalten</span></li>
+          </ul>
+        </div>
+
+        <figure class="hero-visual">
+          <svg class="cabinet" viewBox="0 0 220 360" role="img" aria-labelledby="cab-title">
+            <title id="cab-title" data-i18n="hero.svgTitle">Die Box: ein geschlossener 10-Zoll-Schrank mit Firewall, Switch, drei kompakten Servern, Backup und USV</title>
+            <defs><linearGradient id="alu" x1="0" y1="0" x2="1" y2="0.18"><stop class="alu-1" offset="0"/><stop class="alu-2" offset="0.55"/><stop class="alu-3" offset="1"/></linearGradient></defs>
+            <rect class="cab-body" x="20" y="8" width="180" height="330" rx="12"/>
+            <rect class="cab-inner" x="34" y="24" width="152" height="296" rx="6"/>
+            <g class="unit"><rect x="44" y="36" width="132" height="26" rx="4"/><circle class="led" cx="58" cy="49" r="3"/><rect class="slot" x="124" y="46" width="40" height="6" rx="2"/></g>
+            <g class="unit"><rect x="44" y="70" width="132" height="26" rx="4"/><circle class="led led-b" cx="58" cy="83" r="3"/><rect class="slot" x="124" y="80" width="40" height="6" rx="2"/></g>
+            <g class="unit unit-main"><rect x="44" y="110" width="132" height="32" rx="4"/><circle class="led led-c" cx="58" cy="126" r="3"/><rect class="slot" x="110" y="123" width="54" height="6" rx="2"/></g>
+            <g class="unit unit-main"><rect x="44" y="148" width="132" height="32" rx="4"/><circle class="led led-d" cx="58" cy="164" r="3"/><rect class="slot" x="110" y="161" width="54" height="6" rx="2"/></g>
+            <g class="unit unit-main"><rect x="44" y="186" width="132" height="32" rx="4"/><circle class="led led-e" cx="58" cy="202" r="3"/><rect class="slot" x="110" y="199" width="54" height="6" rx="2"/></g>
+            <g class="unit"><rect x="44" y="232" width="132" height="26" rx="4"/><circle class="led led-b" cx="58" cy="245" r="3"/><rect class="slot" x="124" y="242" width="40" height="6" rx="2"/></g>
+            <g class="unit"><rect x="44" y="266" width="132" height="42" rx="4"/><circle class="led led-steady" cx="58" cy="287" r="3"/><path class="grille" d="M100 278h64M100 287h64M100 296h64"/></g>
+            <rect class="cab-foot" x="34" y="338" width="22" height="9" rx="2"/><rect class="cab-foot" x="164" y="338" width="22" height="9" rx="2"/>
+          </svg>
+
+          <div class="hero-card" aria-hidden="true">
+            <p class="hero-card-head"><span data-i18n="hero.card.title">Muster Treuhand AG</span><span class="ok-chip"><span class="led-dot"></span><span data-i18n="hero.card.ok">Alles in Ordnung</span></span></p>
+            <ul>
+              <li><svg viewBox="0 0 24 24"><use href="#i-check"/></svg><span data-i18n="hero.card.r1">Backup heute Nacht erstellt</span></li>
+              <li><svg viewBox="0 0 24 24"><use href="#i-check"/></svg><span data-i18n="hero.card.r2">Updates installiert</span></li>
+              <li><svg viewBox="0 0 24 24"><use href="#i-check"/></svg><span data-i18n="hero.card.r3">Wiederherstellung getestet</span></li>
+            </ul>
+            <span class="hero-card-btn" data-i18n="hero.card.btn">Person hinzufügen</span>
+          </div>
+          <figcaption data-i18n="hero.caption">Etwa 50&nbsp;cm hoch, leise genug fürs Büro, normale Steckdose.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- WHY -->
+    <section class="section" id="warum" data-track="why">
+      <div class="container">
+        <h2 data-i18n="why.title">Warum gerade jetzt?</h2>
+        <p class="section-lead" data-i18n="why.lead">Vier Gründe, jetzt über die IT zu entscheiden.</p>
+        <div class="reasons">
+          <article class="reason">
+            <svg class="reason-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-lock"/></svg>
+            <div><h3 data-i18n="why.r1.title">Berufsgeheimnis und Datenschutz</h3>
+            <p data-i18n="why.r1.text">Mandanten-, Patienten- und Projektdaten gehören nicht auf Server, die US-Gesetzen wie dem CLOUD Act unterstehen.</p></div>
+          </article>
+          <article class="reason">
+            <svg class="reason-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-calendar"/></svg>
+            <div><h3 data-i18n="why.r2.title">Windows Server 2016 läuft aus</h3>
+            <p data-i18n="why.r2.text">Ab dem 13. Januar 2027 gibt es keine regulären Sicherheitsupdates mehr.</p></div>
+          </article>
+          <article class="reason">
+            <svg class="reason-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shield"/></svg>
+            <div><h3 data-i18n="why.r3.title">Ransomware und Versicherer</h3>
+            <p data-i18n="why.r3.text">Cyberversicherungen verlangen getestete Backups. Wir testen Ihre Wiederherstellung jeden Monat und belegen es schriftlich.</p></div>
+          </article>
+          <article class="reason" data-track="ai">
+            <svg class="reason-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ai"/></svg>
+            <div><h3 data-i18n="why.r4.title">KI ohne Datenabfluss</h3>
+            <p data-i18n="why.r4.text">Befragen Sie Ihre eigenen Dokumente mit einer KI, die in Ihrem Büro läuft. Nichts geht an ChatGPT und Co.</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHAT'S IN THE BOX -->
+    <section class="section section-alt" id="box" data-track="box">
+      <div class="container">
+        <h2 data-i18n="box.title">Was in der Box steckt</h2>
+        <p class="section-lead" data-i18n="box.lead">Alles, was Ihr Büro an Infrastruktur braucht. Ihre Daten bleiben dabei im Haus.</p>
+        <div class="box-grid">
+          <figure class="flow">
+            <svg viewBox="0 0 560 340" role="img" aria-labelledby="flow-title">
+              <title id="flow-title" data-i18n="flow.title">Ihre Daten bleiben im Büro und werden laufend überwacht. Auf Wunsch geht eine verschlüsselte Backup-Kopie in ein Rechenzentrum in der Schweiz.</title>
+              <g class="flow-office">
+                <path class="flow-line" d="M24 110 L130 52 L236 110"/>
+                <rect class="flow-frame" x="36" y="104" width="188" height="176" rx="4"/>
+                <path class="flow-pulse" d="M54 128h34l6-10 8 20 7-14 5 4h76"/>
+                <rect class="flow-box" x="96" y="150" width="68" height="112" rx="7"/>
+                <path class="flow-line thin" d="M106 172h48M106 194h48M106 216h48M106 238h48"/>
+                <circle class="led" cx="112" cy="183" r="2.6"/><circle class="led led-c" cx="112" cy="205" r="2.6"/><circle class="led led-e" cx="112" cy="227" r="2.6"/>
+                <text class="flow-label" x="130" y="304" text-anchor="middle" data-i18n="flow.office">Ihr Büro</text>
+                <text class="flow-sub" x="130" y="324" text-anchor="middle" data-i18n="flow.officeSub">alle Daten, laufend überwacht</text>
+              </g>
+              <g class="flow-dc">
+                <rect class="flow-frame flow-optional" x="384" y="122" width="150" height="104" rx="6"/>
+                <path class="flow-line thin" d="M400 152h118M400 176h118M400 200h118"/>
+                <circle class="led led-b" cx="508" cy="140" r="2.6"/><circle class="led led-d" cx="508" cy="164" r="2.6"/><circle class="led" cx="508" cy="188" r="2.6"/>
+                <text class="flow-label" x="459" y="252" text-anchor="middle" data-i18n="flow.dc">Rechenzentrum Schweiz</text>
+                <text class="flow-sub" x="459" y="272" text-anchor="middle" data-i18n="flow.dcSub">optional: zweite Backup-Kopie</text>
+              </g>
+              <path class="flow-path" d="M236 196 C300 196 318 174 382 174"/>
+              <g class="flow-lock" transform="translate(308 172)"><rect x="-11" y="-2" width="22" height="16" rx="3"/><path d="M-6 -2v-4a6 6 0 0 1 12 0v4"/></g>
+              <text class="flow-sub" x="308" y="152" text-anchor="middle" data-i18n="flow.encrypted">nur verschlüsselt</text>
+            </svg>
+          </figure>
+
+          <dl class="features">
+            <div><dt data-i18n="box.f1.t">Läuft weiter, wenn ein Server ausfällt</dt><dd data-i18n="box.f1.d">Bei Business und Pro übernehmen die anderen zwei Server sofort.</dd></div>
+            <div><dt data-i18n="box.f2.t">Dateiablage und Zusammenarbeit</dt><dd data-i18n="box.f2.d">Netzlaufwerke wie gewohnt, dazu sicheres Teilen und Zugriff von unterwegs.</dd></div>
+            <div><dt data-i18n="box.f3.t">Ihre Branchensoftware</dt><dd data-i18n="box.f3.d">Buchhaltung, Praxissoftware oder CAD-Lizenzen laufen direkt auf der Box, sauber getrennt.</dd></div>
+            <div><dt data-i18n="box.f4.t">Sicherer Fernzugriff</dt><dd data-i18n="box.f4.d">Anmeldung mit Bestätigung per Handy, von zu Hause oder unterwegs.</dd></div>
+            <div><dt data-i18n="box.f5.t">Backup inbegriffen</dt><dd data-i18n="box.f5.d">Auf einem eigenen Gerät für schnelle Wiederherstellung. Auf Wunsch zusätzlich verschlüsselt in einem Schweizer Rechenzentrum, das empfehlen wir.</dd></div>
+            <div><dt data-i18n="box.f6.t">Überwachung und Updates</dt><dd data-i18n="box.f6.d">Die Box wird rund um die Uhr überwacht, Updates laufen automatisch, und Sie erhalten jeden Monat einen Bericht.</dd></div>
+            <div><dt><span data-i18n="box.f7.t">Private KI</span> <span class="tag" data-i18n="box.optional">optional</span></dt><dd data-i18n="box.f7.d">Ein KI-Assistent, der Ihre Dokumente kennt. Er läuft in Ihrem Büro, nichts geht nach aussen.</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- PORTAL -->
+    <section class="section" id="portal" data-track="portal">
+      <div class="container portal-grid">
+        <div class="portal-copy">
+          <h2 data-i18n="portal.title">Sie entscheiden, wir betreiben</h2>
+          <p class="section-lead" data-i18n="portal.lead">Den Alltag regeln Sie selbst im Web-Portal der Box, ohne IT-Kenntnisse und ohne auf jemanden zu warten. Im Hintergrund wird alles laufend überwacht, damit Probleme behoben sind, bevor sie stören.</p>
+          <table class="tasks">
+            <caption class="sr-only" data-i18n="portal.tasksCaption">Aufgaben im Portal und wie lange sie etwa dauern</caption>
+            <tbody>
+              <tr><th scope="row" data-i18n="portal.t1">Neue Mitarbeiterin anlegen</th><td data-i18n="portal.t1d">2 Minuten</td></tr>
+              <tr><th scope="row" data-i18n="portal.t2">Zugriff auf einen Ordner vergeben</th><td data-i18n="portal.t2d">1 Minute</td></tr>
+              <tr><th scope="row" data-i18n="portal.t3">Gelöschte Datei zurückholen</th><td data-i18n="portal.t3d">1 Minute</td></tr>
+              <tr><th scope="row" data-i18n="portal.t4">App aus unserem Katalog installieren</th><td data-i18n="portal.t4d">5 Minuten</td></tr>
+              <tr><th scope="row" data-i18n="portal.t5">Austritt: Zugang sperren</th><td data-i18n="portal.t5d">30 Sekunden</td></tr>
+            </tbody>
+          </table>
+          <p class="portal-note" data-i18n="portal.note">Jede Änderung wird protokolliert. So ist jederzeit nachvollziehbar, wer was geändert hat.</p>
+        </div>
+
+        <figure class="portal-demo">
+          <div class="portal" id="portal-mock" role="img" aria-label="Beispiel: Im Portal wird eine neue Mitarbeiterin angelegt und erhält Zugriff auf die Ordner Buchhaltung und Mandanten." data-i18n-attr="aria-label:portal.mockLabel">
+            <div class="portal-bar" aria-hidden="true">
+              <span class="portal-firm" data-i18n="hero.card.title">Muster Treuhand AG</span>
+              <span class="ok-chip"><span class="led-dot"></span><span data-i18n="hero.card.ok">Alles in Ordnung</span></span>
+            </div>
+            <div class="portal-body" aria-hidden="true">
+              <nav class="portal-nav">
+                <span data-i18n="mock.nav1">Übersicht</span>
+                <span class="active" data-i18n="mock.nav2">Personen</span>
+                <span data-i18n="mock.nav3">Freigaben</span>
+                <span data-i18n="mock.nav4">Apps</span>
+                <span data-i18n="mock.nav5">Backup</span>
+              </nav>
+              <div class="portal-main">
+                <div class="portal-head">
+                  <span class="portal-h" data-i18n="mock.nav2">Personen</span>
+                  <span class="portal-btn" id="portal-add" data-i18n="hero.card.btn">Person hinzufügen</span>
+                </div>
+                <ul class="portal-list">
+                  <li class="portal-row portal-new" id="portal-new"><span class="avatar">AM</span><span class="who"><b>Anna Meier</b><small data-i18n="mock.g4">Buchhaltung, Mandanten</small></span><span class="chip chip-new" data-i18n="mock.ready">Zugang bereit</span></li>
+                  <li class="portal-row"><span class="avatar">SK</span><span class="who"><b>Sandra Keller</b><small data-i18n="mock.g1">Geschäftsleitung</small></span><span class="chip" data-i18n="mock.active">Aktiv</span></li>
+                  <li class="portal-row"><span class="avatar">MB</span><span class="who"><b>Marco Brunner</b><small data-i18n="mock.g2">Buchhaltung</small></span><span class="chip" data-i18n="mock.active">Aktiv</span></li>
+                  <li class="portal-row"><span class="avatar">LF</span><span class="who"><b>Lea Frei</b><small data-i18n="mock.g3">Mandanten</small></span><span class="chip" data-i18n="mock.active">Aktiv</span></li>
+                </ul>
+              </div>
+              <div class="portal-dialog" id="portal-dialog">
+                <span class="portal-h" data-i18n="mock.dialog">Neue Person</span>
+                <span class="mock-label" data-i18n="mock.name">Name</span>
+                <span class="mock-input"><span class="typed" id="portal-typed"></span><span class="caret"></span></span>
+                <span class="mock-label" data-i18n="mock.access">Zugriff auf</span>
+                <span class="mock-check" id="portal-c1"><span class="box"></span><span data-i18n="mock.g2">Buchhaltung</span></span>
+                <span class="mock-check" id="portal-c2"><span class="box"></span><span data-i18n="mock.g3">Mandanten</span></span>
+                <span class="mock-check"><span class="box"></span><span data-i18n="mock.g1">Geschäftsleitung</span></span>
+                <span class="portal-btn" id="portal-create" data-i18n="mock.create">Anlegen</span>
+              </div>
+              <div class="portal-toast" id="portal-toast" data-i18n="mock.toast">Anna Meier ist angelegt. Die Zugangsdaten sind per E-Mail unterwegs.</div>
+            </div>
+          </div>
+          <figcaption><span data-i18n="portal.caption">Beispiel aus dem Portal</span> <button type="button" class="link-btn" id="portal-replay" data-i18n="portal.replay">Nochmals zeigen</button></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="section section-alt" id="ablauf" data-track="how">
+      <div class="container">
+        <h2 data-i18n="how.title">So funktioniert es</h2>
+        <ol class="steps">
+          <li><h3 data-i18n="how.s1.t">Analyse</h3><p data-i18n="how.s1.d">Eine Stunde bei Ihnen vor Ort, kostenlos. Danach wissen Sie, welche Box passt.</p></li>
+          <li><h3 data-i18n="how.s2.t">Einbau</h3><p data-i18n="how.s2.d">Wir liefern die Box fertig eingerichtet und ziehen Ihre Daten um, meist an einem Wochenende.</p></li>
+          <li><h3 data-i18n="how.s3.t">Betrieb</h3><p data-i18n="how.s3.d">Sie verwalten Personen und Freigaben im Portal. Updates und Überwachung laufen automatisch.</p></li>
+          <li><h3 data-i18n="how.s4.t">Erneuerung</h3><p data-i18n="how.s4.d">Nach fünf Jahren ersetzen wir die Hardware, im Preis inbegriffen.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="section" id="preise" data-track="pricing">
+      <div class="container">
+        <h2 data-i18n="pricing.title">Preise</h2>
+        <p class="section-lead" data-i18n="pricing.lead">Pro Monat, exkl. MWST, bei 36 Monaten Laufzeit. Hardware, Software, Backup und Betrieb inbegriffen. Pilotkunden 2027 erhalten im ersten Jahr 30&nbsp;% Rabatt.</p>
+
+        <!-- RECOMMENDER -->
+        <div class="chooser" id="rechner" data-track="calculator">
+          <h3 data-i18n="calc.title">Welche Box passt zu Ihnen?</h3>
+          <div class="chooser-qs">
+            <fieldset class="q">
+              <legend class="q-label" data-i18n="calc.q.size">Wie gross ist Ihr Team?</legend>
+              <div class="picks">
+                <label class="pick"><input type="radio" name="calc-size" value="small"><span class="pick-card"><svg class="pick-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-small"/></svg><span class="pick-label" data-i18n="calc.a.size.small">bis 20</span><span class="pick-sub" data-i18n="calc.a.staff">Mitarbeitende</span></span></label>
+                <label class="pick"><input type="radio" name="calc-size" value="medium"><span class="pick-card"><svg class="pick-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-medium"/></svg><span class="pick-label" data-i18n="calc.a.size.medium">20 bis 60</span><span class="pick-sub" data-i18n="calc.a.staff">Mitarbeitende</span></span></label>
+                <label class="pick"><input type="radio" name="calc-size" value="large"><span class="pick-card"><svg class="pick-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-large"/></svg><span class="pick-label" data-i18n="calc.a.size.large">über 60</span><span class="pick-sub" data-i18n="calc.a.staff">Mitarbeitende</span></span></label>
+              </div>
+            </fieldset>
+            <fieldset class="q">
+              <legend class="q-label" data-i18n="calc.q.downtime">Ein Tag ohne IT ist für Sie …</legend>
+              <div class="picks">
+                <label class="pick"><input type="radio" name="calc-downtime" value="ok"><span class="pick-card"><svg class="pick-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ok"/></svg><span class="pick-label" data-i18n="calc.a.downtime.ok">ärgerlich</span><span class="pick-sub" data-i18n="calc.a.downtime.ok.sub">aber machbar</span></span></label>
+                <label class="pick"><input type="radio" name="calc-downtime" value="costly"><span class="pick-card"><svg class="pick-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-costly"/></svg><span class="pick-label" data-i18n="calc.a.downtime.costly">teuer</span><span class="pick-sub" data-i18n="calc.a.downtime.costly.sub">Termine fallen aus</span></span></label>
+                <label class="pick"><input type="radio" name="calc-downtime" value="critical"><span class="pick-card"><svg class="pick-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-critical"/></svg><span class="pick-label" data-i18n="calc.a.downtime.critical">Stillstand</span><span class="pick-sub" data-i18n="calc.a.downtime.critical.sub">nichts geht mehr</span></span></label>
+              </div>
+            </fieldset>
+            <fieldset class="q">
+              <legend class="q-label" data-i18n="calc.q.response">Eine Störung muss behoben sein …</legend>
+              <div class="picks">
+                <label class="pick"><input type="radio" name="calc-response" value="nextday"><span class="pick-card"><svg class="pick-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-nextday"/></svg><span class="pick-label" data-i18n="calc.a.response.nextday">am nächsten Arbeitstag</span><span class="pick-sub" data-i18n="calc.a.response.nextday.sub">reicht uns</span></span></label>
+                <label class="pick"><input type="radio" name="calc-response" value="sameday"><span class="pick-card"><svg class="pick-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-hours"/></svg><span class="pick-label" data-i18n="calc.a.response.sameday">am selben Tag</span><span class="pick-sub" data-i18n="calc.a.response.sameday.sub">unter der Woche</span></span></label>
+                <label class="pick"><input type="radio" name="calc-response" value="always"><span class="pick-card"><svg class="pick-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-moon"/></svg><span class="pick-label" data-i18n="calc.a.response.always">jeden Tag</span><span class="pick-sub" data-i18n="calc.a.response.always.sub">auch am Wochenende</span></span></label>
+              </div>
+            </fieldset>
+          </div>
+          <div class="chooser-result" aria-live="polite">
+            <p id="calc-pending" class="calc-pending" data-i18n="calc.pending">Beantworten Sie die drei Fragen, dann markieren wir das passende Paket.</p>
+            <div id="calc-done" class="calc-done" hidden>
+              <p class="calc-plan"><span data-i18n="calc.recommend">Unsere Empfehlung:</span> <strong id="calc-plan-name">Start</strong></p>
+              <ul class="calc-reasons" id="calc-reasons"></ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="plans">
+          <article class="plan" data-plan="start">
+            <p class="plan-badge plan-badge-rec" data-i18n="pricing.yours">Ihre Empfehlung</p>
+            <h3>Start</h3>
+            <p class="plan-for" data-i18n="pricing.start.for">Für Büros bis 20 Mitarbeitende</p>
+            <p class="price"><span class="currency">CHF</span>&nbsp;<span class="amount">790</span> <span class="per" data-i18n="pricing.perMonth">pro Monat</span></p>
+            <ul>
+              <li data-i18n="pricing.start.f1">1 kompakter Server</li>
+              <li data-i18n="pricing.start.f2">Reaktion am nächsten Arbeitstag</li>
+              <li data-i18n="pricing.start.f3">Lokales Backup, 30 Tage</li>
+            </ul>
+            <p class="setup" data-i18n="pricing.start.setup">Einrichtung einmalig CHF 2'900</p>
+            <button type="button" class="btn btn-secondary plan-btn" data-plan-select="start" data-i18n="pricing.start.cta">Start wählen</button>
+          </article>
+
+          <article class="plan plan-featured" data-plan="business">
+            <p class="plan-badge" data-i18n="pricing.popular">Für die meisten Büros</p>
+            <p class="plan-badge plan-badge-rec" data-i18n="pricing.yours">Ihre Empfehlung</p>
+            <h3>Business</h3>
+            <p class="plan-for" data-i18n="pricing.business.for">Für 15–100 Mitarbeitende</p>
+            <p class="price"><span class="currency">CHF</span>&nbsp;<span class="amount">1'890</span> <span class="per" data-i18n="pricing.perMonth">pro Monat</span></p>
+            <ul>
+              <li data-i18n="pricing.business.f1">3 Server, laufen bei einem Defekt weiter</li>
+              <li data-i18n="pricing.business.f2">Reaktion am selben Arbeitstag</li>
+              <li data-i18n="pricing.business.f3">Lokales Backup, 90 Tage</li>
+            </ul>
+            <p class="setup" data-i18n="pricing.business.setup">Einrichtung einmalig CHF 6'900</p>
+            <button type="button" class="btn btn-primary plan-btn" data-plan-select="business" data-i18n="pricing.business.cta">Business wählen</button>
+          </article>
+
+          <article class="plan" data-plan="pro">
+            <p class="plan-badge plan-badge-rec" data-i18n="pricing.yours">Ihre Empfehlung</p>
+            <h3>Pro</h3>
+            <p class="plan-for" data-i18n="pricing.pro.for">Für Betriebe, die auch abends und am Wochenende arbeiten</p>
+            <p class="price"><span class="currency">CHF</span>&nbsp;<span class="amount">2'890</span> <span class="per" data-i18n="pricing.perMonth">pro Monat</span></p>
+            <ul>
+              <li data-i18n="pricing.pro.f1">3 Server, laufen bei einem Defekt weiter</li>
+              <li data-i18n="pricing.pro.f2">Alarmierung rund um die Uhr, Reaktion am selben Tag, auch am Wochenende</li>
+              <li data-i18n="pricing.pro.f3">Lokales Backup, 1 Jahr, jährlicher Notfalltest</li>
+            </ul>
+            <p class="setup" data-i18n="pricing.pro.setup">Einrichtung einmalig CHF 8'900</p>
+            <button type="button" class="btn btn-secondary plan-btn" data-plan-select="pro" data-i18n="pricing.pro.cta">Pro wählen</button>
+          </article>
+        </div>
+        <p class="all-plans" data-i18n="pricing.all">In allen Paketen: Web-Portal, Überwachung rund um die Uhr, lokales Backup mit monatlichem Wiederherstellungstest, Firewall und USV. Optional pro Monat: Backup-Kopie im Schweizer Rechenzentrum ab CHF 90, Private KI CHF 590, mehr Speicher ab CHF 190.</p>
+
+        <details class="compare-details">
+          <summary data-i18n="cmp.summary">Alle Unterschiede im Vergleich</summary>
+          <div class="compare-wrap" tabindex="0" role="region" aria-label="Die Pakete im Vergleich" data-i18n-attr="aria-label:cmp.caption">
+            <table class="compare">
+              <thead>
+                <tr><th scope="col"><span class="sr-only" data-i18n="cmp.feature">Merkmal</span></th><th scope="col">Start</th><th scope="col">Business</th><th scope="col">Pro</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row" data-i18n="cmp.servers">Server</th><td data-i18n="cmp.servers.s">1 kompakter Server</td><td data-i18n="cmp.servers.b">3 Server, ausfallsicher</td><td data-i18n="cmp.servers.p">3 Server, ausfallsicher</td></tr>
+                <tr><th scope="row" data-i18n="cmp.storage">Nutzbarer Speicher</th><td data-i18n="cmp.storage.s">rund 3&nbsp;TB</td><td data-i18n="cmp.storage.b">rund 6&nbsp;TB</td><td data-i18n="cmp.storage.p">rund 6&nbsp;TB</td></tr>
+                <tr><th scope="row" data-i18n="cmp.defect">Bei einem Hardwaredefekt</th><td data-i18n="cmp.defect.s">Ersatzgerät am nächsten Arbeitstag, Daten aus dem Backup</td><td data-i18n="cmp.defect.b">Kein Unterbruch, Ersatz am nächsten Arbeitstag</td><td data-i18n="cmp.defect.p">Kein Unterbruch, Ersatz innert eines Tages, auch am Wochenende</td></tr>
+                <tr><th scope="row" data-i18n="cmp.hours">Alarmierung bei Störungen</th><td data-i18n="cmp.hours.s">Mo–Fr zu Bürozeiten</td><td data-i18n="cmp.hours.b">Mo–Fr zu Bürozeiten</td><td data-i18n="cmp.hours.p">rund um die Uhr, 7 Tage</td></tr>
+                <tr><th scope="row" data-i18n="cmp.response">Reaktionszeit bei Störungen</th><td data-i18n="cmp.response.s">nächster Arbeitstag</td><td data-i18n="cmp.response.b">selber Arbeitstag</td><td data-i18n="cmp.response.p">selber Tag, auch am Wochenende</td></tr>
+                <tr><th scope="row" data-i18n="cmp.contact">Ansprechpartner</th><td data-i18n="cmp.contact.s">Support-Team</td><td data-i18n="cmp.contact.b">Support-Team</td><td data-i18n="cmp.contact.p">Fester Techniker</td></tr>
+                <tr><th scope="row" data-i18n="cmp.retention">Lokale Backup-Aufbewahrung</th><td data-i18n="cmp.retention.s">30 Tage</td><td data-i18n="cmp.retention.b">90 Tage</td><td data-i18n="cmp.retention.p">1 Jahr</td></tr>
+                <tr><th scope="row" data-i18n="cmp.offsite">Zweite Kopie im Schweizer Rechenzentrum</th><td data-i18n="cmp.optional">optional</td><td data-i18n="cmp.optional">optional</td><td data-i18n="cmp.optional">optional</td></tr>
+                <tr><th scope="row" data-i18n="cmp.drill">Notfalltest mit Protokoll</th><td>–</td><td>–</td><td data-i18n="cmp.drill.p">jährlich</td></tr>
+                <tr><th scope="row" data-i18n="cmp.evidence">Nachweise für Revision und Versicherung</th><td data-i18n="cmp.evidence.s">Monatsbericht</td><td data-i18n="cmp.evidence.b">Monatsbericht</td><td data-i18n="cmp.evidence.p">Monatsbericht, Quartalsgespräch, Nachweismappe</td></tr>
+                <tr><th scope="row" data-i18n="cmp.setup">Einrichtung einmalig</th><td>CHF&nbsp;<span class="amount-plain">2'900</span></td><td>CHF&nbsp;<span class="amount-plain">6'900</span></td><td>CHF&nbsp;<span class="amount-plain">8'900</span></td></tr>
+                <tr class="compare-price"><th scope="row" data-i18n="cmp.price">Preis pro Monat</th><td>CHF&nbsp;<span class="amount-plain">790</span></td><td>CHF&nbsp;<span class="amount-plain">1'890</span></td><td>CHF&nbsp;<span class="amount-plain">2'890</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section section-alt" id="faq" data-track="faq">
+      <div class="container narrow">
+        <h2 data-i18n="faq.title">Häufige Fragen</h2>
+        <details data-faq="replaces"><summary data-i18n="faq.q1">Was ersetzt die Box?</summary><p data-i18n="faq.a1">Ihren Server, das NAS, die Backup-Lösung, die Firewall und den Wartungsvertrag dafür. Arbeitsplätze, Drucker und Telefonie betreut weiterhin Ihr IT-Partner.</p></details>
+        <details data-faq="room"><summary data-i18n="faq.q2">Brauchen wir einen Serverraum?</summary><p data-i18n="faq.a2">Nein. Eine normale Steckdose und ein Netzwerkanschluss genügen.</p></details>
+        <details data-faq="failure"><summary data-i18n="faq.q3">Was passiert bei einem Defekt oder Stromausfall?</summary><p data-i18n="faq.a3">Bei Business und Pro arbeiten Sie ohne Unterbruch weiter, und wir ersetzen den defekten Server. Bei Start schicken wir am nächsten Arbeitstag ein vorinstalliertes Ersatzgerät und stellen Ihre Daten aus dem Backup wieder her. Eine USV überbrückt kurze Stromausfälle.</p></details>
+        <details data-faq="data"><summary data-i18n="faq.q4">Wo liegen unsere Daten?</summary><p data-i18n="faq.a4">In Ihrem Büro. Auf Wunsch liegt zusätzlich eine verschlüsselte Backup-Kopie in einem Rechenzentrum in der Schweiz. Wir sind vertraglich an Ihr Berufsgeheimnis gebunden.</p></details>
+        <details data-faq="portal"><summary data-i18n="faq.q5">Wer richtet neue Mitarbeitende oder Zugriffe ein?</summary><p data-i18n="faq.a5">Sie selbst, im Web-Portal der Box, in wenigen Minuten. Wenn etwas klemmt, helfen wir.</p></details>
+        <details data-faq="m365"><summary data-i18n="faq.q6">Können wir Microsoft 365 behalten?</summary><p data-i18n="faq.a6">Ja. Viele Kunden behalten Outlook und Office. Die Box übernimmt Dateien, Branchensoftware, Backup und Sicherheit.</p></details>
+        <details data-faq="setup"><summary data-i18n="faq.q7">Was deckt die Einrichtung ab?</summary><p data-i18n="faq.a7">Analyse, Planung, die fertig eingerichtete Box, Einbau, Datenumzug und zwei Wochen enge Begleitung danach. Am Montag nach der Umstellung arbeitet Ihr Büro normal weiter.</p></details>
+        <details data-faq="noise"><summary data-i18n="faq.q8">Wie laut ist die Box, und was kostet der Strom?</summary><p data-i18n="faq.a8">Die Box ist auf rund 150 Watt im Betrieb ausgelegt, das sind etwa CHF 30 Strom im Monat. Sie besteht aus kompakten Rechnern statt lauter Rackserver und passt deshalb ins Büro.</p></details>
+        <details data-faq="buy"><summary data-i18n="faq.q9">Müssen wir die Hardware kaufen?</summary><p data-i18n="faq.a9">Nein, sie ist im Monatspreis enthalten. Wer jährlich im Voraus zahlt, erhält 4&nbsp;% Rabatt. Wer die Hardware lieber kauft, zahlt danach einen tieferen Monatspreis.</p></details>
+        <details data-faq="exit"><summary data-i18n="faq.q10">Was passiert, wenn wir kündigen?</summary><p data-i18n="faq.a10">Ihre Daten gehören Ihnen. Sie erhalten einen vollständigen Export und können die Hardware zum vertraglich festgelegten Restwert übernehmen.</p></details>
+        <details data-faq="pilot"><summary data-i18n="faq.q11">Was bedeutet Pilotphase?</summary><p data-i18n="faq.a11">Wir starten 2027 mit höchstens zehn Pilotkunden in der Region St. Gallen. Wir melden uns persönlich, bevor etwas verbindlich wird.</p></details>
+      </div>
+    </section>
+
+    <!-- SIGNUP -->
+    <section class="section section-signup" id="anmelden" data-track="signup">
+      <div class="container narrow">
+        <h2 data-i18n="form.title">Pilotplatz reservieren</h2>
+        <p class="section-lead" data-i18n="form.lead">Unverbindlich und kostenlos. Wir melden uns innert zwei Arbeitstagen.</p>
+
+        <form id="signup-form" novalidate>
+          <div class="field-row">
+            <div class="field">
+              <label for="f-name" data-i18n="form.name">Name</label>
+              <input id="f-name" name="name" type="text" autocomplete="name" required maxlength="120">
+            </div>
+            <div class="field">
+              <label for="f-company" data-i18n="form.company">Firma</label>
+              <input id="f-company" name="company" type="text" autocomplete="organization" required maxlength="160">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="f-email" data-i18n="form.email">E-Mail geschäftlich</label>
+              <input id="f-email" name="email" type="email" autocomplete="email" required maxlength="200">
+            </div>
+            <div class="field">
+              <label for="f-phone"><span data-i18n="form.phone">Telefon</span> <span class="optional" data-i18n="form.optional">(optional)</span></label>
+              <input id="f-phone" name="phone" type="tel" autocomplete="tel" maxlength="40">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="f-industry" data-i18n="form.industry">Branche</label>
+              <select id="f-industry" name="industry" required>
+                <option value="" data-i18n="form.choose">Bitte wählen</option>
+                <option value="fiduciary" data-i18n="form.ind.fiduciary">Treuhand, Steuerberatung</option>
+                <option value="legal" data-i18n="form.ind.legal">Anwaltskanzlei, Notariat</option>
+                <option value="medical" data-i18n="form.ind.medical">Arzt- oder Zahnarztpraxis, Labor</option>
+                <option value="planning" data-i18n="form.ind.planning">Architektur, Ingenieurwesen</option>
+                <option value="other" data-i18n="form.ind.other">Andere</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="f-size" data-i18n="form.size">Mitarbeitende</label>
+              <select id="f-size" name="size" required>
+                <option value="" data-i18n="form.choose">Bitte wählen</option>
+                <option value="1-9">1–9</option>
+                <option value="10-20">10–20</option>
+                <option value="21-60">21–60</option>
+                <option value="61-100">61–100</option>
+                <option value="100+">100+</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="f-plan" data-i18n="form.plan">Welches Paket interessiert Sie?</label>
+            <select id="f-plan" name="plan">
+              <option value="undecided" data-i18n="form.plan.undecided">Noch offen</option>
+              <option value="start">Start – CHF 790</option>
+              <option value="business">Business – CHF 1'890</option>
+              <option value="pro">Pro – CHF 2'890</option>
+            </select>
+          </div>
+
+          <label class="check"><input type="checkbox" name="wants_call" value="yes" checked> <span data-i18n="form.call">Ich wünsche ein kurzes Gespräch von etwa 20 Minuten</span></label>
+          <label class="check consent"><input type="checkbox" name="consent" id="f-consent" required> <span data-i18n-html="form.consent">Ich bin einverstanden, dass meine Angaben zur Kontaktaufnahme gespeichert werden. Details in der <a href="/datenschutz">Datenschutzerklärung</a>.</span></label>
+
+          <!-- Honeypot: humans never see or fill this -->
+          <div class="hp" aria-hidden="true"><label for="f-website">Website</label><input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+
+          <p class="form-error" id="form-error" role="alert" hidden></p>
+          <button type="submit" class="btn btn-primary btn-wide" id="submit-btn" data-i18n="form.submit">Unverbindlich reservieren</button>
+        </form>
+
+        <div class="form-success" id="form-success" hidden tabindex="-1">
+          <div class="success-head">
+            <svg class="success-check" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"/></svg>
+            <div>
+              <h3 data-i18n="form.success.t">Danke, Ihr Pilotplatz ist vorgemerkt.</h3>
+              <p data-i18n="form.success.d">Wir melden uns innert zwei Arbeitstagen.</p>
+              <a class="btn btn-secondary btn-small" id="booking-link" href="#" target="_blank" rel="noopener" data-i18n="form.success.book">Termin direkt wählen</a>
+            </div>
+          </div>
+
+          <form id="details-form" novalidate>
+            <p class="details-intro" data-i18n="details.intro">Vier kurze Fragen helfen uns, das Gespräch vorzubereiten. Alle sind freiwillig.</p>
+            <fieldset>
+              <legend data-i18n="details.it">Wie ist Ihre IT heute organisiert?</legend>
+              <div class="chips">
+                <label class="chip-opt"><input type="checkbox" name="current_it" value="own_server"><span data-i18n="form.it.server">Eigener Server im Büro</span></label>
+                <label class="chip-opt"><input type="checkbox" name="current_it" value="m365"><span data-i18n="form.it.m365">Microsoft 365 oder Google</span></label>
+                <label class="chip-opt"><input type="checkbox" name="current_it" value="nas"><span data-i18n="form.it.nas">NAS, z.B. Synology</span></label>
+                <label class="chip-opt"><input type="checkbox" name="current_it" value="swiss_cloud"><span data-i18n="form.it.cloud">Schweizer Cloud-Anbieter</span></label>
+                <label class="chip-opt"><input type="checkbox" name="current_it" value="it_partner"><span data-i18n="form.it.partner">Externer IT-Partner</span></label>
+                <label class="chip-opt"><input type="checkbox" name="current_it" value="unknown"><span data-i18n="form.it.unknown">Weiss nicht genau</span></label>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend data-i18n="details.pains">Was beschäftigt Sie am meisten?</legend>
+              <div class="chips">
+                <label class="chip-opt"><input type="checkbox" name="pains" value="confidentiality"><span data-i18n="form.pain.conf">Datenschutz, Berufsgeheimnis</span></label>
+                <label class="chip-opt"><input type="checkbox" name="pains" value="ransomware"><span data-i18n="form.pain.ransom">Ransomware, verlässliches Backup</span></label>
+                <label class="chip-opt"><input type="checkbox" name="pains" value="server_eol"><span data-i18n="form.pain.eol">Server muss ersetzt werden</span></label>
+                <label class="chip-opt"><input type="checkbox" name="pains" value="cost"><span data-i18n="form.pain.cost">Unvorhersehbare IT-Kosten</span></label>
+                <label class="chip-opt"><input type="checkbox" name="pains" value="ai"><span data-i18n="form.pain.ai">KI nutzen ohne Datenabfluss</span></label>
+                <label class="chip-opt"><input type="checkbox" name="pains" value="performance"><span data-i18n="form.pain.perf">Grosse Dateien, langsamer Zugriff</span></label>
+              </div>
+            </fieldset>
+            <div class="field-row">
+              <div class="field">
+                <label for="d-timeline" data-i18n="form.timeline">Wann steht eine Entscheidung an?</label>
+                <select id="d-timeline" name="timeline">
+                  <option value="" data-i18n="form.choose">Bitte wählen</option>
+                  <option value="lt6" data-i18n="form.tl.lt6">In den nächsten 6 Monaten</option>
+                  <option value="6to12" data-i18n="form.tl.6to12">In 6–12 Monaten</option>
+                  <option value="gt12" data-i18n="form.tl.gt12">Später als in 12 Monaten</option>
+                  <option value="info" data-i18n="form.tl.info">Ich informiere mich nur</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="d-payment" data-i18n="form.pay">Wie würden Sie lieber bezahlen?</label>
+                <select id="d-payment" name="payment_pref">
+                  <option value="" data-i18n="form.choose">Bitte wählen</option>
+                  <option value="monthly" data-i18n="form.pay.monthly">Monatlich, Hardware inbegriffen</option>
+                  <option value="prepay" data-i18n="form.pay.prepay">Jährlich im Voraus, 4 % Rabatt</option>
+                  <option value="purchase" data-i18n="form.pay.purchase">Hardware kaufen, tieferer Monatspreis</option>
+                  <option value="undecided" data-i18n="form.pay.undecided">Weiss noch nicht</option>
+                </select>
+              </div>
+            </div>
+            <fieldset>
+              <legend data-i18n="form.price">Wie beurteilen Sie die Preise?</legend>
+              <div class="chips">
+                <label class="chip-opt"><input type="radio" name="price_view" value="cheap"><span data-i18n="form.price.cheap">Günstig</span></label>
+                <label class="chip-opt"><input type="radio" name="price_view" value="fair"><span data-i18n="form.price.fair">Angemessen</span></label>
+                <label class="chip-opt"><input type="radio" name="price_view" value="expensive"><span data-i18n="form.price.exp">Zu teuer</span></label>
+                <label class="chip-opt"><input type="radio" name="price_view" value="unsure"><span data-i18n="form.price.unsure">Kann ich nicht beurteilen</span></label>
+              </div>
+            </fieldset>
+            <div class="field">
+              <label for="d-message" data-i18n="form.message">Was sollten wir noch wissen?</label>
+              <textarea id="d-message" name="message" rows="3" maxlength="2000"></textarea>
+            </div>
+            <p class="form-error" id="details-error" role="alert" hidden></p>
+            <div class="details-actions">
+              <button type="submit" class="btn btn-primary" id="details-btn" data-i18n="details.submit">Antworten senden</button>
+              <button type="button" class="link-btn" id="details-skip" data-i18n="details.skip">Überspringen</button>
+            </div>
+          </form>
+          <p class="details-done" id="details-done" hidden data-i18n="details.done">Danke für Ihre Antworten. Bis bald.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-brand">© 2026 Rechenbox, St. Gallen</p>
+      <p><a href="/datenschutz" data-i18n="footer.privacy">Datenschutz und Impressum</a> <a id="contact-link" href="#" data-i18n="footer.contact">Kontakt</a> <a id="contact-phone" href="#" hidden></a></p>
+      <p class="footer-note" data-i18n="footer.note">Diese Website setzt keine Cookies und lädt nichts von Drittanbietern.</p>
+    </div>
+  </footer>
+
+  <script src="/assets/config.js"></script>
+  <script src="/assets/i18n-en.js"></script>
+  <script src="/assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Engagement stats – Rechenbox</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="/assets/styles.css">
+  <style>
+    .stats-form { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: end; margin-bottom: var(--space-6); }
+    .stats-form .field { flex: 1 1 220px; }
+    .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6); }
+    .kpi { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: var(--space-4); }
+    .kpi .v { font-size: 1.8rem; font-weight: 700; display: block; }
+    .kpi .l { color: var(--ink-2); font-size: 0.9rem; }
+    .kpi.pass { border-color: var(--accent); }
+    table { width: 100%; border-collapse: collapse; margin-bottom: var(--space-6); font-size: 0.95rem; }
+    th, td { text-align: left; padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--line); }
+    td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
+    .bar { height: 8px; background: var(--accent); border-radius: 4px; min-width: 2px; }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="container">
+      <h1>Engagement test</h1>
+      <p class="section-lead">Funnel and sign-up answers from the landing page. Thresholds are the go criteria from the business plan.</p>
+
+      <form class="stats-form" id="stats-form">
+        <div class="field">
+          <label for="token">Stats token</label>
+          <input id="token" type="password" autocomplete="current-password" required>
+        </div>
+        <div class="field">
+          <label for="since">Since (optional)</label>
+          <input id="since" type="text" placeholder="2027-01-01">
+        </div>
+        <button class="btn btn-primary" type="submit">Load</button>
+      </form>
+      <p class="form-error" id="err" role="alert" hidden></p>
+      <div id="out" aria-live="polite"></div>
+    </div>
+  </main>
+
+  <script>
+  (function () {
+    "use strict";
+    var out = document.getElementById("out");
+    var err = document.getElementById("err");
+
+    function el(tag, attrs, text) {
+      var e = document.createElement(tag);
+      Object.keys(attrs || {}).forEach(function (k) { e.setAttribute(k, attrs[k]); });
+      if (text != null) e.textContent = String(text);
+      return e;
+    }
+    function pct(a, b) { return b ? (100 * a / b).toFixed(1) + "%" : "–"; }
+
+    function kpi(label, value, pass) {
+      var d = el("div", { class: "kpi" + (pass ? " pass" : "") });
+      d.appendChild(el("span", { class: "v" }, value));
+      d.appendChild(el("span", { class: "l" }, label + (pass === undefined ? "" : pass ? " · on track" : " · below target")));
+      return d;
+    }
+
+    function table(title, rows, total) {
+      var wrap = document.createDocumentFragment();
+      wrap.appendChild(el("h2", {}, title));
+      var t = el("table");
+      var head = el("tr");
+      ["Value", "Count", "Share", ""].forEach(function (h, i) { head.appendChild(el("th", i === 1 || i === 2 ? { class: "n" } : {}, h)); });
+      t.appendChild(head);
+      var max = Math.max.apply(null, rows.map(function (r) { return r.n; }).concat([1]));
+      rows.forEach(function (r) {
+        var tr = el("tr");
+        tr.appendChild(el("td", {}, r.k || "(none)"));
+        tr.appendChild(el("td", { class: "n" }, r.n));
+        tr.appendChild(el("td", { class: "n" }, pct(r.n, total)));
+        var td = el("td", { style: "width:35%" });
+        var bar = el("div", { class: "bar" });
+        bar.style.width = (100 * r.n / max) + "%";
+        td.appendChild(bar);
+        tr.appendChild(td);
+        t.appendChild(tr);
+      });
+      wrap.appendChild(t);
+      return wrap;
+    }
+
+    function render(s) {
+      out.textContent = "";
+      var f = s.funnel;
+      var conv = f.page_views ? s.signups.total / f.page_views : 0;
+      var callShare = s.signups.total ? s.signups.wants_call / s.signups.total : 0;
+      var k = el("div", { class: "kpis" });
+      k.appendChild(kpi("Page views", f.page_views));
+      k.appendChild(kpi("Engaged (30 s)", f.engaged + " (" + pct(f.engaged, f.page_views) + ")"));
+      k.appendChild(kpi("Reached pricing", pct(f.pricing_views, f.page_views)));
+      k.appendChild(kpi("Plan clicks", f.plan_clicks));
+      k.appendChild(kpi("Form starts", f.form_starts));
+      k.appendChild(kpi("Sign-ups (goal ≥ 25)", s.signups.total, s.signups.total >= 25));
+      k.appendChild(kpi("Visit → sign-up (goal ≥ 3%)", pct(s.signups.total, f.page_views), conv >= 0.03));
+      k.appendChild(kpi("Want a call (goal ≥ 30%)", s.signups.wants_call + " (" + pct(s.signups.wants_call, s.signups.total) + ")", callShare >= 0.3));
+      k.appendChild(kpi("AI interest (toggle or section)", pct(f.ai_interest, f.engaged)));
+      out.appendChild(k);
+
+      var n = s.signups.total;
+      out.appendChild(table("Pains ticked", s.signups.pains, n));
+      out.appendChild(table("Industry", s.signups.industry, n));
+      out.appendChild(table("Company size", s.signups.size, n));
+      out.appendChild(table("Plan chosen", s.signups.plan, n));
+      out.appendChild(table("Price perception", s.signups.price_view, n));
+      out.appendChild(table("Payment preference (hardware financing)", s.signups.payment_pref, n));
+      out.appendChild(table("Decision timeline", s.signups.timeline, n));
+      out.appendChild(table("Current IT", s.signups.current_it, n));
+      out.appendChild(table("Plan clicks by plan", s.plan_clicks, f.plan_clicks));
+      var calcTotal = s.calc_results.reduce(function (t, r) { return t + r.n; }, 0);
+      out.appendChild(table("Recommender result (last per visit)", s.calc_results, calcTotal));
+      out.appendChild(table("Recommender answers (visits per answer)", s.calc_answers, calcTotal));
+      out.appendChild(table("Page views by source", s.sources, f.page_views));
+      out.appendChild(table("Sign-ups by source", s.signups.sources, n));
+      out.appendChild(table("Sections viewed", s.sections, f.page_views));
+      out.appendChild(table("FAQ opened", s.faq, f.page_views));
+      out.appendChild(el("p", { class: "fineprint" }, "Generated " + s.generated_at + (s.since ? " · since " + s.since : "")));
+    }
+
+    document.getElementById("stats-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      err.hidden = true;
+      var since = document.getElementById("since").value.trim();
+      fetch("/api/stats" + (since ? "?since=" + encodeURIComponent(since) : ""), {
+        headers: { Authorization: "Bearer " + document.getElementById("token").value }
+      }).then(function (r) {
+        if (r.status === 401) throw new Error("Wrong token.");
+        if (!r.ok) throw new Error("Request failed (" + r.status + ").");
+        return r.json();
+      }).then(render).catch(function (x) {
+        err.textContent = x.message;
+        err.hidden = false;
+      });
+    });
+  })();
+  </script>
+</body>
+</html>

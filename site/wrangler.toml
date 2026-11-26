@@ -1,0 +1,13 @@
+name = "rechenbox"
+compatibility_date = "2026-11-01"
+pages_build_output_dir = "public"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "rechenbox"
+# Replace with the id printed by: npx wrangler d1 create rechenbox --location=weur
+database_id = "00000000-0000-0000-0000-000000000000"
+
+# Secrets (not stored here):
+#   npx wrangler pages secret put STATS_TOKEN          # protects /api/stats
+#   npx wrangler pages secret put NOTIFY_WEBHOOK_URL   # optional Slack/Teams webhook
