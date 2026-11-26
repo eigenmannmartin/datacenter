@@ -45,6 +45,10 @@
   --unit-main: #3d4248;
   --unit-line: #4d5258;
   --shadow: 0 1px 2px rgb(19 20 22 / 0.06), 0 10px 28px -14px rgb(19 20 22 / 0.22);
+  --hero-bg: radial-gradient(60% 64% at 76% 2%, #ffffff, transparent 72%), linear-gradient(to top, #d9dde2, transparent 38%), #eceef0;
+  --hero-glow: rgb(31 168 101 / 0.22);
+  --hero-drop: drop-shadow(0 30px 34px rgb(19 20 22 / 0.28));
+  --hero-card-shadow: 0 24px 50px -14px rgb(19 20 22 / 0.4), 0 0 0 1px var(--line);
 
   --radius-s: 4px;
   --radius: 8px;
@@ -62,20 +66,25 @@
     --ink: #eceded; --ink-2: #b6b9be; --line: #2c2e32; --line-strong: #50545a;
     --accent: #f1f2f3; --accent-hover: #d3d6d9; --accent-ink: #111214; --accent-soft: #2a2c30; --accent-text: #eceded;
     --led: #3ddc8b; --focus: #f0b44c; --danger: #f08a6c;
-    --alu-1: #5a5f66; --alu-2: #3b3f45; --alu-3: #4b5057; --alu-edge: #6a7078;
-    --cab-inner: #17191b; --unit: #26292d; --unit-main: #2e3237; --unit-line: #41454b;
+    --alu-1: #8b9199; --alu-2: #4a4f56; --alu-3: #6c727a; --alu-edge: #6a7078;
+    --hero-bg: radial-gradient(58% 62% at 76% 4%, rgb(214 220 228 / 0.2), transparent 72%), linear-gradient(to top, #050506, transparent 34%), #0b0c0d;
+    --hero-glow: rgb(61 220 139 / 0.3); --hero-drop: drop-shadow(0 30px 40px rgb(0 0 0 / 0.6));
+    --hero-card-shadow: 0 24px 60px -12px rgb(0 0 0 / 0.75), 0 0 0 1px rgb(255 255 255 / 0.5);
+    --cab-inner: #101113; --unit: #26292d; --unit-main: #2e3237; --unit-line: #41454b;
     --shadow: 0 1px 2px rgb(0 0 0 / 0.35), 0 12px 30px -12px rgb(0 0 0 / 0.65);
     color-scheme: dark;
   }
 }
-/* The hero shows the box at night, so it (and the header while over it) is dark in both themes. */
-:root[data-theme="dark"], .hero, .js .site-header.on-hero {
+:root[data-theme="dark"] {
   --bg: #0e0f10; --bg-alt: #151618; --surface: #1a1b1e; --surface-2: #1f2023;
   --ink: #eceded; --ink-2: #b6b9be; --line: #2c2e32; --line-strong: #50545a;
   --accent: #f1f2f3; --accent-hover: #d3d6d9; --accent-ink: #111214; --accent-soft: #2a2c30; --accent-text: #eceded;
   --led: #3ddc8b; --focus: #f0b44c; --danger: #f08a6c;
-  --alu-1: #5a5f66; --alu-2: #3b3f45; --alu-3: #4b5057; --alu-edge: #6a7078;
-  --cab-inner: #17191b; --unit: #26292d; --unit-main: #2e3237; --unit-line: #41454b;
+  --alu-1: #8b9199; --alu-2: #4a4f56; --alu-3: #6c727a; --alu-edge: #6a7078;
+  --hero-bg: radial-gradient(58% 62% at 76% 4%, rgb(214 220 228 / 0.2), transparent 72%), linear-gradient(to top, #050506, transparent 34%), #0b0c0d;
+  --hero-glow: rgb(61 220 139 / 0.3); --hero-drop: drop-shadow(0 30px 40px rgb(0 0 0 / 0.6));
+  --hero-card-shadow: 0 24px 60px -12px rgb(0 0 0 / 0.75), 0 0 0 1px rgb(255 255 255 / 0.5);
+  --cab-inner: #101113; --unit: #26292d; --unit-main: #2e3237; --unit-line: #41454b;
   --shadow: 0 1px 2px rgb(0 0 0 / 0.35), 0 12px 30px -12px rgb(0 0 0 / 0.65);
   color-scheme: dark;
 }
@@ -179,16 +188,13 @@ svg use { pointer-events: none; }
 @keyframes led-pulse { 0%, 100% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--led) 22%, transparent); } 50% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--led) 6%, transparent); } }
 
 /* ---------- Hero ---------- */
-/* Full screen: the box standing in a dark office, lit from above, LEDs on. */
+/* Full screen: the box lit from above, LEDs on. Bright room in the light theme, dark office in the dark one. */
 .hero {
   position: relative; display: flex; flex-direction: column; overflow: clip;
   min-height: 100vh; min-height: 100svh;
   margin-top: -63px; padding: calc(63px + var(--s6)) 0 0;
   color: var(--ink);
-  background:
-    radial-gradient(58% 62% at 76% 4%, rgb(214 220 228 / 0.2), transparent 72%),
-    linear-gradient(to top, #050506, transparent 34%),
-    #0b0c0d;
+  background: var(--hero-bg);
 }
 .hero-grid { flex: 1; display: grid; gap: var(--s6); align-items: center; padding-bottom: var(--s6); }
 @media (min-width: 920px) { .hero-grid { grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: var(--s7); } }
@@ -210,7 +216,7 @@ svg use { pointer-events: none; }
   .hero .proof { padding: var(--s3) 0; }
   .cabinet { height: min(60svh, 620px); }
 }
-.hero-foot { border-top: 1px solid rgb(255 255 255 / 0.12); }
+.hero-foot { border-top: 1px solid var(--line-strong); }
 .proof { list-style: none; padding: var(--s4) 0; margin: 0; display: grid; gap: var(--s2); color: var(--ink); font-size: 0.98rem; font-weight: 550; }
 @media (min-width: 760px) { .proof { grid-template-columns: repeat(3, auto); justify-content: space-between; gap: var(--s5); padding: var(--s5) 0; } }
 .proof li { display: flex; align-items: center; gap: var(--s2); }
@@ -219,12 +225,12 @@ svg use { pointer-events: none; }
 .hero-visual { position: relative; margin: 0 auto; display: grid; justify-items: center; width: min(100%, 460px); }
 .hero-visual::after { /* LED light spilling onto the floor */
   content: ""; position: absolute; left: 8%; right: 8%; bottom: -5%; height: 13%;
-  background: radial-gradient(closest-side, rgb(61 220 139 / 0.3), transparent); filter: blur(10px); pointer-events: none;
+  background: radial-gradient(closest-side, var(--hero-glow), transparent); filter: blur(10px); pointer-events: none;
 }
-.cabinet { position: relative; z-index: 1; display: block; height: min(66svh, 620px); width: auto; max-width: 100%; filter: drop-shadow(0 30px 40px rgb(0 0 0 / 0.6)); }
+.cabinet { position: relative; z-index: 1; display: block; height: min(66svh, 620px); width: auto; max-width: 100%; filter: var(--hero-drop); }
 .cab-body { fill: url(#alu); stroke: var(--alu-edge); stroke-width: 1; }
-.alu-1 { stop-color: #8b9199; } .alu-2 { stop-color: #4a4f56; } .alu-3 { stop-color: #6c727a; }
-.cab-inner { fill: #101113; }
+.alu-1 { stop-color: var(--alu-1); } .alu-2 { stop-color: var(--alu-2); } .alu-3 { stop-color: var(--alu-3); }
+.cab-inner { fill: var(--cab-inner); }
 .unit rect:first-child { fill: var(--unit); stroke: var(--unit-line); stroke-width: 1; }
 .unit-main rect:first-child { fill: var(--unit-main); }
 .slot { fill: rgb(255 255 255 / 0.1); }
@@ -232,12 +238,12 @@ svg use { pointer-events: none; }
 .cab-foot { fill: var(--alu-edge); }
 .cabinet .led { filter: drop-shadow(0 0 3px var(--led)) drop-shadow(0 0 8px var(--led)); }
 
-/* The portal card is a lit screen in the dark room: light in both themes. */
+/* The portal card is a lit screen: light in both themes. */
 .hero-card {
   --surface: #ffffff; --ink: #131416; --ink-2: #4a4e54; --line: #dfe1e4; --accent: #131416; --accent-ink: #ffffff; --led: #1fa865;
   position: absolute; z-index: 2; left: -6%; bottom: 13%; width: 244px; color: var(--ink);
   background: var(--surface); border-radius: var(--radius-l);
-  box-shadow: 0 24px 60px -12px rgb(0 0 0 / 0.75), 0 0 0 1px rgb(255 255 255 / 0.5); padding: var(--s4); font-size: 0.86rem;
+  box-shadow: var(--hero-card-shadow); padding: var(--s4); font-size: 0.86rem;
 }
 .hero-card-head { display: flex; flex-direction: column; gap: var(--s1); margin: 0 0 var(--s3); font-weight: 650; }
 .ok-chip { display: inline-flex; align-items: center; gap: var(--s2); font-size: 0.78rem; font-weight: 550; color: var(--ink-2); }
