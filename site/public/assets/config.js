@@ -4,7 +4,7 @@ window.RECHENBOX_CONFIG = {
   // Leave empty to hide the booking button.
   bookingUrl: "",
   // Public contact address shown in the footer.
-  contactEmail: "hallo@example.ch",
+  contactEmail: "hallo@rechenbox.ch",
   // Phone number shown in the footer, e.g. "+41 44 000 00 00". Leave empty to hide it.
   contactPhone: "",
   // Set to false to disable the anonymous event log (e.g. for local testing).

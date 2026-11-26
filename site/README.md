@@ -32,12 +32,12 @@ npx wrangler pages secret put NOTIFY_WEBHOOK_URL          # optional
 npx wrangler pages deploy
 ```
 
-Then attach your domain in the Cloudflare dashboard and add a rate-limiting rule for `/api/*` (for example 30 requests per minute per IP).
+Then attach `rechenbox.ch` (and `www.rechenbox.ch`, redirecting to it) in the Cloudflare dashboard and add a rate-limiting rule for `/api/*` (for example 30 requests per minute per IP).
 
 ## Before launch
 
 - [ ] Fill in the legal notice placeholders in `public/datenschutz.html` and have the privacy text checked
-- [ ] Set `bookingUrl`, `contactEmail` and `contactPhone` in `public/assets/config.js`
+- [ ] Set `bookingUrl` and `contactPhone` in `public/assets/config.js`, and make sure the mailbox `hallo@rechenbox.ch` exists
 - [ ] Replace the working name "Rechenbox" once the name and trademark are decided
 - [ ] Add an "About us" section with the founders' names, photos and background: the page review flagged this as the biggest trust gap for this audience
 - [ ] Submit a test sign-up on the live site and check it in `/stats`
@@ -45,13 +45,13 @@ Then attach your domain in the Cloudflare dashboard and add a rate-limiting rule
 ## Running the test
 
 Tag every ad and post link with UTM parameters, e.g.
-`https://example.ch/?utm_source=linkedin&utm_medium=paid&utm_campaign=treuhand-zh`.
+`https://rechenbox.ch/?utm_source=linkedin&utm_medium=paid&utm_campaign=treuhand-sg`.
 Use `?lang=en` to link to the English version.
 
 Read the results at `/stats`, or from the command line:
 
 ```sh
-curl -s -H "Authorization: Bearer $STATS_TOKEN" https://example.ch/api/stats | jq .
+curl -s -H "Authorization: Bearer $STATS_TOKEN" https://rechenbox.ch/api/stats | jq .
 ```
 
 Export the sign-ups (contains personal data, keep it safe):

@@ -1,6 +1,6 @@
 # Hardware, plans and financing
 
-*As of 2026-11-26. Product name: **Rechenbox** (working name, check Zefix and Swissreg before use). Pilot region: **St. Gallen**. Replaces the "Hardware reference design" in section 2b of the plan and the pricing and unit economics in 2a. Prices are estimates in CHF excl. VAT unless a source is linked. Figures marked "lab" must be measured before they go into a sales promise.*
+*As of 2026-11-26. Product name: **Rechenbox**, domain **rechenbox.ch** (still check Zefix and Swissreg for the name). Pilot region: **St. Gallen**. Replaces the "Hardware reference design" in section 2b of the plan and the pricing and unit economics in 2a. Prices are estimates in CHF excl. VAT unless a source is linked. Figures marked "lab" must be measured before they go into a sales promise.*
 
 **Decision:** two boxes, three plans.
 

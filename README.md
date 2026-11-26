@@ -1,4 +1,6 @@
-# Rechenbox: datacenter in a box (working title)
+# Rechenbox: datacenter in a box
+
+Website: [rechenbox.ch](https://rechenbox.ch)
 
 A managed private cloud that sits in the office of Swiss SMEs with 10–100 staff that handle confidential data (fiduciaries, law offices, medical practices, architects and engineers). One monthly fee covers hardware, software, off-site backup, security and operations.
 
