@@ -21,14 +21,15 @@
       network: "Die Übermittlung hat nicht geklappt. Bitte prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
       server: "Die Übermittlung hat nicht geklappt. Bitte versuchen Sie es später erneut oder schreiben Sie uns eine E-Mail.",
       sending: "Wird gesendet…",
-      skipped: "Alles klar. Wir melden uns bald.",
+      skipped: "In Ordnung. Wir melden uns innert zwei Arbeitstagen.",
+      calcCta: "Pilotplatz mit {plan} reservieren",
       typedName: "Anna Meier",
-      rStart: "Ein Tag Ausfall ist verkraftbar. Eine Box mit Ersatzgerät am nächsten Arbeitstag reicht.",
+      rStart: "Ein Tag Ausfall ist für Sie verkraftbar. Dann genügt ein Server, den wir bei einem Defekt am nächsten Arbeitstag ersetzen.",
       rSize: "Ab etwa 20 Mitarbeitenden lohnt sich die Ausfallsicherheit von drei Servern.",
-      rDowntime: "Ein Ausfall kostet Sie Umsatz oder Arbeitszeit. Drei Server ersetzen sich gegenseitig, ohne Unterbruch.",
-      rHours: "Business: Reaktion am selben Arbeitstag.",
-      rNow: "Pro: Alarmierung rund um die Uhr, Reaktion am selben Tag, auch am Wochenende.",
-      rCritical: "Wenn Sie ohne IT nicht arbeiten können, zählt auch das Wochenende."
+      rDowntime: "Ein Ausfall kostet Sie Umsatz oder Arbeitszeit. Mit drei Servern arbeiten Sie weiter, wenn einer ausfällt.",
+      rHours: "Bei Business reagieren wir am selben Arbeitstag.",
+      rNow: "Bei Pro werden wir rund um die Uhr alarmiert und reagieren am selben Tag, auch am Wochenende.",
+      rCritical: "Wenn Ihr Betrieb ohne IT stillsteht, zählt auch das Wochenende."
     },
     en: {
       langToggle: "Auf Deutsch wechseln",
@@ -40,14 +41,15 @@
       network: "Sending failed. Please check your connection and try again.",
       server: "Sending failed. Please try again later or send us an email.",
       sending: "Sending…",
-      skipped: "All right. We'll be in touch soon.",
+      skipped: "All right. We will get back to you within two working days.",
+      calcCta: "Reserve a pilot slot with {plan}",
       typedName: "Anna Meier",
-      rStart: "A day of downtime is bearable. One box with a replacement on the next working day is enough.",
+      rStart: "You can cope with a day of downtime. One server is then enough, and we replace it on the next working day if it fails.",
       rSize: "From about 20 staff, the failover of three servers pays off.",
-      rDowntime: "Downtime costs you revenue or working time. Three servers stand in for each other without interruption.",
-      rHours: "Business: response on the same working day.",
-      rNow: "Pro: alerting around the clock, response the same day, weekends included.",
-      rCritical: "If you cannot work without IT, weekends count too."
+      rDowntime: "Downtime costs you revenue or working time. With three servers you keep working when one fails.",
+      rHours: "With Business we respond on the same working day.",
+      rNow: "With Pro we are alerted around the clock and respond the same day, weekends included.",
+      rCritical: "If your business stops without IT, weekends count too."
     }
   };
 
@@ -90,6 +92,17 @@
   });
   systemDark.addEventListener("change", updateThemeButton);
 
+  // ---------- Header over the hero ----------
+  // The hero is dark in both themes. While it sits under the header, the header takes its colours.
+  var header = document.querySelector(".site-header");
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (entries) {
+      header.classList.toggle("on-hero", entries[0].isIntersecting);
+    }, { rootMargin: "-" + header.offsetHeight + "px 0px 0px 0px" }).observe($("top"));
+  } else {
+    header.classList.remove("on-hero");
+  }
+
   // ---------- Language ----------
   var originals = new Map();
   function remember(el, kind) {
@@ -131,7 +144,7 @@
     toggle.textContent = en ? "DE" : "EN";
     toggle.setAttribute("lang", en ? "de" : "en");
     toggle.setAttribute("aria-label", MSG[lang].langToggle);
-    document.title = en ? "Rechenbox – your server box in the office" : "Rechenbox – Ihre Server-Box im Büro";
+    document.title = en ? "Rechenbox – your server in your office, run by us" : "Rechenbox – Ihr Server im Büro, von uns betrieben";
     updateThemeButton();
     updateCalc(false);
     if (portal.done) $("portal-typed").textContent = MSG[lang].typedName;
@@ -191,6 +204,7 @@
     if (!r) return;
 
     $("calc-plan-name").textContent = PLAN_NAMES[r.plan];
+    $("calc-cta").textContent = MSG[lang].calcCta.replace("{plan}", PLAN_NAMES[r.plan]);
     var list = $("calc-reasons");
     list.textContent = "";
     r.reasons.forEach(function (key) {
@@ -213,6 +227,7 @@
     $("anmelden").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
     setTimeout(function () { $("f-name").focus({ preventScroll: true }); }, reduceMotion ? 0 : 450);
   }
+  $("calc-cta").addEventListener("click", function () { goToForm(recommendedPlan); });
   document.querySelectorAll("[data-plan-select]").forEach(function (btn) {
     btn.addEventListener("click", function () { goToForm(btn.getAttribute("data-plan-select")); });
   });
