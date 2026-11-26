@@ -93,7 +93,7 @@
   systemDark.addEventListener("change", updateThemeButton);
 
   // ---------- Header over the hero ----------
-  // The hero is dark in both themes. While it sits under the header, the header takes its colours.
+  // While the hero sits under the header, the header is transparent and shows the hero through.
   var header = document.querySelector(".site-header");
   if ("IntersectionObserver" in window) {
     new IntersectionObserver(function (entries) {
