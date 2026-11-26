@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Rechenbox – Ihre Server-Box im Büro</title>
-  <meta name="description" content="Server, Ablage, Backup und Sicherheit in einer Box für Treuhand, Kanzleien, Praxen und Planungsbüros. Personen und Zugriffe verwalten Sie selbst im Web-Portal, den Betrieb übernehmen wir.">
-  <meta property="og:title" content="Rechenbox – Ihre Server-Box im Büro">
-  <meta property="og:description" content="Sie verwalten, wir betreiben. Ihre Daten bleiben im Büro, das Backup liegt verschlüsselt in der Schweiz.">
+  <title>Rechenbox – Ihr Server im Büro, von uns betrieben</title>
+  <meta name="description" content="Die Rechenbox ersetzt Server, NAS, Backup und Firewall in Treuhandbüros, Kanzleien, Praxen und Planungsbüros. Sie steht in Ihrem Büro, den Betrieb übernehmen wir. Fester Monatspreis ab CHF 790.">
+  <meta property="og:title" content="Rechenbox – Ihr Server im Büro, von uns betrieben">
+  <meta property="og:description" content="Ihr Server steht im Büro, den Betrieb übernehmen wir. Fester Monatspreis ab CHF 790, auf Wunsch mit verschlüsselter Backup-Kopie in einem Schweizer Rechenzentrum.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://rechenbox.ch/">
   <link rel="canonical" href="https://rechenbox.ch/">
@@ -40,7 +40,7 @@
 
   <a class="skip-link" href="#main" data-i18n="skip">Zum Inhalt springen</a>
 
-  <header class="site-header">
+  <header class="site-header on-hero">
     <div class="container header-inner">
       <a class="brand" href="#top" aria-label="Rechenbox, zum Seitenanfang">
         <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="6" y="3" width="20" height="26" rx="3"/><rect class="u" x="10" y="8" width="12" height="3" rx="1"/><rect class="u" x="10" y="14" width="12" height="3" rx="1"/><rect class="u" x="10" y="20" width="12" height="3" rx="1"/></svg>
@@ -49,6 +49,7 @@
       <nav class="main-nav" aria-label="Hauptnavigation" data-i18n-attr="aria-label:nav.label">
         <a href="#box" data-i18n="nav.box">Die Box</a>
         <a href="#portal" data-i18n="nav.portal">Portal</a>
+        <a href="#ablauf" data-i18n="nav.how">Ablauf</a>
         <a href="#preise" data-i18n="nav.pricing">Preise</a>
         <a href="#faq" data-i18n="nav.faq">Fragen</a>
       </nav>
@@ -68,18 +69,14 @@
     <section class="hero" id="top">
       <div class="container hero-grid">
         <div class="hero-copy">
-          <p class="status-line"><span class="led-dot" aria-hidden="true"></span><span data-i18n="hero.status">Pilotplätze 2027 in der Region St. Gallen</span></p>
-          <h1 data-i18n="hero.title">Ihre Server-Box im Büro. Sie verwalten, wir betreiben.</h1>
-          <p class="lead" data-i18n="hero.lead">Für Treuhand, Kanzleien, Praxen und Planungsbüros mit 10–100 Mitarbeitenden: Server, Ablage, Backup und Sicherheit in einer Box. Personen und Zugriffe regeln Sie selbst im Web-Portal, den Betrieb übernehmen wir.</p>
+          <p class="status-line"><span class="led-dot" aria-hidden="true"></span><span data-i18n="hero.status">10 Pilotplätze für 2027, Region St. Gallen</span></p>
+          <h1><span data-i18n="hero.title1">Ihr Server steht im Büro.</span> <span data-i18n="hero.title2">Den Betrieb übernehmen wir.</span></h1>
+          <p class="lead" data-i18n="hero.lead">Die Rechenbox ersetzt Server, NAS, Backup und Firewall in Treuhandbüros, Kanzleien, Praxen und Planungsbüros mit 10 bis 100 Mitarbeitenden. Wir überwachen sie, spielen Updates ein und ersetzen defekte Hardware.</p>
           <div class="hero-actions">
             <a class="btn btn-primary" href="#anmelden" data-i18n="cta.reserve">Pilotplatz reservieren</a>
             <a class="btn btn-secondary" href="#preise" data-i18n="cta.pricing">Preise ansehen</a>
           </div>
-          <ul class="proof" aria-label="Das Wichtigste in Kürze" data-i18n-attr="aria-label:hero.proofLabel">
-            <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="hero.proof1">Ihre Daten bleiben im Büro</span></li>
-            <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="hero.proof2">Fester Monatspreis ab CHF&nbsp;790</span></li>
-            <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="hero.proof3">Personen und Zugriffe selbst verwalten</span></li>
-          </ul>
+          <p class="cta-note" data-i18n="cta.note">Kostenlos und unverbindlich. Wir melden uns innert zwei Arbeitstagen.</p>
         </div>
 
         <figure class="hero-visual">
@@ -107,36 +104,41 @@
             </ul>
             <span class="hero-card-btn" data-i18n="hero.card.btn">Person hinzufügen</span>
           </div>
-          <figcaption data-i18n="hero.caption">Etwa 50&nbsp;cm hoch, leise genug fürs Büro, normale Steckdose.</figcaption>
         </figure>
+      </div>
+      <div class="container hero-foot">
+        <ul class="proof" aria-label="Das Wichtigste in Kürze" data-i18n-attr="aria-label:hero.proofLabel">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="hero.proof1">Ihre Daten bleiben im Büro</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="hero.proof2">Fester Monatspreis ab CHF&nbsp;790</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="hero.proof3">Personen und Zugriffe verwalten Sie selbst</span></li>
+        </ul>
       </div>
     </section>
 
     <!-- WHY -->
     <section class="section" id="warum">
       <div class="container">
-        <h2 data-i18n="why.title">Warum gerade jetzt?</h2>
-        <p class="section-lead" data-i18n="why.lead">Vier Gründe, jetzt über die IT zu entscheiden.</p>
+        <h2 data-i18n="why.title">Vier Gründe, die IT jetzt neu zu regeln</h2>
         <div class="reasons">
           <article class="reason">
             <svg class="reason-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-lock"/></svg>
             <div><h3 data-i18n="why.r1.title">Berufsgeheimnis und Datenschutz</h3>
-            <p data-i18n="why.r1.text">Mandanten-, Patienten- und Projektdaten gehören nicht auf Server, die US-Gesetzen wie dem CLOUD Act unterstehen.</p></div>
+            <p data-i18n="why.r1.text">US-Anbieter müssen Daten auf Verlangen an US-Behörden herausgeben, auch wenn der Server in der Schweiz steht (CLOUD Act). Mandanten-, Patienten- und Projektdaten auf der Box bleiben in Ihrem Büro.</p></div>
           </article>
           <article class="reason">
             <svg class="reason-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-calendar"/></svg>
             <div><h3 data-i18n="why.r2.title">Windows Server 2016 läuft aus</h3>
-            <p data-i18n="why.r2.text">Ab dem 13. Januar 2027 gibt es keine regulären Sicherheitsupdates mehr.</p></div>
+            <p data-i18n="why.r2.text">Ab dem 13. Januar 2027 gibt es keine regulären Sicherheitsupdates mehr. Wer heute noch darauf arbeitet, braucht bis dahin einen Ersatz.</p></div>
           </article>
           <article class="reason">
             <svg class="reason-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shield"/></svg>
             <div><h3 data-i18n="why.r3.title">Ransomware und Versicherer</h3>
-            <p data-i18n="why.r3.text">Cyberversicherungen verlangen getestete Backups. Wir testen Ihre Wiederherstellung jeden Monat und belegen es schriftlich.</p></div>
+            <p data-i18n="why.r3.text">Cyberversicherer fragen nach getesteten Backups. Wir stellen jeden Monat Daten aus Ihrem Backup wieder her, und das Ergebnis steht in Ihrem Monatsbericht.</p></div>
           </article>
           <article class="reason">
             <svg class="reason-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ai"/></svg>
             <div><h3 data-i18n="why.r4.title">KI ohne Datenabfluss</h3>
-            <p data-i18n="why.r4.text">Befragen Sie Ihre eigenen Dokumente mit einer KI, die in Ihrem Büro läuft. Nichts geht an ChatGPT und Co.</p></div>
+            <p data-i18n="why.r4.text">Mit der Option Private KI befragen Sie Ihre eigenen Dokumente. Das Sprachmodell läuft auf der Box, Ihre Fragen und Dokumente verlassen das Büro nicht.</p></div>
           </article>
         </div>
       </div>
@@ -146,7 +148,7 @@
     <section class="section section-alt" id="box">
       <div class="container">
         <h2 data-i18n="box.title">Was in der Box steckt</h2>
-        <p class="section-lead" data-i18n="box.lead">Alles, was Ihr Büro an Infrastruktur braucht. Ihre Daten bleiben dabei im Haus.</p>
+        <p class="section-lead" data-i18n="box.lead">Im Schrank stecken Firewall, Netzwerk-Switch, ein bis drei Server, ein Backup-Gerät und eine USV für Stromausfälle. Das bekommen Sie damit:</p>
         <div class="box-grid">
           <figure class="flow">
             <svg viewBox="0 0 560 340" role="img" aria-labelledby="flow-title">
@@ -175,13 +177,13 @@
           </figure>
 
           <dl class="features">
-            <div><dt data-i18n="box.f1.t">Läuft weiter, wenn ein Server ausfällt</dt><dd data-i18n="box.f1.d">Bei Business und Pro übernehmen die anderen zwei Server sofort.</dd></div>
-            <div><dt data-i18n="box.f2.t">Dateiablage und Zusammenarbeit</dt><dd data-i18n="box.f2.d">Netzlaufwerke wie gewohnt, dazu sicheres Teilen und Zugriff von unterwegs.</dd></div>
-            <div><dt data-i18n="box.f3.t">Ihre Branchensoftware</dt><dd data-i18n="box.f3.d">Buchhaltung, Praxissoftware oder CAD-Lizenzen laufen direkt auf der Box, sauber getrennt.</dd></div>
-            <div><dt data-i18n="box.f4.t">Sicherer Fernzugriff</dt><dd data-i18n="box.f4.d">Anmeldung mit Bestätigung per Handy, von zu Hause oder unterwegs.</dd></div>
-            <div><dt data-i18n="box.f5.t">Backup inbegriffen</dt><dd data-i18n="box.f5.d">Auf einem eigenen Gerät für schnelle Wiederherstellung. Auf Wunsch zusätzlich verschlüsselt in einem Schweizer Rechenzentrum, das empfehlen wir.</dd></div>
-            <div><dt data-i18n="box.f6.t">Überwachung und Updates</dt><dd data-i18n="box.f6.d">Die Box wird rund um die Uhr überwacht, Updates laufen automatisch, und Sie erhalten jeden Monat einen Bericht.</dd></div>
-            <div><dt><span data-i18n="box.f7.t">Private KI</span> <span class="tag" data-i18n="box.optional">optional</span></dt><dd data-i18n="box.f7.d">Ein KI-Assistent, der Ihre Dokumente kennt. Er läuft in Ihrem Büro, nichts geht nach aussen.</dd></div>
+            <div><dt data-i18n="box.f1.t">Läuft weiter, wenn ein Server ausfällt</dt><dd data-i18n="box.f1.d">Business und Pro haben drei Server. Fällt einer aus, übernehmen die anderen zwei, und Sie arbeiten weiter.</dd></div>
+            <div><dt data-i18n="box.f2.t">Dateiablage und Zusammenarbeit</dt><dd data-i18n="box.f2.d">Netzlaufwerke wie gewohnt. Dazu können Sie Dateien teilen und von unterwegs darauf zugreifen.</dd></div>
+            <div><dt data-i18n="box.f3.t">Ihre Branchensoftware</dt><dd data-i18n="box.f3.d">Buchhaltung, Praxissoftware oder CAD-Lizenzen laufen auf der Box, jede Anwendung getrennt von den anderen.</dd></div>
+            <div><dt data-i18n="box.f4.t">Sicherer Fernzugriff</dt><dd data-i18n="box.f4.d">Wer von zu Hause oder unterwegs arbeitet, bestätigt die Anmeldung auf dem Handy.</dd></div>
+            <div><dt data-i18n="box.f5.t">Backup inbegriffen</dt><dd data-i18n="box.f5.d">Das Backup liegt auf einem eigenen Gerät, damit eine Wiederherstellung schnell geht. Wir empfehlen zusätzlich die verschlüsselte Kopie in einem Schweizer Rechenzentrum, ab CHF 90 pro Monat.</dd></div>
+            <div><dt data-i18n="box.f6.t">Überwachung und Updates</dt><dd data-i18n="box.f6.d">Wir überwachen die Box rund um die Uhr und spielen Updates automatisch ein. Jeden Monat erhalten Sie einen Bericht.</dd></div>
+            <div><dt><span data-i18n="box.f7.t">Private KI</span> <span class="tag" data-i18n="box.optional">optional</span></dt><dd data-i18n="box.f7.d">Ein KI-Assistent, der Fragen zu Ihren Dokumenten beantwortet. Er läuft auf der Box und kostet CHF 590 pro Monat.</dd></div>
           </dl>
         </div>
       </div>
@@ -191,8 +193,8 @@
     <section class="section" id="portal">
       <div class="container portal-grid">
         <div class="portal-copy">
-          <h2 data-i18n="portal.title">Sie entscheiden, wir betreiben</h2>
-          <p class="section-lead" data-i18n="portal.lead">Den Alltag regeln Sie selbst im Web-Portal der Box, ohne IT-Kenntnisse und ohne auf jemanden zu warten. Im Hintergrund wird alles laufend überwacht, damit Probleme behoben sind, bevor sie stören.</p>
+          <h2 data-i18n="portal.title">Alltägliches erledigen Sie selbst im Portal</h2>
+          <p class="section-lead" data-i18n="portal.lead">Eine neue Mitarbeiterin oder einen Ordnerzugriff richten Sie im Web-Portal der Box selbst ein. So lange dauert das:</p>
           <table class="tasks">
             <caption class="sr-only" data-i18n="portal.tasksCaption">Aufgaben im Portal und wie lange sie etwa dauern</caption>
             <tbody>
@@ -203,7 +205,7 @@
               <tr><th scope="row" data-i18n="portal.t5">Austritt: Zugang sperren</th><td data-i18n="portal.t5d">30 Sekunden</td></tr>
             </tbody>
           </table>
-          <p class="portal-note" data-i18n="portal.note">Jede Änderung wird protokolliert. So ist jederzeit nachvollziehbar, wer was geändert hat.</p>
+          <p class="portal-note" data-i18n="portal.note">Das Portal protokolliert jede Änderung mit Person und Zeitpunkt. Den Rest übernehmen wir: Überwachung, Updates, Backup-Tests und den Ersatz defekter Hardware.</p>
         </div>
 
         <figure class="portal-demo">
@@ -253,21 +255,22 @@
     <!-- HOW IT WORKS -->
     <section class="section section-alt" id="ablauf">
       <div class="container">
-        <h2 data-i18n="how.title">So funktioniert es</h2>
+        <h2 data-i18n="how.title">So läuft es ab</h2>
         <ol class="steps">
-          <li><h3 data-i18n="how.s1.t">Analyse</h3><p data-i18n="how.s1.d">Eine Stunde bei Ihnen vor Ort, kostenlos. Danach wissen Sie, welche Box passt.</p></li>
-          <li><h3 data-i18n="how.s2.t">Einbau</h3><p data-i18n="how.s2.d">Wir liefern die Box fertig eingerichtet und ziehen Ihre Daten um, meist an einem Wochenende.</p></li>
-          <li><h3 data-i18n="how.s3.t">Betrieb</h3><p data-i18n="how.s3.d">Sie verwalten Personen und Freigaben im Portal. Updates und Überwachung laufen automatisch.</p></li>
-          <li><h3 data-i18n="how.s4.t">Erneuerung</h3><p data-i18n="how.s4.d">Nach fünf Jahren ersetzen wir die Hardware, im Preis inbegriffen.</p></li>
+          <li><h3 data-i18n="how.s1.t">Analyse</h3><p data-i18n="how.s1.d">Wir kommen für eine Stunde zu Ihnen, kostenlos. Danach wissen Sie, welche Box passt.</p></li>
+          <li><h3 data-i18n="how.s2.t">Einbau</h3><p data-i18n="how.s2.d">Wir liefern die Box fertig eingerichtet und ziehen Ihre Daten um, meist an einem Wochenende. Am Montag arbeiten Sie normal weiter.</p></li>
+          <li><h3 data-i18n="how.s3.t">Betrieb</h3><p data-i18n="how.s3.d">Sie verwalten Personen und Freigaben im Portal. Wir überwachen die Box und spielen Updates ein.</p></li>
+          <li><h3 data-i18n="how.s4.t">Erneuerung</h3><p data-i18n="how.s4.d">Nach fünf Jahren ersetzen wir die Hardware. Das ist im Monatspreis enthalten.</p></li>
         </ol>
+        <p class="section-cta"><span data-i18n="how.cta">Der erste Schritt ist die kostenlose Analyse bei Ihnen im Büro.</span> <a class="btn btn-primary" href="#anmelden" data-i18n="cta.reserve">Pilotplatz reservieren</a></p>
       </div>
     </section>
 
     <!-- PRICING -->
     <section class="section" id="preise">
       <div class="container">
-        <h2 data-i18n="pricing.title">Preise</h2>
-        <p class="section-lead" data-i18n="pricing.lead">Pro Monat, exkl. MWST, bei 36 Monaten Laufzeit. Hardware, Software, Backup und Betrieb inbegriffen. Pilotkunden 2027 erhalten im ersten Jahr 30&nbsp;% Rabatt.</p>
+        <h2 data-i18n="pricing.title">Ein fester Preis pro Monat</h2>
+        <p class="section-lead" data-i18n="pricing.lead">Im Monatspreis sind Hardware, Software, Backup und Betrieb enthalten. Die Preise gelten exkl. MWST bei 36 Monaten Laufzeit. Pilotkunden erhalten 2027 im ersten Jahr 30&nbsp;% Rabatt.</p>
 
         <!-- RECOMMENDER -->
         <div class="chooser" id="rechner">
@@ -290,7 +293,7 @@
               </div>
             </fieldset>
             <fieldset class="q">
-              <legend class="q-label" data-i18n="calc.q.response">Eine Störung muss behoben sein …</legend>
+              <legend class="q-label" data-i18n="calc.q.response">Wie schnell müssen wir bei einer Störung reagieren?</legend>
               <div class="picks">
                 <label class="pick"><input type="radio" name="calc-response" value="nextday"><span class="pick-card"><svg class="pick-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-nextday"/></svg><span class="pick-label" data-i18n="calc.a.response.nextday">am nächsten Arbeitstag</span><span class="pick-sub" data-i18n="calc.a.response.nextday.sub">reicht uns</span></span></label>
                 <label class="pick"><input type="radio" name="calc-response" value="sameday"><span class="pick-card"><svg class="pick-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-hours"/></svg><span class="pick-label" data-i18n="calc.a.response.sameday">am selben Tag</span><span class="pick-sub" data-i18n="calc.a.response.sameday.sub">unter der Woche</span></span></label>
@@ -299,10 +302,11 @@
             </fieldset>
           </div>
           <div class="chooser-result" aria-live="polite">
-            <p id="calc-pending" class="calc-pending" data-i18n="calc.pending">Beantworten Sie die drei Fragen, dann markieren wir das passende Paket.</p>
+            <p id="calc-pending" class="calc-pending" data-i18n="calc.pending">Beantworten Sie die drei Fragen. Danach markieren wir das passende Paket.</p>
             <div id="calc-done" class="calc-done" hidden>
               <p class="calc-plan"><span data-i18n="calc.recommend">Unsere Empfehlung:</span> <strong id="calc-plan-name">Start</strong></p>
               <ul class="calc-reasons" id="calc-reasons"></ul>
+              <button type="button" class="btn btn-primary btn-small" id="calc-cta"></button>
             </div>
           </div>
         </div>
@@ -319,11 +323,11 @@
               <li data-i18n="pricing.start.f3">Lokales Backup, 30 Tage</li>
             </ul>
             <p class="setup" data-i18n="pricing.start.setup">Einrichtung einmalig CHF 2'900</p>
-            <button type="button" class="btn btn-secondary plan-btn" data-plan-select="start" data-i18n="pricing.start.cta">Start wählen</button>
+            <button type="button" class="btn btn-secondary plan-btn" data-plan-select="start" data-i18n="pricing.start.cta">Start reservieren</button>
           </article>
 
           <article class="plan plan-featured" data-plan="business">
-            <p class="plan-badge" data-i18n="pricing.popular">Für die meisten Büros</p>
+            <p class="plan-badge" data-i18n="pricing.popular">Empfohlen ab 20 Mitarbeitenden</p>
             <p class="plan-badge plan-badge-rec" data-i18n="pricing.yours">Ihre Empfehlung</p>
             <h3>Business</h3>
             <p class="plan-for" data-i18n="pricing.business.for">Für 15–100 Mitarbeitende</p>
@@ -334,7 +338,7 @@
               <li data-i18n="pricing.business.f3">Lokales Backup, 90 Tage</li>
             </ul>
             <p class="setup" data-i18n="pricing.business.setup">Einrichtung einmalig CHF 6'900</p>
-            <button type="button" class="btn btn-primary plan-btn" data-plan-select="business" data-i18n="pricing.business.cta">Business wählen</button>
+            <button type="button" class="btn btn-primary plan-btn" data-plan-select="business" data-i18n="pricing.business.cta">Business reservieren</button>
           </article>
 
           <article class="plan" data-plan="pro">
@@ -348,13 +352,13 @@
               <li data-i18n="pricing.pro.f3">Lokales Backup, 1 Jahr, jährlicher Notfalltest</li>
             </ul>
             <p class="setup" data-i18n="pricing.pro.setup">Einrichtung einmalig CHF 8'900</p>
-            <button type="button" class="btn btn-secondary plan-btn" data-plan-select="pro" data-i18n="pricing.pro.cta">Pro wählen</button>
+            <button type="button" class="btn btn-secondary plan-btn" data-plan-select="pro" data-i18n="pricing.pro.cta">Pro reservieren</button>
           </article>
         </div>
         <p class="all-plans" data-i18n="pricing.all">In allen Paketen: Web-Portal, Überwachung rund um die Uhr, lokales Backup mit monatlichem Wiederherstellungstest, Firewall und USV. Optional pro Monat: Backup-Kopie im Schweizer Rechenzentrum ab CHF 90, Private KI CHF 590, mehr Speicher ab CHF 190.</p>
 
         <details class="compare-details">
-          <summary data-i18n="cmp.summary">Alle Unterschiede im Vergleich</summary>
+          <summary data-i18n="cmp.summary">Pakete im Detail vergleichen</summary>
           <div class="compare-wrap" tabindex="0" role="region" aria-label="Die Pakete im Vergleich" data-i18n-attr="aria-label:cmp.caption">
             <table class="compare">
               <thead>
@@ -383,18 +387,18 @@
     <!-- FAQ -->
     <section class="section section-alt" id="faq">
       <div class="container narrow">
-        <h2 data-i18n="faq.title">Häufige Fragen</h2>
+        <h2 data-i18n="faq.title">Fragen und Antworten</h2>
         <details data-faq="replaces"><summary data-i18n="faq.q1">Was ersetzt die Box?</summary><p data-i18n="faq.a1">Ihren Server, das NAS, die Backup-Lösung, die Firewall und den Wartungsvertrag dafür. Arbeitsplätze, Drucker und Telefonie betreut weiterhin Ihr IT-Partner.</p></details>
-        <details data-faq="room"><summary data-i18n="faq.q2">Brauchen wir einen Serverraum?</summary><p data-i18n="faq.a2">Nein. Eine normale Steckdose und ein Netzwerkanschluss genügen.</p></details>
+        <details data-faq="room"><summary data-i18n="faq.q2">Brauchen wir einen Serverraum?</summary><p data-i18n="faq.a2">Nein. Die Box ist etwa 50&nbsp;cm hoch und braucht eine normale Steckdose und einen Netzwerkanschluss.</p></details>
         <details data-faq="failure"><summary data-i18n="faq.q3">Was passiert bei einem Defekt oder Stromausfall?</summary><p data-i18n="faq.a3">Bei Business und Pro arbeiten Sie ohne Unterbruch weiter, und wir ersetzen den defekten Server. Bei Start schicken wir am nächsten Arbeitstag ein vorinstalliertes Ersatzgerät und stellen Ihre Daten aus dem Backup wieder her. Eine USV überbrückt kurze Stromausfälle.</p></details>
         <details data-faq="data"><summary data-i18n="faq.q4">Wo liegen unsere Daten?</summary><p data-i18n="faq.a4">In Ihrem Büro. Auf Wunsch liegt zusätzlich eine verschlüsselte Backup-Kopie in einem Rechenzentrum in der Schweiz. Wir sind vertraglich an Ihr Berufsgeheimnis gebunden.</p></details>
-        <details data-faq="portal"><summary data-i18n="faq.q5">Wer richtet neue Mitarbeitende oder Zugriffe ein?</summary><p data-i18n="faq.a5">Sie selbst, im Web-Portal der Box, in wenigen Minuten. Wenn etwas klemmt, helfen wir.</p></details>
-        <details data-faq="m365"><summary data-i18n="faq.q6">Können wir Microsoft 365 behalten?</summary><p data-i18n="faq.a6">Ja. Viele Kunden behalten Outlook und Office. Die Box übernimmt Dateien, Branchensoftware, Backup und Sicherheit.</p></details>
-        <details data-faq="setup"><summary data-i18n="faq.q7">Was deckt die Einrichtung ab?</summary><p data-i18n="faq.a7">Analyse, Planung, die fertig eingerichtete Box, Einbau, Datenumzug und zwei Wochen enge Begleitung danach. Am Montag nach der Umstellung arbeitet Ihr Büro normal weiter.</p></details>
-        <details data-faq="noise"><summary data-i18n="faq.q8">Wie laut ist die Box, und was kostet der Strom?</summary><p data-i18n="faq.a8">Die Box ist auf rund 150 Watt im Betrieb ausgelegt, das sind etwa CHF 30 Strom im Monat. Sie besteht aus kompakten Rechnern statt lauter Rackserver und passt deshalb ins Büro.</p></details>
+        <details data-faq="portal"><summary data-i18n="faq.q5">Wer richtet neue Mitarbeitende oder Zugriffe ein?</summary><p data-i18n="faq.a5">Sie selbst, im Web-Portal der Box. Eine neue Person anzulegen dauert etwa zwei Minuten. Wenn etwas nicht klappt, helfen wir.</p></details>
+        <details data-faq="m365"><summary data-i18n="faq.q6">Können wir Microsoft 365 behalten?</summary><p data-i18n="faq.a6">Ja. Outlook und Office laufen weiter wie bisher. Die Box übernimmt Dateiablage, Branchensoftware, Backup und Firewall.</p></details>
+        <details data-faq="setup"><summary data-i18n="faq.q7">Was deckt die Einrichtung ab?</summary><p data-i18n="faq.a7">Analyse, Planung, die fertig eingerichtete Box, Einbau, Datenumzug und zwei Wochen Begleitung danach. Am Montag nach der Umstellung arbeitet Ihr Büro normal weiter.</p></details>
+        <details data-faq="noise"><summary data-i18n="faq.q8">Wie laut ist die Box, und was kostet der Strom?</summary><p data-i18n="faq.a8">In der Box arbeiten kompakte Rechner, die deutlich leiser sind als Rackserver. Sie ist auf rund 150 Watt im Betrieb ausgelegt, das sind etwa CHF 30 Strom im Monat.</p></details>
         <details data-faq="buy"><summary data-i18n="faq.q9">Müssen wir die Hardware kaufen?</summary><p data-i18n="faq.a9">Nein, sie ist im Monatspreis enthalten. Wer jährlich im Voraus zahlt, erhält 4&nbsp;% Rabatt. Wer die Hardware lieber kauft, zahlt danach einen tieferen Monatspreis.</p></details>
-        <details data-faq="exit"><summary data-i18n="faq.q10">Was passiert, wenn wir kündigen?</summary><p data-i18n="faq.a10">Ihre Daten gehören Ihnen. Sie erhalten einen vollständigen Export und können die Hardware zum vertraglich festgelegten Restwert übernehmen.</p></details>
-        <details data-faq="pilot"><summary data-i18n="faq.q11">Was bedeutet Pilotphase?</summary><p data-i18n="faq.a11">Wir starten 2027 mit höchstens zehn Pilotkunden in der Region St. Gallen. Wir melden uns persönlich, bevor etwas verbindlich wird.</p></details>
+        <details data-faq="exit"><summary data-i18n="faq.q10">Was passiert, wenn wir kündigen?</summary><p data-i18n="faq.a10">Sie erhalten einen vollständigen Export Ihrer Daten. Die Hardware können Sie zum vertraglich festgelegten Restwert übernehmen.</p></details>
+        <details data-faq="pilot"><summary data-i18n="faq.q11">Was bedeutet Pilotphase?</summary><p data-i18n="faq.a11">Wir starten 2027 mit höchstens zehn Pilotkunden in der Region St. Gallen. Sie erhalten im ersten Jahr 30&nbsp;% Rabatt. Mit der Reservation merken wir einen Platz für Sie vor, verbindlich wird es erst mit Ihrer Unterschrift unter dem Vertrag.</p></details>
       </div>
     </section>
 
@@ -402,7 +406,7 @@
     <section class="section section-signup" id="anmelden">
       <div class="container narrow">
         <h2 data-i18n="form.title">Pilotplatz reservieren</h2>
-        <p class="section-lead" data-i18n="form.lead">Unverbindlich und kostenlos. Wir melden uns innert zwei Arbeitstagen.</p>
+        <p class="section-lead" data-i18n="form.lead">Die Reservation ist kostenlos und unverbindlich. Wir melden uns innert zwei Arbeitstagen und vereinbaren die Analyse bei Ihnen vor Ort.</p>
 
         <form id="signup-form" novalidate>
           <div class="field-row">
@@ -480,7 +484,7 @@
           </div>
 
           <form id="details-form" novalidate>
-            <p class="details-intro" data-i18n="details.intro">Vier kurze Fragen helfen uns, das Gespräch vorzubereiten. Alle sind freiwillig.</p>
+            <p class="details-intro" data-i18n="details.intro">Fünf kurze Fragen helfen uns, das Gespräch vorzubereiten. Alle sind freiwillig.</p>
             <fieldset>
               <legend data-i18n="details.it">Wie ist Ihre IT heute organisiert?</legend>
               <div class="chips">
@@ -544,7 +548,7 @@
               <button type="button" class="link-btn" id="details-skip" data-i18n="details.skip">Überspringen</button>
             </div>
           </form>
-          <p class="details-done" id="details-done" hidden data-i18n="details.done">Danke für Ihre Antworten. Bis bald.</p>
+          <p class="details-done" id="details-done" hidden data-i18n="details.done">Danke für Ihre Antworten. Wir melden uns innert zwei Arbeitstagen.</p>
         </div>
       </div>
     </section>
