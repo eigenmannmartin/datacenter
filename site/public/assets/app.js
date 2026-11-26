@@ -92,17 +92,6 @@
   });
   systemDark.addEventListener("change", updateThemeButton);
 
-  // ---------- Header over the hero ----------
-  // While the hero sits under the header, the header is transparent and shows the hero through.
-  var header = document.querySelector(".site-header");
-  if ("IntersectionObserver" in window) {
-    new IntersectionObserver(function (entries) {
-      header.classList.toggle("on-hero", entries[0].isIntersecting);
-    }, { rootMargin: "-" + header.offsetHeight + "px 0px 0px 0px" }).observe($("top"));
-  } else {
-    header.classList.remove("on-hero");
-  }
-
   // ---------- Language ----------
   var originals = new Map();
   function remember(el, kind) {
