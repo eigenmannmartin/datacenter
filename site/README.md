@@ -68,13 +68,15 @@ Use `?lang=en` to link to the English version.
 
 Every push to `main` that touches `site/` deploys automatically via `.github/workflows/deploy-site.yml`: it checks the JavaScript, applies `schema.sql` to the remote database (idempotent), deploys to Cloudflare Pages and smoke-tests the result. It can also be started by hand under Actions → Deploy site → Run workflow.
 
+Every pull request that touches `site/` gets a preview via `.github/workflows/preview-site.yml`, at `https://<branch>.rechenbox.pages.dev`. The workflow posts the link as a comment on the pull request and updates it on each push. Previews use the separate D1 database `rechenbox-preview` (EU), so test sign-ups never mix with real ones, and the same password gate as production. Pull requests from forks are skipped, because they get no secrets.
+
 Set up in Cloudflare (account `a1121094b30551cad6cd3d7681e5018a`):
 
 - Zone `rechenbox.ch`, nameservers `apollo.ns.cloudflare.com` and `kate.ns.cloudflare.com`; always HTTPS, TLS 1.2 minimum, strict SSL
 - DNS: `rechenbox.ch` and `www` as proxied CNAMEs to `rechenbox.pages.dev`; a redirect rule sends `www.rechenbox.ch` to `rechenbox.ch` (301)
 - Web Analytics for `rechenbox.ch`, injected automatically
 - Mail at Infomaniak: MX `mta-gw.infomaniak.ch` (priority 5), SPF `include:spf.infomaniak.ch -all`, DMARC `p=reject`, `autodiscover`/`autoconfig` CNAMEs to `infomaniak.com` (all DNS only, not proxied). DKIM still to add from the Infomaniak Manager
-- D1 database `rechenbox` (EU jurisdiction)
+- D1 databases `rechenbox` (production) and `rechenbox-preview` (pull request previews), both EU jurisdiction
 - Pages project `rechenbox` (production branch `main`) with the D1 binding, both custom domains and the `SITE_PASSWORD` secret
 - Account API token `rechenbox-github-deploy` (Pages Write, D1 Write on this account only; expires 2027-11-26), stored as the repository secret `CLOUDFLARE_API_TOKEN` next to `CLOUDFLARE_ACCOUNT_ID`. Renew it before it expires: Manage Account → Account API Tokens.
 

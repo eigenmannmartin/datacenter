@@ -1,0 +1,102 @@
+name: Preview site
+
+# Deploys every pull request that touches site/ as a Cloudflare Pages preview
+# (https://<branch>.rechenbox.pages.dev) and posts the link on the pull request.
+# Previews use the separate database "rechenbox-preview" and the same password gate as production.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - "site/**"
+      - ".github/workflows/preview-site.yml"
+
+concurrency:
+  group: preview-site-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  WRANGLER_VERSION: "4.168.0"
+
+jobs:
+  preview:
+    # Pull requests from forks get no secrets: skip them instead of failing.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: site
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      BRANCH: ${{ github.head_ref }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      PR_TITLE: ${{ github.event.pull_request.title }}
+      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Check JavaScript syntax
+        run: |
+          for f in public/assets/*.js functions/*.js functions/api/*.js lib/*.js; do node --check "$f"; done
+
+      - name: Apply database schema to the preview database
+        run: npx --yes "wrangler@${WRANGLER_VERSION}" d1 execute rechenbox-preview --env preview --remote --file=schema.sql --yes
+
+      - name: Deploy preview
+        id: deploy
+        run: |
+          out="$RUNNER_TEMP/wrangler-output.jsonl"
+          WRANGLER_OUTPUT_FILE_PATH="$out" npx --yes "wrangler@${WRANGLER_VERSION}" pages deploy \
+            --project-name rechenbox \
+            --branch "$BRANCH" \
+            --commit-hash "$HEAD_SHA" \
+            --commit-message "PR #${PR_NUMBER}: ${PR_TITLE:0:250}" | tee "$RUNNER_TEMP/deploy.log"
+          url=$(jq -r 'select(.type == "pages-deploy-detailed") | (.alias // .url) // empty' "$out" 2>/dev/null | tail -n 1)
+          if [ -z "$url" ]; then
+            url=$(grep -oE 'https://[a-z0-9.-]+\.rechenbox\.pages\.dev' "$RUNNER_TEMP/deploy.log" | tail -n 1)
+          fi
+          [ -n "$url" ] || { echo "::error::No preview URL found in the wrangler output"; exit 1; }
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+          echo "Preview: $url" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Smoke test
+        env:
+          URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          for i in 1 2 3 4 5 6; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "$URL/")
+            { [ "$code" = "200" ] || [ "$code" = "401" ]; } && break
+            sleep 10
+          done
+          echo "Preview answers $code"
+          [ "$code" = "200" ] || [ "$code" = "401" ]
+
+      - name: Post the link on the pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          URL: ${{ steps.deploy.outputs.url }}
+          REPO: ${{ github.repository }}
+        run: |
+          marker="<!-- rechenbox-preview -->"
+          body="${marker}
+          **Preview:** ${URL}
+
+          Commit ${HEAD_SHA:0:7}. Same password as the live site. Sign-ups made here go to the preview database, not the real one."
+          body=$(printf '%s\n' "$body" | sed 's/^          //')
+          id=$(gh api "repos/${REPO}/issues/${PR_NUMBER}/comments" --paginate \
+                 --jq ".[] | select(.user.login == \"github-actions[bot]\" and (.body | startswith(\"${marker}\"))) | .id" | head -n 1)
+          if [ -n "$id" ]; then
+            gh api -X PATCH "repos/${REPO}/issues/comments/${id}" -f body="$body" > /dev/null
+          else
+            gh api "repos/${REPO}/issues/${PR_NUMBER}/comments" -f body="$body" > /dev/null
+          fi

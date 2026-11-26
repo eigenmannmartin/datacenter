@@ -8,6 +8,16 @@ database_name = "rechenbox"
 # EU jurisdiction: data is stored and processed in the EU only
 database_id = "04a95002-a17e-4d1d-9f9c-0aff3d9c9333"
 
-# Deployed by .github/workflows/deploy-site.yml on every push to main.
-# Optional secret on the Pages project (not here):
+# Preview deployments (pull requests, any branch other than main) get their own database,
+# so test sign-ups never mix with real ones. Also EU jurisdiction.
+[env.preview]
+[[env.preview.d1_databases]]
+binding = "DB"
+database_name = "rechenbox-preview"
+database_id = "60cff366-8274-4fa6-ae72-3b3120ac4c24"
+
+# Production: .github/workflows/deploy-site.yml on every push to main.
+# Previews: .github/workflows/preview-site.yml on every pull request.
+# Secrets on the Pages project (not here): SITE_PASSWORD (pre-launch gate, set for production and preview).
+# Optional:
 #   NOTIFY_WEBHOOK_URL   optional Slack/Teams webhook: npx wrangler pages secret put NOTIFY_WEBHOOK_URL --project-name rechenbox
