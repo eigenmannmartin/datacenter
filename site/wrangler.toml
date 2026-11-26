@@ -5,9 +5,10 @@ pages_build_output_dir = "public"
 [[d1_databases]]
 binding = "DB"
 database_name = "rechenbox"
-# Replace with the id printed by: npx wrangler d1 create rechenbox --location=weur
-database_id = "00000000-0000-0000-0000-000000000000"
+# EU jurisdiction: data is stored and processed in the EU only
+database_id = "04a95002-a17e-4d1d-9f9c-0aff3d9c9333"
 
-# Secrets (not stored here):
-#   npx wrangler pages secret put STATS_TOKEN          # protects /api/stats
-#   npx wrangler pages secret put NOTIFY_WEBHOOK_URL   # optional Slack/Teams webhook
+# Deployed by .github/workflows/deploy-site.yml on every push to main.
+# Secrets live on the Pages project, not here:
+#   STATS_TOKEN          protects /api/stats (already set)
+#   NOTIFY_WEBHOOK_URL   optional Slack/Teams webhook: npx wrangler pages secret put NOTIFY_WEBHOOK_URL --project-name rechenbox

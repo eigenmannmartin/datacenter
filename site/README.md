@@ -19,20 +19,20 @@ npx wrangler pages dev
 # open http://localhost:8788, and http://localhost:8788/stats with token "dev-token"
 ```
 
-## Deploy (Cloudflare Pages)
+## Deploy
 
-```sh
-cd site
-npx wrangler login
-npx wrangler d1 create rechenbox --location=weur        # copy the database_id into wrangler.toml
-npx wrangler d1 execute rechenbox --remote --file=schema.sql   # new database; for an existing one see the migration note in schema.sql
-npx wrangler pages project create rechenbox --production-branch=main
-npx wrangler pages secret put STATS_TOKEN                 # a long random string
-npx wrangler pages secret put NOTIFY_WEBHOOK_URL          # optional
-npx wrangler pages deploy
-```
+Every push to `main` that touches `site/` deploys automatically via `.github/workflows/deploy-site.yml`: it checks the JavaScript, applies `schema.sql` to the remote database (idempotent), deploys to Cloudflare Pages and smoke-tests the result. It can also be started by hand under Actions → Deploy site → Run workflow.
 
-Then attach `rechenbox.ch` (and `www.rechenbox.ch`, redirecting to it) in the Cloudflare dashboard and add a rate-limiting rule for `/api/*` (for example 30 requests per minute per IP).
+Already set up in Cloudflare (account `a1121094b30551cad6cd3d7681e5018a`):
+
+- Zone `rechenbox.ch`, nameservers `apollo.ns.cloudflare.com` and `kate.ns.cloudflare.com`; always HTTPS, TLS 1.2 minimum, strict SSL
+- DNS: `rechenbox.ch` and `www` as proxied CNAMEs to `rechenbox.pages.dev`; a redirect rule sends `www.rechenbox.ch` to `rechenbox.ch` (301)
+- D1 database `rechenbox` (EU jurisdiction), schema applied
+- Pages project `rechenbox` (production branch `main`) with the D1 binding, the `STATS_TOKEN` secret and both custom domains
+
+Repository secrets the workflow needs: `CLOUDFLARE_API_TOKEN` (custom token with Account → Cloudflare Pages → Edit and Account → D1 → Edit) and `CLOUDFLARE_ACCOUNT_ID`.
+
+Optional chat notification for new sign-ups: `npx wrangler pages secret put NOTIFY_WEBHOOK_URL --project-name rechenbox`.
 
 ## Before launch
 
