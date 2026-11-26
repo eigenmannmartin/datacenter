@@ -1,6 +1,6 @@
 /* Rechenbox landing page: language and theme switches, plan recommender,
- * portal demo, two-step sign-up form, and anonymous cookie-less event logging
- * to /api/event (first party only). */
+ * portal demo and two-step sign-up form. Visitor statistics come from
+ * Cloudflare Web Analytics (injected at the edge, no cookies), not from this file. */
 (function () {
   "use strict";
 
@@ -56,9 +56,8 @@
   var params = new URLSearchParams(location.search);
   var lang = params.get("lang") === "en" ? "en" : "de";
 
-  // ---------- Event logging ----------
-  // A random id per page load, kept in memory only: no cookies, no storage.
-  var pageId = Math.random().toString(36).slice(2, 12);
+  // ---------- Lead source ----------
+  // Sent with the sign-up only, so each lead can be traced to its ad or post.
   var utm = {};
   ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"].forEach(function (k) {
     var v = params.get(k);
@@ -66,17 +65,6 @@
   });
   var referrerHost = "";
   try { referrerHost = document.referrer ? new URL(document.referrer).hostname : ""; } catch (e) { /* ignore */ }
-
-  function track(name, props) {
-    if (CONFIG.trackEvents === false) return;
-    var body = JSON.stringify({ name: name, props: props || {}, pid: pageId, lang: lang, path: location.pathname, ref: referrerHost, utm: utm, vw: window.innerWidth });
-    try {
-      if (navigator.sendBeacon && navigator.sendBeacon("/api/event", new Blob([body], { type: "application/json" }))) return;
-    } catch (e) { /* fall through */ }
-    try { fetch("/api/event", { method: "POST", headers: { "Content-Type": "application/json" }, body: body, keepalive: true }).catch(function () {}); } catch (e) { /* never break the page */ }
-  }
-  var sentOnce = {};
-  function trackOnce(key, name, props) { if (sentOnce[key]) return; sentOnce[key] = true; track(name, props); }
 
   function money(n) {
     return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, lang === "en" ? "," : "'");
@@ -99,7 +87,6 @@
   $("theme-toggle").addEventListener("click", function () {
     root.setAttribute("data-theme", isDark() ? "light" : "dark");
     updateThemeButton();
-    track("theme_switch", { to: isDark() ? "dark" : "light" });
   });
   systemDark.addEventListener("change", updateThemeButton);
 
@@ -157,14 +144,12 @@
     var qs = p.toString();
     history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + location.hash);
     applyLang();
-    track("lang_switch", { to: lang });
   });
 
   // ---------- Recommender ----------
   // Start is one box; Business and Pro share the same hardware and differ in support.
   var QUESTIONS = ["size", "downtime", "response"];
-  var lastTrackedResult = null;
-  var resultTimer;
+  var recommendedPlan = "";
 
   function answer(q) {
     var el = document.querySelector('input[name="calc-' + q + '"]:checked');
@@ -190,16 +175,16 @@
     return { plan: plan, reasons: reasons };
   }
 
-  function updateCalc(fromUser) {
+  function updateCalc() {
     var a = {};
     var answered = 0;
     QUESTIONS.forEach(function (q) { a[q] = answer(q); if (a[q]) answered++; });
     var done = answered === QUESTIONS.length;
     $("calc-pending").hidden = done;
     $("calc-done").hidden = !done;
-    if (fromUser) trackOnce("calc", "calc_use", {});
 
     var r = done ? recommend(a) : null;
+    recommendedPlan = r ? r.plan : "";
     document.querySelectorAll(".plan").forEach(function (card) {
       card.classList.toggle("recommended", !!r && card.getAttribute("data-plan") === r.plan);
     });
@@ -213,37 +198,23 @@
       li.textContent = MSG[lang][key];
       list.appendChild(li);
     });
-    if (fromUser) {
-      clearTimeout(resultTimer);
-      resultTimer = setTimeout(function () {
-        if (r.plan !== lastTrackedResult) { lastTrackedResult = r.plan; track("calc_result", { plan: r.plan }); }
-      }, 1500);
-    }
   }
 
   QUESTIONS.forEach(function (q) {
     document.querySelectorAll('input[name="calc-' + q + '"]').forEach(function (el) {
-      el.addEventListener("change", function () { updateCalc(true); track("calc_answer", { q: q, a: el.value }); });
+      el.addEventListener("change", function () { updateCalc(true); });
     });
   });
 
   // ---------- Plan buttons ("fake door") ----------
   var planSelect = $("f-plan");
-  function goToForm(plan, source) {
+  function goToForm(plan) {
     if (plan && planSelect.querySelector('option[value="' + plan + '"]')) planSelect.value = plan;
-    track("plan_click", { plan: plan || "none", source: source });
     $("anmelden").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
     setTimeout(function () { $("f-name").focus({ preventScroll: true }); }, reduceMotion ? 0 : 450);
   }
   document.querySelectorAll("[data-plan-select]").forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      var plan = btn.getAttribute("data-plan-select");
-      var card = btn.closest(".plan");
-      goToForm(plan, card && card.classList.contains("recommended") ? "recommended" : "pricing");
-    });
-  });
-  document.querySelectorAll("[data-track-cta]").forEach(function (a) {
-    a.addEventListener("click", function () { track("cta_click", { where: a.getAttribute("data-track-cta") }); });
+    btn.addEventListener("click", function () { goToForm(btn.getAttribute("data-plan-select")); });
   });
 
   // ---------- Portal demo: the page's one orchestrated moment ----------
@@ -306,56 +277,13 @@
   } else {
     portalFinal();
   }
-  $("portal-replay").addEventListener("click", function () { playPortal(); track("portal_replay", {}); });
-
-  // ---------- FAQ ----------
-  document.querySelectorAll("details[data-faq]").forEach(function (d) {
-    d.addEventListener("toggle", function () { if (d.open) track("faq_open", { q: d.getAttribute("data-faq") }); });
-  });
-  var cmp = document.querySelector(".compare-details");
-  if (cmp) cmp.addEventListener("toggle", function () { if (cmp.open) trackOnce("compare", "compare_open", {}); });
-
-  // ---------- Engagement: sections, scroll depth, time ----------
-  if ("IntersectionObserver" in window) {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) {
-          var id = e.target.getAttribute("data-track");
-          trackOnce("sec:" + id, "section_view", { section: id });
-          io.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.35 });
-    document.querySelectorAll("[data-track]").forEach(function (el) { io.observe(el); });
-  }
-  var depths = [25, 50, 75, 90];
-  var scrollTick = false;
-  window.addEventListener("scroll", function () {
-    if (scrollTick) return;
-    scrollTick = true;
-    requestAnimationFrame(function () {
-      scrollTick = false;
-      var max = document.documentElement.scrollHeight - window.innerHeight;
-      if (max <= 0) return;
-      var pct = (window.scrollY / max) * 100;
-      depths.forEach(function (d) { if (pct >= d) trackOnce("scroll" + d, "scroll_depth", { pct: d }); });
-    });
-  }, { passive: true });
-  var visibleMs = 0, lastTick = Date.now();
-  setInterval(function () {
-    var now = Date.now();
-    if (document.visibilityState === "visible") visibleMs += now - lastTick;
-    lastTick = now;
-    if (visibleMs >= 30000) trackOnce("engaged", "engaged_30s", {});
-  }, 1000);
+  $("portal-replay").addEventListener("click", playPortal);
 
   // ---------- Sign-up, step 1 ----------
   var form = $("signup-form");
   var errorEl = $("form-error");
   var submitBtn = $("submit-btn");
   var signupRef = null;
-
-  form.addEventListener("focusin", function () { trackOnce("form_start", "form_start", {}); });
 
   function showError(el, msg, field) {
     el.textContent = msg;
@@ -376,7 +304,8 @@
       wants_call: fd.get("wants_call") === "yes",
       consent: fd.get("consent") === "on",
       website: fd.get("website") || "", // honeypot
-      lang: lang, utm: utm, ref: referrerHost, pid: pageId
+      recommended_plan: recommendedPlan,
+      lang: lang, utm: utm, ref: referrerHost
     };
   }
 
@@ -400,7 +329,7 @@
     errorEl.hidden = true;
     var data = collect();
     var problem = validate(data);
-    if (problem) { showError(errorEl, problem.msg, problem.field); track("form_invalid", {}); return; }
+    if (problem) { showError(errorEl, problem.msg, problem.field); return; }
 
     var label = submitBtn.textContent;
     submitBtn.disabled = true;
@@ -409,12 +338,10 @@
       .then(function (res) { if (!res.ok) throw new Error("server"); return res.json(); })
       .then(function (json) {
         signupRef = json && json.ref ? json.ref : null;
-        track("form_submit", { plan: data.plan, industry: data.industry, size: data.size, wants_call: data.wants_call });
         form.hidden = true;
         var book = $("booking-link");
         if (CONFIG.bookingUrl) {
           book.href = CONFIG.bookingUrl;
-          book.addEventListener("click", function () { track("call_click", {}); });
         } else {
           book.hidden = true;
         }
@@ -425,7 +352,6 @@
       })
       .catch(function (err) {
         showError(errorEl, err && err.message === "server" ? MSG[lang].server : MSG[lang].network);
-        track("form_error", {});
       })
       .finally(function () { submitBtn.disabled = false; submitBtn.textContent = label; });
   });
@@ -460,14 +386,11 @@
     detailsBtn.textContent = MSG[lang].sending;
     fetch("/api/details", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
       .then(function (res) { if (!res.ok) throw new Error("server"); })
-      .then(function () {
-        track("details_submit", { pains: body.pains.length, payment: body.payment_pref || "none" });
-        finishDetails();
-      })
+      .then(function () { finishDetails(); })
       .catch(function (err) { showError(detailsErr, err && err.message === "server" ? MSG[lang].server : MSG[lang].network); })
       .finally(function () { detailsBtn.disabled = false; detailsBtn.textContent = label; });
   });
-  $("details-skip").addEventListener("click", function () { track("details_skip", {}); finishDetails(MSG[lang].skipped); });
+  $("details-skip").addEventListener("click", function () { finishDetails(MSG[lang].skipped); });
 
   // ---------- Footer contact ----------
   if (CONFIG.contactEmail) $("contact-link").href = "mailto:" + CONFIG.contactEmail;
@@ -480,5 +403,4 @@
 
   // ---------- Start ----------
   applyLang();
-  track("page_view", {});
 })();

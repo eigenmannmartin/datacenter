@@ -7,6 +7,7 @@ const PLANS = ["undecided", "start", "business", "pro"];
 const TIMELINES = ["lt6", "6to12", "gt12", "info"];
 const PRICE_VIEWS = ["cheap", "fair", "expensive", "unsure"];
 const PAYMENT_PREFS = ["monthly", "prepay", "purchase", "undecided"];
+const RECOMMENDED = ["start", "business", "pro"];
 const CURRENT_IT = ["own_server", "m365", "nas", "swiss_cloud", "it_partner", "unknown"];
 const PAINS = ["confidentiality", "ransomware", "server_eol", "cost", "ai", "performance"];
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -48,7 +49,7 @@ export async function onRequestPost({ request, env, waitUntil }) {
 
   await env.DB.prepare(
     `INSERT INTO signups (name, company, email, phone, industry, size, current_it, pains, plan, timeline, price_view,
-                          message, wants_call, lang, utm_source, utm_medium, utm_campaign, ref, pid, country, payment_pref, token)
+                          message, wants_call, lang, utm_source, utm_medium, utm_campaign, ref, country, payment_pref, token, recommended_plan)
      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20, ?21, ?22)`
   ).bind(
     name,
@@ -69,10 +70,10 @@ export async function onRequestPost({ request, env, waitUntil }) {
     str(utm.utm_medium, 100),
     str(utm.utm_campaign, 100),
     str(b.ref, 100),
-    str(b.pid, 16),
     request.cf?.country || null,
     oneOf(b.payment_pref, PAYMENT_PREFS),
-    token
+    token,
+    oneOf(b.recommended_plan, RECOMMENDED)
   ).run();
 
   // Optional chat notification (Slack/Teams incoming webhook). No email or phone in the message.

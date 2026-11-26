@@ -1,7 +1,7 @@
 name: Deploy site
 
 # Deploys site/ to Cloudflare Pages (project "rechenbox", served at https://rechenbox.ch).
-# Needs two repository secrets: CLOUDFLARE_API_TOKEN (Pages: Edit, D1: Edit) and CLOUDFLARE_ACCOUNT_ID.
+# Needs two repository secrets: CLOUDFLARE_API_TOKEN (account token "rechenbox-github-deploy": Pages Write, D1 Write) and CLOUDFLARE_ACCOUNT_ID.
 
 on:
   push:
@@ -69,6 +69,6 @@ jobs:
           done
           echo "Home page: $code"
           [ "$code" = "200" ]
-          stats=$(curl -s -o /dev/null -w '%{http_code}' "$url/api/stats")
-          echo "Stats API without token: $stats (expected 401)"
-          [ "$stats" = "401" ]
+          signup=$(curl -s -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d '{}' "$url/api/signup")
+          echo "Sign-up API with an empty form: $signup (expected 422)"
+          [ "$signup" = "422" ]

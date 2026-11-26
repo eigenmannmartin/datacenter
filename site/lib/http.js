@@ -45,10 +45,6 @@ export function sameOrigin(request) {
   }
 }
 
-const BOT_RE = /bot|crawl|spider|slurp|preview|headless|lighthouse|monitor|curl|wget|python-requests|httpclient/i;
-export function isBot(request) {
-  return BOT_RE.test(request.headers.get("User-Agent") || "");
-}
 
 export function str(value, max) {
   if (typeof value !== "string") return null;
@@ -60,13 +56,3 @@ export function oneOf(value, allowed) {
   return allowed.includes(value) ? value : null;
 }
 
-// Constant-time string comparison for the stats token.
-export function safeEqual(a, b) {
-  const enc = new TextEncoder();
-  const x = enc.encode(String(a));
-  const y = enc.encode(String(b));
-  let diff = x.length ^ y.length;
-  const len = Math.max(x.length, y.length);
-  for (let i = 0; i < len; i++) diff |= (x[i] || 0) ^ (y[i] || 0);
-  return diff === 0;
-}

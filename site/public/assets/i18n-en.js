@@ -279,5 +279,5 @@ window.RECHENBOX_EN = {
 
   "footer.privacy": "Privacy and legal notice",
   "footer.contact": "Contact",
-  "footer.note": "This website sets no cookies and loads nothing from third parties."
+  "footer.note": "No cookies. We count visits anonymously with Cloudflare Web Analytics."
 };
