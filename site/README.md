@@ -107,5 +107,6 @@ npx wrangler pages dev
 - [ ] Check four statements the page makes as given, which `docs/hardware.md` describes as planned: the sync app for PC, Mac and phone with sharing by link, sign-in for remote access confirmed on the phone, business software (accounting, practice, CAD licence server) running on the box, and that files stay with the old provider until the customer has checked the move
 - [ ] The task durations in the portal section are labelled as targets and the portal picture as a draft: measure them once the portal exists
 - [ ] Measure power draw and noise in the lab; the page gives the design target for power and says both are not measured yet
+- [ ] Confirm what the "Private KI" section says beyond `docs/hardware.md` (section 7 covers only the device and the price): AI agents come with the CHF 590 option; an answer names the document it comes from; the AI keeps to the access rights set in the portal; an agent asks a person before it sends anything or changes data, and every step is logged. The agent demo is labelled as an example and a draft
 - [ ] Decide whether "I'd like a short call" in the form stays pre-ticked: it raises the share of sign-ups that ask for a call, which is one of the go/no-go figures
 - [ ] Submit a test sign-up on the live site, find it in the D1 table, then delete it there
