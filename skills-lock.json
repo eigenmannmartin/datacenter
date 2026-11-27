@@ -1,6 +1,13 @@
 {
   "version": 2,
   "skills": {
+    "ab-testing": {
+      "source": "coreyhaines31/marketingskills",
+      "commit": "2bf95edb4ebd37198ab7fd18b99ba95c2145ec64",
+      "sourceType": "github",
+      "skillPath": "skills/ab-testing/SKILL.md",
+      "computedHash": "56e4fd344bf686d5d3a083b2728a9fd65f173f047a6535eeb05712dd7ee10f13"
+    },
     "accessibility-engineering": {
       "source": "addyosmani/agent-skills",
       "commit": "e997ac5b9a74eab332d5e9793bb38a38c8cfdd74",
@@ -148,12 +155,26 @@
       "skillPath": "skills/interview-me/SKILL.md",
       "computedHash": "68615337944c1d56cd9db6b934e247ff1d67600dd9db3d41cc9bf7236b9d986c"
     },
+    "launch": {
+      "source": "coreyhaines31/marketingskills",
+      "commit": "2bf95edb4ebd37198ab7fd18b99ba95c2145ec64",
+      "sourceType": "github",
+      "skillPath": "skills/launch/SKILL.md",
+      "computedHash": "585ae1023f9178c84490bf5fcf2a0e0d1dc418e215f3c8d813f3e648acaac5c1"
+    },
     "observability-and-instrumentation": {
       "source": "addyosmani/agent-skills",
       "commit": "e997ac5b9a74eab332d5e9793bb38a38c8cfdd74",
       "sourceType": "github",
       "skillPath": "skills/observability-and-instrumentation/SKILL.md",
       "computedHash": "3720071b84c8ee80bd5649dbc66da14a5a7b94262c672ca56bcb5b7480b463c4"
+    },
+    "offers": {
+      "source": "coreyhaines31/marketingskills",
+      "commit": "2bf95edb4ebd37198ab7fd18b99ba95c2145ec64",
+      "sourceType": "github",
+      "skillPath": "skills/offers/SKILL.md",
+      "computedHash": "3641ad9980f4cfb0e5b8810b0cfecd7f724b9e0076152930c06de8884d1ad791"
     },
     "performance-optimization": {
       "source": "addyosmani/agent-skills",
@@ -168,6 +189,13 @@
       "sourceType": "github",
       "skillPath": "skills/planning-and-task-breakdown/SKILL.md",
       "computedHash": "fcce61a29cf1364e78761639c0eaddd97c033e64531749f62b000c9d0a257f21"
+    },
+    "pricing": {
+      "source": "coreyhaines31/marketingskills",
+      "commit": "2bf95edb4ebd37198ab7fd18b99ba95c2145ec64",
+      "sourceType": "github",
+      "skillPath": "skills/pricing/SKILL.md",
+      "computedHash": "9bea1819645df0b2d95429ecb64745ef5d2940b0bb161a40131eae3db8222813"
     },
     "security-and-hardening": {
       "source": "addyosmani/agent-skills",
