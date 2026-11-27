@@ -42,7 +42,7 @@ CREATE INDEX IF NOT EXISTS signups_email ON signups (email);
 CREATE TABLE IF NOT EXISTS order_details (
   token   TEXT PRIMARY KEY,                -- signups.token
   options TEXT NOT NULL DEFAULT '[]',      -- JSON array: offsite (backup copy in a Swiss data centre), ai, storage
-  start   TEXT                             -- lt6 | 6to12 | gt12: preferred start, in months from the order
+  start   TEXT                             -- 2027h1 | 2027h2 | 2028: preferred start (first or second half of 2027, 2028 or later)
 );
 
 -- Migrations for databases created by an earlier version of this file:

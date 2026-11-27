@@ -86,7 +86,7 @@
             <a class="btn btn-primary" href="#bestellen" data-i18n="cta.order">Jetzt bestellen</a>
             <a class="btn btn-secondary" href="#preise" data-i18n="cta.pricing">Preise ansehen</a>
           </div>
-          <p class="cta-note" data-i18n="cta.note">Pilotkunden erhalten im ersten Jahr 30&nbsp;% Rabatt. Vor dem Vertrag kommen wir für eine Stunde zur Analyse zu Ihnen.</p>
+          <p class="cta-note" data-i18n="cta.note">Pilotkunden erhalten im ersten Jahr 30&nbsp;% Rabatt. Bevor Sie unterschreiben, kommen wir für eine Stunde zur Analyse zu Ihnen.</p>
         </div>
 
       </div>
@@ -478,7 +478,7 @@
         <details data-faq="noise"><summary data-i18n="faq.q8">Wie laut ist die Box, und was kostet der Strom?</summary><p data-i18n="faq.a8">In der Box arbeiten kompakte Rechner statt Rackserver. Ausgelegt ist sie auf rund 150 Watt im Betrieb, das wären etwa CHF&nbsp;30 Strom im Monat. Lautstärke und Verbrauch haben wir noch nicht gemessen.</p></details>
         <details data-faq="buy"><summary data-i18n="faq.q9">Müssen wir die Hardware kaufen?</summary><p data-i18n="faq.a9">Nein, sie ist im Monatspreis enthalten. Wer jährlich im Voraus zahlt, erhält 4&nbsp;% Rabatt. Wer die Hardware lieber kauft, zahlt danach einen tieferen Monatspreis.</p></details>
         <details data-faq="exit"><summary data-i18n="faq.q10">Was passiert, wenn wir kündigen?</summary><p data-i18n="faq.a10">Sie erhalten einen vollständigen Export Ihrer Daten. Die Hardware können Sie zum vertraglich festgelegten Restwert übernehmen.</p></details>
-        <details data-faq="pilot"><summary data-i18n="faq.q11">Was bedeutet Pilotphase?</summary><p data-i18n="faq.a11">Wir starten 2027 mit höchstens zehn Pilotkunden in der Region St. Gallen. Sie erhalten im ersten Jahr 30&nbsp;% Rabatt. Nach Ihrer Bestellung kommen wir zur Analyse vorbei und schicken Ihnen danach den Vertrag. Verbindlich wird die Bestellung erst mit Ihrer Unterschrift.</p></details>
+        <details data-faq="pilot"><summary data-i18n="faq.q11">Was bedeutet Pilotphase?</summary><p data-i18n="faq.a11">Wir starten 2027 mit höchstens zehn Pilotkunden in der Region St. Gallen. Sie erhalten im ersten Jahr 30&nbsp;% Rabatt. Nach Ihrer Bestellung kommen wir zur Analyse vorbei und schicken Ihnen danach den Vertrag. Verbindlich wird die Bestellung erst mit Ihrer Unterschrift. Bis dahin zahlen Sie nichts.</p></details>
       </div>
     </section>
 
@@ -487,13 +487,13 @@
     <section class="section" id="bestellen">
       <div class="container narrow">
         <h2 data-i18n="form.title">Rechenbox bestellen</h2>
-        <p class="section-lead" data-i18n="form.lead">Für den Pilot 2027 nehmen wir höchstens zehn Kunden in der Region St. Gallen an. Nach Ihrer Bestellung melden wir uns innert zwei Arbeitstagen und vereinbaren die Analyse bei Ihnen vor Ort.</p>
+        <p class="section-lead" data-i18n="form.lead">Nach Ihrer Bestellung melden wir uns innert zwei Arbeitstagen und vereinbaren die Analyse bei Ihnen vor Ort.</p>
 
         <noscript><p>Das Bestellformular braucht JavaScript. Bestellen Sie per E-Mail an <a href="mailto:hallo@rechenbox.ch">hallo@rechenbox.ch</a>.</p></noscript>
         <form id="order-form" novalidate>
           <h3 class="order-part" data-i18n="order.box">Ihre Rechenbox</h3>
           <fieldset class="q" id="q-plan">
-            <legend class="q-label" data-i18n="order.plan">Paket</legend>
+            <legend class="q-label"><span data-i18n="order.plan">Paket</span> <span class="q-missing" data-i18n="order.missing">bitte wählen</span></legend>
             <div class="picks">
               <label class="pick"><input type="radio" name="plan" value="start"><span class="pick-card"><span class="pick-label">Start</span><span class="pick-sub">CHF&nbsp;<span class="amount-plain">790</span> <span data-i18n="pricing.perMonth">pro Monat</span></span></span></label>
               <label class="pick"><input type="radio" name="plan" value="business"><span class="pick-card"><span class="pick-label">Business</span><span class="pick-sub">CHF&nbsp;<span class="amount-plain">1'890</span> <span data-i18n="pricing.perMonth">pro Monat</span></span></span></label>
@@ -509,7 +509,7 @@
             </div>
           </fieldset>
           <fieldset class="q" id="q-pay">
-            <legend class="q-label" data-i18n="order.pay">Zahlung</legend>
+            <legend class="q-label"><span data-i18n="order.pay">Zahlung</span> <span class="q-missing" data-i18n="order.missing">bitte wählen</span></legend>
             <div class="picks">
               <label class="pick"><input type="radio" name="payment_pref" value="monthly"><span class="pick-card"><span class="pick-label" data-i18n="order.pay.monthly">Monatlich</span><span class="pick-sub" data-i18n="order.pay.monthly.sub">Hardware inbegriffen</span></span></label>
               <label class="pick"><input type="radio" name="payment_pref" value="prepay"><span class="pick-card"><span class="pick-label" data-i18n="order.pay.prepay">Jährlich</span><span class="pick-sub" data-i18n="order.pay.prepay.sub">im Voraus, 4&nbsp;% Rabatt</span></span></label>
@@ -517,15 +517,16 @@
             </div>
           </fieldset>
           <fieldset class="q" id="q-start">
-            <legend class="q-label" data-i18n="order.start">Gewünschter Start</legend>
+            <legend class="q-label"><span data-i18n="order.start">Gewünschter Beginn</span> <span class="q-missing" data-i18n="order.missing">bitte wählen</span></legend>
             <div class="picks">
-              <label class="pick"><input type="radio" name="start" value="lt6"><span class="pick-card"><span class="pick-label" data-i18n="order.start.lt6">Innert 6 Monaten</span></span></label>
-              <label class="pick"><input type="radio" name="start" value="6to12"><span class="pick-card"><span class="pick-label" data-i18n="order.start.6to12">In 6 bis 12 Monaten</span></span></label>
-              <label class="pick"><input type="radio" name="start" value="gt12"><span class="pick-card"><span class="pick-label" data-i18n="order.start.gt12">Später</span></span></label>
+              <label class="pick"><input type="radio" name="start" value="2027h1"><span class="pick-card"><span class="pick-label" data-i18n="order.start.2027h1">1. Halbjahr 2027</span></span></label>
+              <label class="pick"><input type="radio" name="start" value="2027h2"><span class="pick-card"><span class="pick-label" data-i18n="order.start.2027h2">2. Halbjahr 2027</span></span></label>
+              <label class="pick"><input type="radio" name="start" value="2028"><span class="pick-card"><span class="pick-label" data-i18n="order.start.2028">2028 oder später</span></span></label>
             </div>
           </fieldset>
 
           <div class="order-summary" id="order-summary">
+            <p class="sr-only" id="summary-live" aria-live="polite"></p>
             <p class="summary-empty" id="summary-empty" data-i18n="order.sum.empty">Wählen Sie ein Paket, dann steht hier Ihr Preis.</p>
             <div id="summary-body" hidden>
               <table class="summary-table">

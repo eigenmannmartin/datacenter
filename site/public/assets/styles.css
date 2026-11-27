@@ -593,6 +593,8 @@ input[type="text"], input[type="email"], input[type="tel"], input[type="password
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 input:focus-visible, select:focus-visible, textarea:focus-visible { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); }
+/* A native checkbox has no border to colour: it gets the page's focus outline instead of the faint ring. */
+.addon input:focus-visible, .check input:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; box-shadow: none; }
 [aria-invalid="true"] { border-color: var(--danger) !important; }
 fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
 legend { font-weight: 600; margin-bottom: var(--s2); padding: 0; }
@@ -614,6 +616,9 @@ legend { font-weight: 600; margin-bottom: var(--s2); padding: 0; }
 .order-part { font-size: 1.25rem; margin: 0; }
 .order-summary + .order-part { margin-top: var(--s4); }
 .q.invalid > .q-label { color: var(--danger); }
+/* "bitte wählen" next to a group that still needs an answer: the message by the button is a screen further down. */
+.q-missing { display: none; font-weight: 600; }
+.q.invalid .q-missing { display: inline; }
 .q.invalid .pick-card { border-color: var(--danger); }
 .addons { display: grid; border-top: 1px solid var(--line); }
 .addon { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: var(--s3); padding: var(--s3) 0; border-bottom: 1px solid var(--line); cursor: pointer; font-size: 1rem; }

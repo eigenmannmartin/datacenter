@@ -21,7 +21,7 @@
       network: "Die Übermittlung hat nicht geklappt. Bitte prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
       server: "Die Übermittlung hat nicht geklappt. Bitte versuchen Sie es später erneut oder schreiben Sie uns an {email}.",
       sending: "Wird gesendet…",
-      skipped: "In Ordnung, das klären wir im Gespräch.",
+      skipped: "In Ordnung, das klären wir bei der Analyse.",
       calcCta: "{plan} bestellen",
       typedName: "Anna Meier",
       from: "ab",
@@ -29,16 +29,20 @@
       opt_ai: "Private KI",
       opt_storage: "6\u00a0TB mehr Speicher",
       payNote_prepay: "Wenn Sie jährlich im Voraus zahlen, erhalten Sie 4\u00a0% Rabatt.",
-      payNote_purchase: "Wenn Sie die Hardware kaufen, sinkt der Monatspreis. Beide Beträge nennen wir Ihnen vor dem Vertrag.",
-      recap: "Ihre Auswahl: {what}, {pay}, Start {start}.",
+      payNote_purchase: "Wenn Sie die Hardware kaufen, zahlen Sie einmalig den Kaufpreis und danach einen tieferen Monatspreis. Beide Beträge nennen wir Ihnen, bevor Sie unterschreiben.",
+      pilotLater: "Den Pilotrabatt erhalten Kunden, die 2027 beginnen.",
+      sumLive: "Total pro Monat {total}.",
+      sumLivePilot: "Im ersten Jahr {pilot} pro Monat.",
+      recap: "Ihre Auswahl: {what}; {pay}; Beginn {start}.",
+      planName: "Paket {plan}",
       with: " mit ",
       and: " und ",
       pay_monthly: "monatliche Zahlung",
       pay_prepay: "jährliche Zahlung im Voraus",
       pay_purchase: "Kauf der Hardware",
-      start_lt6: "innert 6 Monaten",
-      start_6to12: "in 6 bis 12 Monaten",
-      start_gt12: "später",
+      start_2027h1: "im 1. Halbjahr 2027",
+      start_2027h2: "im 2. Halbjahr 2027",
+      start_2028: "2028 oder später",
       rStart: "Ein Tag Ausfall ist für Sie verkraftbar. Dann genügt ein Server, den wir bei einem Defekt am nächsten Arbeitstag ersetzen.",
       rSize: "Mit mehr als 20 Mitarbeitenden lohnt sich die Ausfallsicherheit von drei Servern.",
       rDowntime: "Ein Ausfall kostet Sie Umsatz oder Arbeitszeit. Mit drei Servern arbeiten Sie weiter, wenn einer ausfällt.",
@@ -56,7 +60,7 @@
       network: "Sending failed. Please check your connection and try again.",
       server: "Sending failed. Please try again later or write to us at {email}.",
       sending: "Sending…",
-      skipped: "All right, we will cover that in the call.",
+      skipped: "All right, we will cover that during the assessment.",
       calcCta: "Order {plan}",
       typedName: "Anna Meier",
       from: "from",
@@ -65,16 +69,20 @@
       opt_ai: "Private AI",
       opt_storage: "6\u00a0TB more storage",
       payNote_prepay: "If you pay a year in advance, you get 4% off.",
-      payNote_purchase: "If you buy the hardware, the monthly price goes down. We will give you both amounts before the contract.",
-      recap: "Your choice: {what}, {pay}, start {start}.",
+      payNote_purchase: "If you buy the hardware, you pay a one-off purchase price and then a lower monthly price. We will give you both amounts before you sign.",
+      pilotLater: "The pilot discount is for customers who start in 2027.",
+      sumLive: "Total per month {total}.",
+      sumLivePilot: "In the first year {pilot} per month.",
+      recap: "Your choice: {what}; {pay}; start {start}.",
+      planName: "the {plan} plan",
       with: " with ",
       and: " and ",
       pay_monthly: "monthly payment",
       pay_prepay: "yearly payment in advance",
       pay_purchase: "hardware purchase",
-      start_lt6: "within 6 months",
-      start_6to12: "in 6 to 12 months",
-      start_gt12: "later",
+      start_2027h1: "in the first half of 2027",
+      start_2027h2: "in the second half of 2027",
+      start_2028: "in 2028 or later",
       rStart: "You can cope with a day of downtime. One server is then enough, and we replace it on the next working day if it fails.",
       rSize: "With more than 20 staff, the failover of three servers pays off.",
       rDowntime: "Downtime costs you revenue or working time. With three servers you keep working when one fails.",
@@ -391,7 +399,7 @@
   var signupRef = null;
   var sentOrder = null;
 
-  function chf(n) { return "CHF " + money(n); }
+  function chf(n) { return "CHF\u00a0" + money(n); }
   function picked(name) {
     var el = form.querySelector('input[name="' + name + '"]:checked');
     return el ? el.value : "";
@@ -401,12 +409,15 @@
   }
 
   // The summary: what the chosen plan and options cost per month, per month in the pilot's first year, and once for setup.
+  // The pilot price shows unless the visitor wants to start after 2027, when the pilot discount does not apply.
+  // A visually hidden line repeats the totals for screen readers after each change.
   function renderSummary() {
     var plan = picked("plan");
     var p = PRICES[plan];
-    $("offsite-price").textContent = p ? chf(p.offsite) : MSG[lang].from + " " + chf(PRICES.start.offsite);
+    $("offsite-price").textContent = p ? chf(p.offsite) : MSG[lang].from + "\u00a0" + chf(PRICES.start.offsite);
     $("summary-empty").hidden = !!p;
     $("summary-body").hidden = !p;
+    $("summary-live").textContent = "";
     if (!p) return;
     var rows = [[PLAN_NAMES[plan], p.monthly]];
     pickedAll("options").forEach(function (o) {
@@ -426,12 +437,17 @@
       tr.append(th, td);
       lines.appendChild(tr);
     });
+    var pilot = picked("start") !== "2028";
+    var pilotPrice = chf(total * (1 - PILOT_DISCOUNT));
     $("sum-total").textContent = chf(total);
-    $("sum-pilot").textContent = chf(total * (1 - PILOT_DISCOUNT));
+    $("sum-pilot").textContent = pilotPrice;
+    $("sum-pilot").parentNode.hidden = !pilot;
     $("sum-setup").textContent = chf(p.setup);
-    var note = MSG[lang]["payNote_" + picked("payment_pref")] || "";
-    $("summary-pay").textContent = note;
-    $("summary-pay").hidden = !note;
+    var notes = [MSG[lang]["payNote_" + picked("payment_pref")], pilot ? "" : MSG[lang].pilotLater].filter(Boolean);
+    $("summary-pay").textContent = notes.join(" ");
+    $("summary-pay").hidden = !notes.length;
+    $("summary-live").textContent = MSG[lang].sumLive.replace("{total}", chf(total)) +
+      (pilot ? " " + MSG[lang].sumLivePilot.replace("{pilot}", pilotPrice) : "");
   }
 
   function clearGroup(fieldset) {
@@ -524,7 +540,7 @@
   function renderRecap() {
     if (!sentOrder) return;
     var o = sentOrder;
-    var what = PLAN_NAMES[o.plan];
+    var what = MSG[lang].planName.replace("{plan}", PLAN_NAMES[o.plan]);
     if (o.options.length) what += MSG[lang].with + listOf(o.options.map(function (k) { return MSG[lang]["inline_" + k] || MSG[lang]["opt_" + k]; }));
     $("success-recap").textContent = MSG[lang].recap
       .replace("{what}", what)

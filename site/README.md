@@ -42,9 +42,9 @@ Everything is in the Cloudflare dashboard, behind your Cloudflare login. Nothing
 | Orders: browse, filter, edit, delete | [D1 → rechenbox](https://dash.cloudflare.com/a1121094b30551cad6cd3d7681e5018a/workers/d1/databases/04a95002-a17e-4d1d-9f9c-0aff3d9c9333) → Tables → `signups`, with options and start in `order_details` |
 | Funnel numbers | Same database → Console, with the queries below |
 
-Each order is a row in `signups` with the contact details, the plan (`plan`), the payment chosen (`payment_pref`: `monthly`, `prepay` or `purchase`), what the plan picker recommended (`recommended_plan`), the optional answers (current IT, pains, price view, message) and the lead source (`utm_source`, `utm_campaign`, `ref`). The options (`offsite` for the backup copy in a Swiss data centre, `ai`, `storage`) and the preferred start (`lt6`, `6to12`, `gt12`: within 6 months, in 6 to 12 months, later) are in `order_details`, joined on `token`. Visit-to-order conversion = orders ÷ visits in Web Analytics for the same period.
+Each order is a row in `signups` with the contact details, the plan (`plan`), the payment chosen (`payment_pref`: `monthly`, `prepay` or `purchase`), what the plan picker recommended (`recommended_plan`), the optional answers (current IT, pains, price view, message) and the lead source (`utm_source`, `utm_campaign`, `ref`). The options (`offsite` for the backup copy in a Swiss data centre, `ai`, `storage`) and the preferred start (`2027h1`, `2027h2`, `2028`: first or second half of 2027, 2028 or later) are in `order_details`, joined on `token`. If the same email orders again within 10 minutes, the row keeps the latest choices. The start choices are calendar half-years because the pilot discount is for customers who start in 2027 (the price summary leaves it out for 2028); if the campaign runs past mid-2027, change them in `public/index.html`, `public/assets/app.js`, `public/assets/i18n-en.js` and `functions/api/signup.js`. Visit-to-order conversion = orders ÷ visits in Web Analytics for the same period.
 
-Rows from before 27 November 2026 come from the earlier form, which reserved a free pilot slot: they have `wants_call` (whether the visitor wanted a call) and `timeline` (when a decision was due), and no row in `order_details`. The order form asks neither, so the go/no-go figure "share wanting a call" has no successor in the data. The closest measure of buying intent is now the number of orders, by plan and with the start they chose. Update section 1b of the business plan accordingly.
+Rows from before 27 November 2026 come from the earlier form, which reserved a free pilot slot: they have `wants_call` (whether the visitor wanted a call) and `timeline` (when a decision was due), and no row in `order_details`. The order form asks neither, so the go/no-go figure "share wanting a call" has no successor in the data. The closest measure of buying intent is now the number of orders, by plan, and how many of them want to start in 2027. Update section 1b of the business plan accordingly.
 
 Queries for the D1 console:
 
@@ -53,9 +53,9 @@ Queries for the D1 console:
 SELECT s.ts, s.name, s.company, s.email, s.phone, s.industry, s.size, s.plan, o.options, s.payment_pref, o.start, s.recommended_plan
 FROM signups s JOIN order_details o ON o.token = s.token ORDER BY s.ts DESC;
 
--- Go/no-go: orders, orders that want to start within 6 months, share calling the price too expensive
+-- Go/no-go: orders, orders that want to start in 2027 (pilot candidates), share calling the price too expensive
 SELECT COUNT(*) AS orders,
-       SUM(o.start = 'lt6') AS start_within_6_months,
+       SUM(o.start IN ('2027h1', '2027h2')) AS start_2027,
        ROUND(100.0 * SUM(s.price_view = 'expensive') / NULLIF(SUM(s.price_view IS NOT NULL), 0), 1) AS pct_too_expensive
 FROM signups s JOIN order_details o ON o.token = s.token;
 
@@ -68,7 +68,7 @@ SELECT j.value AS pain, COUNT(*) AS n FROM signups, json_each(signups.pains) j G
 -- By plan, payment, industry or lead source (swap the column)
 SELECT plan, COUNT(*) AS n FROM signups s JOIN order_details o ON o.token = s.token GROUP BY plan ORDER BY n DESC;
 SELECT payment_pref, COUNT(*) AS n FROM signups s JOIN order_details o ON o.token = s.token GROUP BY payment_pref ORDER BY n DESC;
-SELECT COALESCE(utm_source, ref, 'direct') AS source, COUNT(*) AS n FROM signups GROUP BY source ORDER BY n DESC;
+SELECT COALESCE(s.utm_source, s.ref, 'direct') AS source, COUNT(*) AS n FROM signups s JOIN order_details o ON o.token = s.token GROUP BY source ORDER BY n DESC;
 ```
 
 Optional: get a chat message for every new order (Slack or Teams incoming webhook, no name, email or phone in the message):
@@ -116,5 +116,5 @@ npx wrangler pages dev
 - [ ] Measure power draw and noise in the lab; the page gives the design target for power and says both are not measured yet
 - [ ] Confirm what the "Private KI" section says beyond `docs/hardware.md` (section 7 covers only the device and the price): AI agents come with the CHF 590 option and are available in the 2027 pilot; the example tasks (filing receipts in client folders, reading amounts off invoices, summarising documents); an answer names the document it comes from; the AI answers each person only from folders that person can open; a person approves before an agent files documents or changes data, and every step is logged; staff start agents and approve their steps themselves (in which interface).
 - [ ] Have the order form checked: it asks visitors to "order" (Bestellung absenden) although no contract is made. The note under the button and the FAQ say that nothing is paid now and that an order only becomes binding with the signed contract; the confirmation thanks them for their interest in the pilot
-- [ ] Confirm how the pilot discount works: the price summary in the order form takes 30 % off the whole monthly price (plan and options) for the first year, and nothing off the setup fee
+- [ ] Confirm how the pilot discount works: the price summary in the order form takes 30 % off the whole monthly price (plan and options) for the first year, nothing off the setup fee, and shows no pilot price for a start in 2028 or later
 - [ ] Submit a test order on the live site, find it in the D1 tables `signups` and `order_details`, then delete it in both

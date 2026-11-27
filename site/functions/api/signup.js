@@ -7,7 +7,7 @@ const INDUSTRIES = ["fiduciary", "legal", "medical", "planning", "other"];
 const SIZES = ["1-9", "10-20", "21-60", "61-100", "100+"];
 const PLANS = ["start", "business", "pro"];
 const PAYMENT_PREFS = ["monthly", "prepay", "purchase"];
-const STARTS = ["lt6", "6to12", "gt12"];
+const STARTS = ["2027h1", "2027h2", "2028"]; // first or second half of 2027, 2028 or later
 const OPTIONS = ["offsite", "ai", "storage"];
 const RECOMMENDED = ["start", "business", "pro"];
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -45,16 +45,32 @@ export async function onRequestPost({ request, env, waitUntil }) {
     }, 422);
   }
 
-  // Double submit within 10 minutes: accept, don't store twice.
+  const options = pick(b.options, OPTIONS);
+  const recommended = oneOf(b.recommended_plan, RECOMMENDED);
+
+  // Sent again within 10 minutes (a double click, or a changed mind): keep one row and store the latest choices,
+  // which the confirmation repeats.
   const recent = await env.DB.prepare(
     "SELECT token FROM signups WHERE email = ?1 AND ts > strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '-10 minutes') LIMIT 1"
   ).bind(email).first();
-  if (recent) return json({ ok: true, ref: recent.token });
+  if (recent) {
+    await env.DB.batch([
+      env.DB.prepare(
+        `UPDATE signups SET name = ?2, company = ?3, phone = ?4, industry = ?5, size = ?6, plan = ?7, payment_pref = ?8,
+                            recommended_plan = COALESCE(?9, recommended_plan)
+         WHERE token = ?1`
+      ).bind(recent.token, name, company, str(b.phone, 40), industry, size, plan, payment, recommended),
+      env.DB.prepare(
+        `INSERT INTO order_details (token, options, start) VALUES (?1, ?2, ?3)
+         ON CONFLICT (token) DO UPDATE SET options = excluded.options, start = excluded.start`
+      ).bind(recent.token, JSON.stringify(options), start),
+    ]);
+    return json({ ok: true, ref: recent.token });
+  }
 
   // Private reference for the optional second step (/api/details). Never shown, never emailed.
   const token = crypto.randomUUID();
   const utm = b.utm && typeof b.utm === "object" ? b.utm : {};
-  const options = pick(b.options, OPTIONS);
 
   // One transaction: the order is stored whole or not at all.
   await env.DB.batch([
@@ -78,7 +94,7 @@ export async function onRequestPost({ request, env, waitUntil }) {
       request.cf?.country || null,
       payment,
       token,
-      oneOf(b.recommended_plan, RECOMMENDED)
+      recommended
     ),
     env.DB.prepare("INSERT INTO order_details (token, options, start) VALUES (?1, ?2, ?3)").bind(
       token,
