@@ -12,7 +12,7 @@
   // Strings that only exist in JavaScript.
   var MSG = {
     de: {
-      langToggle: "Switch to English",
+      langToggle: "EN: Switch to English",
       themeToDark: "Dunkles Design einschalten",
       themeToLight: "Helles Design einschalten",
       required: "Bitte füllen Sie die markierten Felder aus.",
@@ -32,7 +32,7 @@
       rCritical: "Ihr Betrieb steht ohne IT still. Bei Pro ersetzen wir defekte Hardware innert eines Tages, auch am Wochenende."
     },
     en: {
-      langToggle: "Auf Deutsch wechseln",
+      langToggle: "DE: Auf Deutsch wechseln",
       themeToDark: "Switch to dark mode",
       themeToLight: "Switch to light mode",
       required: "Please fill in the highlighted fields.",
@@ -84,6 +84,9 @@
   }
   function updateThemeButton() {
     $("theme-toggle").setAttribute("aria-label", isDark() ? MSG[lang].themeToLight : MSG[lang].themeToDark);
+    // The dark picture of the box is chosen by a media query. Once the visitor has picked a theme, the pick replaces it.
+    var picked = root.getAttribute("data-theme");
+    $("hero-dark").media = picked ? (picked === "dark" ? "all" : "not all") : "(prefers-color-scheme: dark)";
     var meta = document.querySelectorAll('meta[name="theme-color"]');
     meta.forEach(function (m) { m.setAttribute("content", isDark() ? "#0e0f10" : "#ffffff"); m.removeAttribute("media"); });
   }
@@ -358,7 +361,10 @@
         if (!signupRef) $("details-form").hidden = true;
         var ok = $("form-success");
         ok.hidden = false;
-        ok.focus();
+        // Bring the confirmation to the top of the window first: the questions below it are long, and a plain
+        // focus() leaves its heading above the window on phones and small laptops.
+        ok.scrollIntoView({ block: "start", behavior: "auto" });
+        ok.focus({ preventScroll: true });
       })
       .catch(function (err) {
         showError(errorEl, err && err.message === "server" ? serverMsg() : MSG[lang].network);
@@ -413,4 +419,6 @@
 
   // ---------- Start ----------
   applyLang();
+  // From here on the forms are handled above; the small script in the page head stops blocking them.
+  root.classList.add("app");
 })();
