@@ -8,6 +8,15 @@ A German landing page (with an English toggle) at [rechenbox.ch](https://rechenb
 - `lib/http.js`: shared helpers for the functions
 - `schema.sql`: D1 table `signups`
 
+The picture of the box on the first screen is a rendering, not a photo, and the page says so ("Visualisierung"). There is one file per colour scheme, `public/assets/img/rack-light.webp` and `rack-dark.webp`, made with [`docs/rack.py`](../docs/rack.py):
+
+```sh
+python3 docs/rack.py --shot studio-light --samples 192 --scale 1.0 --out out/studio-light.png   # about 11 minutes on 3 cores
+python3 docs/rack.py --shot studio-dark  --samples 192 --scale 1.0 --out out/studio-dark.png
+```
+
+then resize to 1200 x 1500 px and save as WebP with the alpha channel. The names of the parts on the picture are text in the page; their positions are in one commented block of `public/assets/styles.css` and have to be set again if the camera or the order of the devices changes.
+
 No cookies. The Schibsted Grotesk font is self-hosted in `public/assets/fonts/` (SIL Open Font License, licence file alongside). Visitor statistics come from Cloudflare Web Analytics, which Cloudflare injects at the edge; the site code contains no tracking. Light and dark mode follow the system; the switch in the header overrides it for the current visit only.
 
 ## Pre-launch password gate
@@ -95,4 +104,7 @@ npx wrangler pages dev
 - [ ] Set `bookingUrl` and `contactPhone` in `public/assets/config.js`, and make sure the mailbox `hallo@rechenbox.ch` exists
 - [ ] Check the name "Rechenbox" in Zefix and Swissreg
 - [ ] Add an "About us" section with the founders' names, photos and background: the page review flagged this as the biggest trust gap for this audience
+- [ ] Confirm two statements the page words as plans: a sync program for PC, Mac and phone ("Vorgesehen ist ..."), and that files stay with the old provider until the customer has checked the move ("sollen ... bleiben")
+- [ ] Confirm the call of "about 20 minutes" offered in the form, and decide what the page says about business software (accounting, practice, CAD) on the box: it now says nothing
+- [ ] Measure power draw and noise in the lab; the page gives the design targets and says both are not measured yet
 - [ ] Submit a test sign-up on the live site, find it in the D1 table, then delete it there

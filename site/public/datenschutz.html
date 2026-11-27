@@ -5,22 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Datenschutz und Impressum – Rechenbox</title>
   <meta name="robots" content="noindex">
+  <meta name="color-scheme" content="light dark">
   <link rel="stylesheet" href="/assets/styles.css">
+  <script>
+    (function (root) {
+      // Bring back the theme picked on the start page earlier in this visit, before the first paint (index.html does the same).
+      try {
+        var theme = sessionStorage.getItem("theme");
+        if (theme === "dark" || theme === "light") root.setAttribute("data-theme", theme);
+      } catch (e) { /* storage is blocked: the system setting applies */ }
+    })(document.documentElement);
+  </script>
 </head>
 <body>
   <header class="site-header">
     <div class="container header-inner">
-      <a class="brand" href="/">
+      <a class="brand" href="/" aria-label="Rechenbox, zur Startseite">
         <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="6" y="3" width="20" height="26" rx="3"/><rect class="u" x="10" y="8" width="12" height="3" rx="1"/><rect class="u" x="10" y="14" width="12" height="3" rx="1"/><rect class="u" x="10" y="20" width="12" height="3" rx="1"/></svg>
         <span>Rechenbox</span>
       </a>
+      <div class="header-actions">
+        <a class="btn btn-secondary" href="/">Zur Startseite</a>
+      </div>
     </div>
   </header>
 
   <main class="page">
-    <div class="container narrow">
+    <div class="container">
       <h1>Datenschutz und Impressum</h1>
-      <p><em>Privacy notice and legal notice. An English version is available on request.</em></p>
+      <p lang="en"><em>Privacy notice and legal notice. An English version is available on request.</em></p>
 
       <!-- TODO before launch: replace every highlighted placeholder and have the text checked. -->
       <h2>Impressum</h2>
@@ -43,13 +56,19 @@
       <p>Die Website wird über das Netzwerk von Cloudflare, Inc. ausgeliefert; dabei können Anfragen in Rechenzentren ausserhalb der Schweiz bearbeitet werden. Die Datenbank mit Ihren Formularangaben liegt bei Cloudflare in der EU und wird nur dort gespeichert und bearbeitet. Cloudflare ist unter dem Swiss-U.S. Data Privacy Framework zertifiziert. <span class="placeholder">[Vor dem Start rechtlich prüfen lassen.]</span></p>
 
       <h2>Aufbewahrung</h2>
-      <p>Formulardaten löschen wir spätestens 24 Monate nach dem letzten Kontakt oder sofort auf Ihren Wunsch. </p>
+      <p>Formulardaten löschen wir spätestens 24 Monate nach dem letzten Kontakt oder sofort auf Ihren Wunsch.</p>
 
       <h2>Ihre Rechte</h2>
       <p>Sie können jederzeit Auskunft über Ihre Daten verlangen, sie berichtigen oder löschen lassen. Schreiben Sie dafür an die im Impressum genannte E-Mail-Adresse.</p>
-
-      <p><a href="/">Zurück zur Startseite</a></p>
     </div>
   </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© 2026 Rechenbox, St.&nbsp;Gallen</p>
+      <p class="footer-links"><a href="/">Startseite</a> <a href="mailto:hallo@rechenbox.ch">Kontakt</a></p>
+      <p>Keine Cookies. Besucherzahlen erfassen wir anonym mit Cloudflare Web Analytics.</p>
+    </div>
+  </footer>
 </body>
 </html>
