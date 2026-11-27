@@ -131,6 +131,7 @@ svg use { pointer-events: none; }
 .main-nav a:hover { color: var(--ink); }
 .header-actions { margin-left: auto; display: flex; align-items: center; gap: var(--s2); }
 @media (min-width: 1000px) { .main-nav { display: flex; } }
+@media (min-width: 1000px) and (max-width: 1099px) { .main-nav { gap: var(--s4); } }
 .main-nav a, .site-header .btn { white-space: nowrap; }
 @media (max-width: 374px) { .brand span { display: none; } }
 
@@ -343,7 +344,8 @@ h2 + .reasons, h2 + .steps { margin-top: var(--s7); }
 .portal-note { color: var(--ink-2); font-size: 0.95rem; margin: 0; }
 
 .portal-demo { margin: 0; }
-.portal-demo figcaption { display: flex; justify-content: space-between; align-items: center; gap: var(--s4); margin-top: var(--s3); font-size: 0.88rem; color: var(--ink-2); }
+.portal-demo figcaption { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--s1) var(--s4); margin-top: var(--s3); font-size: 0.88rem; color: var(--ink-2); }
+.portal-demo .link-btn { white-space: nowrap; }
 .portal {
   border: 1px solid var(--line); border-radius: var(--radius-l); background: var(--surface);
   box-shadow: var(--shadow); overflow: hidden; font-size: 0.86rem; user-select: none;
@@ -391,6 +393,47 @@ h2 + .reasons, h2 + .steps { margin-top: var(--s7); }
   opacity: 0; transition: opacity 0.25s, transform 0.3s var(--ease);
 }
 .portal-toast.show { opacity: 1; transform: translate(-50%, 0); }
+/* The status line in the bars of the two demos. */
+.ok-chip { display: inline-flex; align-items: center; gap: var(--s2); font-size: 0.78rem; font-weight: 550; color: var(--ink-2); }
+.ok-chip .led-dot { width: 7px; height: 7px; }
+
+/* ---------- Private KI: the agent demo on the left, the four points on the right ---------- */
+.ai-grid { display: grid; gap: var(--s7); margin-top: var(--s7); }
+@media (min-width: 960px) { .ai-grid { grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); gap: var(--s8); align-items: center; } }
+.agent-body { position: relative; display: grid; align-content: start; gap: var(--s4); padding: var(--s4); }
+.agent-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--s2) var(--s3); }
+.agent-tag { font-size: 0.72rem; font-weight: 650; color: var(--accent-text); background: var(--accent-soft); border-radius: var(--radius-s); padding: 0.1rem 0.4rem; margin-right: var(--s1); vertical-align: 2px; }
+.agent-by { display: inline-flex; align-items: center; gap: var(--s2); font-size: 0.78rem; color: var(--ink-2); }
+.agent-by .avatar { width: 24px; height: 24px; font-size: 0.66rem; }
+.agent-steps { list-style: none; margin: 0; padding: 0; display: grid; }
+.agent-steps li { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: var(--s3); align-items: start; padding: var(--s2) 0; border-top: 1px solid var(--line); }
+.agent-steps li:last-child { border-bottom: 1px solid var(--line); }
+.agent-steps small { display: block; margin-top: 2px; color: var(--ink-2); font-size: 0.78rem; }
+.step-icon { display: grid; place-items: center; width: 18px; height: 18px; }
+.step-icon svg { width: 16px; height: 16px; fill: none; stroke: var(--led); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.step-icon .spin { display: none; width: 13px; height: 13px; border-radius: 50%; border: 2px solid var(--line-strong); border-top-color: var(--ink); }
+.agent-steps li.working svg { display: none; }
+.agent-steps li.working .spin { display: block; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.agent-approve { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--s2) var(--s3); padding: var(--s3); border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface-2); }
+.agent-approve p { margin: 0; font-weight: 600; }
+.agent-actions { position: relative; display: flex; align-items: center; gap: var(--s2); }
+.portal-btn-ghost { color: var(--ink); background: transparent; box-shadow: inset 0 0 0 1px var(--line-strong); }
+.agent-approve .chip-new { display: none; position: absolute; right: 0; top: 50%; transform: translateY(-50%); }
+.agent-approve.approved .portal-btn { visibility: hidden; }
+.agent-approve.approved .chip-new { display: inline-block; }
+/* The result of the approval: hidden while the box waits, shown with the chip. Without JS the card shows the finished state. */
+.agent-result { margin: 0; font-size: 0.8rem; color: var(--ink-2); opacity: 0; visibility: hidden; }
+.agent-approve.approved + .agent-result, html:not(.js) .agent-result { opacity: 1; visibility: visible; transition: opacity 0.35s var(--ease); }
+html:not(.js) .agent-approve .portal-btn { visibility: hidden; }
+html:not(.js) .agent-approve .chip-new { display: inline-block; }
+/* On phones the buttons go under the question; the chip then takes the place of the first button. */
+@media (max-width: 559px) { .agent-approve { flex-direction: column; align-items: flex-start; } .agent-approve .chip-new { left: 0; right: auto; } }
+/* The steps and the approval appear one by one while the demo runs. Without JS every step shows, already approved. */
+.js .agent-steps li, .js .agent-approve { opacity: 0; transform: translateY(6px); transition: opacity 0.35s var(--ease), transform 0.35s var(--ease); }
+.js .agent-steps li.shown, .js .agent-approve.shown { opacity: 1; transform: none; }
+.js .agent-steps li:not(.shown), .js .agent-approve:not(.shown) { transition: none; }
+
 /* The new row: hidden until the demo adds it. Without JS or with reduced motion, it simply shows. */
 .js .portal-new { display: none; }
 .js .portal-new.added { display: grid; animation: row-in 0.45s var(--ease); }

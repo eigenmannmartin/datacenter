@@ -57,6 +57,7 @@
       <nav class="main-nav" aria-label="Hauptnavigation" data-i18n-attr="aria-label:nav.label">
         <a href="#box" data-i18n="nav.box">Die Box</a>
         <a href="#portal" data-i18n="nav.portal">Portal</a>
+        <a href="#ki" data-i18n="nav.ai">KI</a>
         <a href="#umzug" data-i18n="nav.move">Umzug</a>
         <a href="#ablauf" data-i18n="nav.how">Ablauf</a>
         <a href="#preise" data-i18n="nav.pricing">Preise</a>
@@ -261,8 +262,54 @@
       </div>
     </section>
 
+    <!-- PRIVATE AI -->
+    <section class="section section-alt" id="ki">
+      <div class="container">
+        <h2 data-i18n="ai.title">Eine KI für Ihre Dokumente, die im Büro bleibt</h2>
+        <p class="section-lead" data-i18n="ai.lead">Wer einen Vertrag in einen Chatbot im Internet kopiert, gibt ihn aus der Hand. Mit der Option Private KI läuft ein Sprachmodell (LLM) auf einem eigenen Gerät in Ihrem Büro. Es beantwortet Fragen zu Ihren Dokumenten, und KI-Agenten erledigen damit wiederkehrende Arbeit.</p>
+        <div class="ai-grid">
+          <figure class="portal-demo ai-demo">
+            <div class="portal" id="agent-mock" role="img" aria-label="Beispiel: Ein KI-Agent liest 14 neue Belege und ordnet 12 davon den Mandanten zu. Zwei unklare Belege bleiben im Eingang. Eine Mitarbeiterin gibt die Ablage der zwölf Belege frei." data-i18n-attr="aria-label:ai.mockLabel">
+              <div class="portal-bar" aria-hidden="true">
+                <span class="portal-firm" data-i18n="ai.mock.title">Private KI</span>
+                <span class="ok-chip"><span class="led-dot"></span><span data-i18n="ai.mock.local">Läuft im Büro</span></span>
+              </div>
+              <div class="agent-body" aria-hidden="true">
+                <div class="agent-head">
+                  <span class="portal-h"><span class="agent-tag" data-i18n="ai.mock.agent">Agent</span> <span data-i18n="ai.mock.task">Belege zuordnen</span></span>
+                  <span class="agent-by"><span class="avatar">LF</span><span data-i18n="ai.mock.by">gestartet von Lea Frei</span></span>
+                </div>
+                <ol class="agent-steps">
+                  <li id="agent-s1"><span class="step-icon"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg><span class="spin"></span></span><span data-i18n="ai.mock.s1">14 neue Belege im Ordner «Eingang» gelesen</span></li>
+                  <li id="agent-s2"><span class="step-icon"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg><span class="spin"></span></span><span><span data-i18n="ai.mock.s2">12 Belege den Mandanten zugeordnet</span><small data-i18n="ai.mock.s2sub">Muster&nbsp;Bau&nbsp;AG: 7, Muster&nbsp;Immobilien&nbsp;GmbH: 5</small></span></li>
+                  <li id="agent-s3"><span class="step-icon"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg><span class="spin"></span></span><span data-i18n="ai.mock.s3">2 unklare Belege im Eingang belassen</span></li>
+                </ol>
+                <div class="agent-approve" id="agent-approve">
+                  <p data-i18n="ai.mock.ask">12 Belege in die Mandantenordner ablegen?</p>
+                  <span class="agent-actions">
+                    <span class="portal-btn portal-btn-ghost" data-i18n="ai.mock.check">Prüfen</span>
+                    <span class="portal-btn" id="agent-ok" data-i18n="ai.mock.ok">Freigeben</span>
+                    <span class="chip chip-new" data-i18n="ai.mock.done">Freigegeben</span>
+                  </span>
+                </div>
+                <p class="agent-result" id="agent-result" data-i18n="ai.mock.toast">12 Belege abgelegt. Der Schritt steht im Protokoll.</p>
+              </div>
+            </div>
+            <figcaption><span data-i18n="ai.caption">Beispiel, Entwurf der Oberfläche</span> <button type="button" class="link-btn" id="agent-replay" data-i18n="portal.replay">Nochmals zeigen</button></figcaption>
+          </figure>
+
+          <dl class="features">
+            <div><dt data-i18n="ai.f1.t">Fragen an Ihre Dokumente</dt><dd data-i18n="ai.f1.d">Ihre Mitarbeitenden fragen in normalen Sätzen, zum Beispiel nach der Kündigungsfrist in einem Mietvertrag oder dem Total einer Offerte. Die Antwort nennt das Dokument, aus dem sie stammt.</dd></div>
+            <div><dt data-i18n="ai.f2.t">KI-Agenten für wiederkehrende Arbeit</dt><dd data-i18n="ai.f2.d">Ein Agent arbeitet eine Aufgabe in mehreren Schritten ab. Zum Beispiel ordnet er neue Belege den Mandantenordnern zu, liest die Beträge aus Rechnungen heraus oder fasst ein langes Dokument zusammen.</dd></div>
+            <div><dt data-i18n="ai.f3.t">Zugriffsrechte und Freigabe durch eine Person</dt><dd data-i18n="ai.f3.d">Die KI hält sich an die Zugriffsrechte aus dem Portal. Eine Lernende erhält also keine Antworten aus dem Ordner der Geschäftsleitung. Bevor ein Agent Dateien ablegt oder Daten ändert, muss eine Person den Schritt freigeben. Jeder Schritt wird protokolliert.</dd></div>
+            <div><dt data-i18n="ai.f4.t">Eigenes Gerät, fester Preis</dt><dd data-i18n="ai.f4.d">Das Sprachmodell läuft auf einem eigenen Gerät, damit eine aufwendige KI-Aufgabe die Anwendungen auf der Box nicht bremst. Die Option kostet CHF&nbsp;590 pro Monat und lässt sich zu jedem Paket dazunehmen.</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
     <!-- MIGRATION -->
-    <section class="section section-alt" id="umzug">
+    <section class="section" id="umzug">
       <div class="container">
         <h2 data-i18n="move.title">Umzug von Microsoft 365, Google Workspace oder Ihrem Server</h2>
         <p class="section-lead" data-i18n="move.lead">Ihre Dateien ziehen auf die Box um. E-Mail und Kalender bleiben bei Ihrem heutigen Anbieter, denn die Box betreibt keinen Mailserver.</p>
@@ -289,7 +336,7 @@
     </section>
 
     <!-- HOW IT WORKS -->
-    <section class="section" id="ablauf">
+    <section class="section section-alt" id="ablauf">
       <div class="container">
         <h2 data-i18n="how.title">So läuft es ab</h2>
         <ol class="steps">
@@ -303,7 +350,7 @@
     </section>
 
     <!-- PRICING -->
-    <section class="section section-alt" id="preise">
+    <section class="section" id="preise">
       <div class="container">
         <h2 data-i18n="pricing.title">Ein fester Preis pro Monat</h2>
         <p class="section-lead" data-i18n="pricing.lead">Im Monatspreis sind Hardware, Software, Backup und Betrieb enthalten. Die Preise gelten exkl. MWST bei 36 Monaten Laufzeit. Pilotkunden 2027 erhalten im ersten Jahr 30&nbsp;% Rabatt.</p>
@@ -421,7 +468,7 @@
     </section>
 
     <!-- FAQ -->
-    <section class="section" id="faq">
+    <section class="section section-alt" id="faq">
       <div class="container narrow">
         <h2 data-i18n="faq.title">Fragen und Antworten</h2>
         <details data-faq="replaces"><summary data-i18n="faq.q1">Was ersetzt die Box?</summary><p data-i18n="faq.a1">Ihren Server, das NAS, die Backup-Lösung, die Firewall und den Wartungsvertrag dafür. Arbeitsplätze, Drucker und Telefonie betreut weiterhin Ihr IT-Partner.</p></details>
@@ -439,7 +486,7 @@
     </section>
 
     <!-- SIGNUP -->
-    <section class="section section-alt section-signup" id="anmelden">
+    <section class="section section-signup" id="anmelden">
       <div class="container narrow">
         <h2 data-i18n="form.title">Pilotplatz reservieren</h2>
         <p class="section-lead" data-i18n="form.lead">Die Reservation ist kostenlos und unverbindlich. Wir melden uns innert zwei Arbeitstagen und vereinbaren die Analyse bei Ihnen vor Ort.</p>

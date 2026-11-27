@@ -1,5 +1,5 @@
 /* Rechenbox landing page: language and theme switches, plan recommender,
- * portal demo and two-step sign-up form. Visitor statistics come from
+ * portal and agent demos and two-step sign-up form. Visitor statistics come from
  * Cloudflare Web Analytics (injected at the edge, no cookies), not from this file. */
 (function () {
   "use strict";
@@ -291,6 +291,47 @@
     portalFinal();
   }
   $("portal-replay").addEventListener("click", playPortal);
+
+  // ---------- Private KI demo: an agent works through a task, then waits for a person to approve ----------
+  var agent = { run: 0 };
+  var AGENT_STEPS = ["agent-s1", "agent-s2", "agent-s3"];
+  function agentReset() {
+    AGENT_STEPS.forEach(function (id) { $(id).classList.remove("shown", "working"); });
+    $("agent-approve").classList.remove("shown", "approved");
+  }
+  function agentFinal() {
+    agentReset();
+    AGENT_STEPS.forEach(function (id) { $(id).classList.add("shown"); });
+    $("agent-approve").classList.add("shown", "approved");
+  }
+  async function playAgent() {
+    if (reduceMotion) { agentFinal(); return; }
+    var run = ++agent.run;
+    var alive = function () { return run === agent.run; };
+    agentReset();
+    await sleep(400); if (!alive()) return;
+    for (var i = 0; i < AGENT_STEPS.length; i++) {
+      var step = $(AGENT_STEPS[i]);
+      step.classList.add("shown", "working");
+      await sleep(900); if (!alive()) return;
+      step.classList.remove("working");
+      await sleep(250); if (!alive()) return;
+    }
+    $("agent-approve").classList.add("shown");
+    await sleep(1200); if (!alive()) return;
+    await press("agent-ok"); if (!alive()) return;
+    $("agent-approve").classList.add("approved");
+  }
+  // With reduced motion the finished state shows at once; otherwise the demo starts when the card is in view.
+  if (reduceMotion || !("IntersectionObserver" in window)) {
+    agentFinal();
+  } else {
+    var agentIo = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) { agentIo.disconnect(); playAgent(); }
+    }, { threshold: 0.55 });
+    agentIo.observe($("agent-mock"));
+  }
+  $("agent-replay").addEventListener("click", playAgent);
 
   // ---------- Sign-up, step 1 ----------
   var form = $("signup-form");
