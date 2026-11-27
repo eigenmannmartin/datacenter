@@ -234,7 +234,6 @@ svg use { pointer-events: none; }
 .hero-visual { position: relative; margin: 0; }
 .rack { position: relative; display: block; aspect-ratio: 4 / 5; width: min(118%, 34rem); margin: -12% 0 -9% 50%; translate: -50% 0; }
 .rack picture, .rack img { display: block; width: 100%; height: 100%; }
-.hero-visual figcaption { position: relative; z-index: 1; padding: 0 var(--s4) var(--s3); font-size: 0.8rem; color: var(--ink-2); text-align: right; }
 @media (min-width: 920px) {
   .hero-visual { min-height: 0; pointer-events: none; }
   .rack {
@@ -242,7 +241,6 @@ svg use { pointer-events: none; }
     position: absolute; left: 74%; bottom: calc(var(--rack-h) * -0.085); width: auto; height: var(--rack-h); margin: 0;
   }
   @supports (height: 1svh) { .rack { --rack-h: min((100svh - 63px - 5rem) / 0.86, 60vw, 66rem); } }
-  .hero-visual figcaption { position: absolute; right: max(var(--s4), (100vw - 1140px) / 2 + var(--s4)); bottom: var(--s2); padding: 0; }
 }
 
 /* Light on the picture. A sheen crosses the glass door once; the status lights glow where the render has them
@@ -270,7 +268,7 @@ svg use { pointer-events: none; }
   .js .hero-copy > :nth-child(3) { animation-delay: 0.14s; }
   .js .hero-copy > :nth-child(4) { animation-delay: 0.22s; }
   .js .hero-copy > :nth-child(5) { animation-delay: 0.3s; }
-  .js .hero-foot, .js .hero-visual figcaption { opacity: 0; animation: fade 0.9s var(--ease) 0.5s forwards; }
+  .js .hero-foot { opacity: 0; animation: fade 0.9s var(--ease) 0.5s forwards; }
   .js .rack picture { opacity: 0; transform: translateY(2.5%) scale(1.04); transform-origin: 50% 80%; animation: rack-in 1.5s var(--ease) 0.15s forwards; }
   .js .rack-sheen::before { animation: sheen 1.5s cubic-bezier(0.45, 0, 0.3, 1) 1.2s both; }
   .js .rack-leds i { animation: led-wake 0.9s ease-out calc(1.5s + var(--d) * 0.13s) both, led-breathe 4.6s ease-in-out calc(2.4s + var(--d) * 0.13s) infinite alternate; }
@@ -344,8 +342,8 @@ h2 + .reasons, h2 + .steps { margin-top: var(--s7); }
 .portal-note { color: var(--ink-2); font-size: 0.95rem; margin: 0; }
 
 .portal-demo { margin: 0; }
-.portal-demo figcaption { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--s1) var(--s4); margin-top: var(--s3); font-size: 0.88rem; color: var(--ink-2); }
-.portal-demo .link-btn { white-space: nowrap; }
+/* A click on a finished demo plays it again. With reduced motion the demos show their end state, so nothing to click. */
+@media (prefers-reduced-motion: no-preference) { .js .portal-demo .portal { cursor: pointer; } }
 .portal {
   border: 1px solid var(--line); border-radius: var(--radius-l); background: var(--surface);
   box-shadow: var(--shadow); overflow: hidden; font-size: 0.86rem; user-select: none;
@@ -537,7 +535,8 @@ html:not(.js) .agent-approve .chip-new { display: inline-block; }
 @media (min-width: 1100px) { .plan-for { min-height: 4.8em; } }
 .price { margin-bottom: var(--s4); display: flex; align-items: baseline; gap: var(--s1); flex-wrap: wrap; }
 .price .currency { font-weight: 600; color: var(--ink-2); }
-.price .amount { font-size: 2.3rem; font-weight: 760; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+/* Proportional figures: with tabular ones the font sets the English thousands comma as wide as a digit ("1 , 890"). */
+.price .amount { font-size: 2.3rem; font-weight: 760; letter-spacing: -0.03em; }
 .price .per { color: var(--ink-2); font-size: 0.95rem; }
 .plan ul { list-style: none; padding: 0; margin: 0 0 var(--s4); display: grid; gap: var(--s2); }
 .plan li { position: relative; padding-left: 1.4rem; font-size: 0.98rem; }
@@ -610,6 +609,30 @@ legend { font-weight: 600; margin-bottom: var(--s2); padding: 0; }
 .chip-opt:hover span { border-color: var(--ink-2); }
 .chip-opt input:checked + span { border-color: var(--accent); background: var(--accent-soft); font-weight: 600; }
 .chip-opt input:focus-visible + span { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+/* ---------- Order form: plan, options, payment and start as in a shop, then the price, then the contact details ---------- */
+.order-part { font-size: 1.25rem; margin: 0; }
+.order-summary + .order-part { margin-top: var(--s4); }
+.q.invalid > .q-label { color: var(--danger); }
+.q.invalid .pick-card { border-color: var(--danger); }
+.addons { display: grid; border-top: 1px solid var(--line); }
+.addon { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: var(--s3); padding: var(--s3) 0; border-bottom: 1px solid var(--line); cursor: pointer; font-size: 1rem; }
+.addon input { width: 1.05rem; height: 1.05rem; margin: 0; accent-color: var(--accent); }
+.addon-price { color: var(--ink-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.addon:has(input:checked) .addon-price { color: var(--ink); font-weight: 600; }
+.order-summary { border: 1px solid var(--line); border-radius: var(--radius-l); background: var(--surface-2); padding: var(--s4) var(--s5); }
+.summary-empty { margin: 0; color: var(--ink-2); font-size: 0.95rem; }
+.summary-table { width: 100%; border-collapse: collapse; font-size: 1rem; margin-bottom: var(--s3); }
+.summary-table th { text-align: left; font-weight: 450; padding: var(--s1) var(--s4) var(--s1) 0; }
+.summary-table td { text-align: right; vertical-align: top; white-space: nowrap; padding: var(--s1) 0; }
+.summary-table tfoot th, .summary-table tfoot td { color: var(--ink-2); }
+.summary-table .summary-total th, .summary-table .summary-total td { color: var(--ink); font-weight: 700; border-top: 1px solid var(--line-strong); padding-top: var(--s3); }
+.summary-table .summary-pilot th, .summary-table .summary-pilot td { color: var(--ink); font-weight: 600; }
+.summary-note { margin: 0; color: var(--ink-2); font-size: 0.9rem; }
+.summary-note + .summary-note { margin-top: var(--s1); }
+.order-submit { display: grid; gap: var(--s3); }
+.order-note { margin: 0; color: var(--ink-2); font-size: 0.92rem; }
+.success-recap { margin: var(--s3) 0 0; }
 
 .form-success { border: 1px solid var(--line); border-radius: var(--radius-l); padding: var(--s6) var(--s5); background: var(--surface-2); }
 .form-success:focus { outline: none; }

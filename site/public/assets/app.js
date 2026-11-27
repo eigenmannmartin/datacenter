@@ -1,5 +1,5 @@
 /* Rechenbox landing page: language and theme switches, plan recommender,
- * portal and agent demos and two-step sign-up form. Visitor statistics come from
+ * portal and agent demos, order form and the optional questions after it. Visitor statistics come from
  * Cloudflare Web Analytics (injected at the edge, no cookies), not from this file. */
 (function () {
   "use strict";
@@ -22,8 +22,23 @@
       server: "Die Übermittlung hat nicht geklappt. Bitte versuchen Sie es später erneut oder schreiben Sie uns an {email}.",
       sending: "Wird gesendet…",
       skipped: "In Ordnung, das klären wir im Gespräch.",
-      calcCta: "Pilotplatz mit {plan} reservieren",
+      calcCta: "{plan} bestellen",
       typedName: "Anna Meier",
+      from: "ab",
+      opt_offsite: "Backup-Kopie im Schweizer Rechenzentrum",
+      opt_ai: "Private KI",
+      opt_storage: "6\u00a0TB mehr Speicher",
+      payNote_prepay: "Wenn Sie jährlich im Voraus zahlen, erhalten Sie 4\u00a0% Rabatt.",
+      payNote_purchase: "Wenn Sie die Hardware kaufen, sinkt der Monatspreis. Beide Beträge nennen wir Ihnen vor dem Vertrag.",
+      recap: "Ihre Auswahl: {what}, {pay}, Start {start}.",
+      with: " mit ",
+      and: " und ",
+      pay_monthly: "monatliche Zahlung",
+      pay_prepay: "jährliche Zahlung im Voraus",
+      pay_purchase: "Kauf der Hardware",
+      start_lt6: "innert 6 Monaten",
+      start_6to12: "in 6 bis 12 Monaten",
+      start_gt12: "später",
       rStart: "Ein Tag Ausfall ist für Sie verkraftbar. Dann genügt ein Server, den wir bei einem Defekt am nächsten Arbeitstag ersetzen.",
       rSize: "Mit mehr als 20 Mitarbeitenden lohnt sich die Ausfallsicherheit von drei Servern.",
       rDowntime: "Ein Ausfall kostet Sie Umsatz oder Arbeitszeit. Mit drei Servern arbeiten Sie weiter, wenn einer ausfällt.",
@@ -42,8 +57,24 @@
       server: "Sending failed. Please try again later or write to us at {email}.",
       sending: "Sending…",
       skipped: "All right, we will cover that in the call.",
-      calcCta: "Reserve a pilot slot with {plan}",
+      calcCta: "Order {plan}",
       typedName: "Anna Meier",
+      from: "from",
+      opt_offsite: "Backup copy in a Swiss data centre",
+      inline_offsite: "a backup copy in a Swiss data centre",
+      opt_ai: "Private AI",
+      opt_storage: "6\u00a0TB more storage",
+      payNote_prepay: "If you pay a year in advance, you get 4% off.",
+      payNote_purchase: "If you buy the hardware, the monthly price goes down. We will give you both amounts before the contract.",
+      recap: "Your choice: {what}, {pay}, start {start}.",
+      with: " with ",
+      and: " and ",
+      pay_monthly: "monthly payment",
+      pay_prepay: "yearly payment in advance",
+      pay_purchase: "hardware purchase",
+      start_lt6: "within 6 months",
+      start_6to12: "in 6 to 12 months",
+      start_gt12: "later",
       rStart: "You can cope with a day of downtime. One server is then enough, and we replace it on the next working day if it fails.",
       rSize: "With more than 20 staff, the failover of three servers pays off.",
       rDowntime: "Downtime costs you revenue or working time. With three servers you keep working when one fails.",
@@ -130,7 +161,7 @@
         el.setAttribute(parts[0], en && val ? val : store["attr:" + parts[0]]);
       });
     });
-    document.querySelectorAll(".amount, .amount-plain, #f-plan option").forEach(function (el) {
+    document.querySelectorAll(".amount, .amount-plain").forEach(function (el) {
       el.textContent = en ? el.textContent.replace(/(\d)'(\d)/g, "$1,$2") : el.textContent.replace(/(\d),(\d)/g, "$1'$2");
     });
     var toggle = $("lang-toggle");
@@ -140,6 +171,8 @@
     document.title = en ? "Rechenbox – your server in your office, run by us" : "Rechenbox – Ihr Server im Büro, von uns betrieben";
     updateThemeButton();
     updateCalc(false);
+    renderSummary();
+    renderRecap();
     if (portal.done) $("portal-typed").textContent = MSG[lang].typedName;
   }
 
@@ -218,20 +251,9 @@
     });
   });
 
-  // ---------- Plan buttons ("fake door") ----------
-  var planSelect = $("f-plan");
-  function goToForm(plan) {
-    if (plan && planSelect.querySelector('option[value="' + plan + '"]')) planSelect.value = plan;
-    $("anmelden").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
-    setTimeout(function () { $("f-name").focus({ preventScroll: true }); }, reduceMotion ? 0 : 450);
-  }
-  $("calc-cta").addEventListener("click", function () { goToForm(recommendedPlan); });
-  document.querySelectorAll("[data-plan-select]").forEach(function (btn) {
-    btn.addEventListener("click", function () { goToForm(btn.getAttribute("data-plan-select")); });
-  });
-
   // ---------- Portal demo: the page's one orchestrated moment ----------
-  var portal = { run: 0, done: false };
+  // It plays once when it comes into view; a click on the card plays it again once it has finished.
+  var portal = { run: 0, done: false, playing: false };
   function portalReset() {
     $("portal-dialog").classList.remove("open");
     $("portal-typed").textContent = "";
@@ -256,6 +278,14 @@
     if (reduceMotion) { portalFinal(); return; }
     var run = ++portal.run;
     var alive = function () { return run === portal.run; };
+    portal.playing = true;
+    try {
+      await portalSteps(alive);
+    } finally {
+      if (alive()) portal.playing = false;
+    }
+  }
+  async function portalSteps(alive) {
     portalReset();
     portal.done = false;
     await sleep(500); if (!alive()) return;
@@ -284,16 +314,16 @@
   }
   if ("IntersectionObserver" in window) {
     var portalIo = new IntersectionObserver(function (entries) {
-      if (entries[0].isIntersecting) { portalIo.disconnect(); playPortal(); }
+      if (entries[0].isIntersecting) { portalIo.disconnect(); if (!portal.playing) playPortal(); }
     }, { threshold: 0.55 });
     portalIo.observe($("portal-mock"));
   } else {
     portalFinal();
   }
-  $("portal-replay").addEventListener("click", playPortal);
+  $("portal-mock").addEventListener("click", function () { if (!portal.playing) playPortal(); });
 
   // ---------- Private KI demo: an agent works through a task, then waits for a person to approve ----------
-  var agent = { run: 0 };
+  var agent = { run: 0, playing: false };
   var AGENT_STEPS = ["agent-s1", "agent-s2", "agent-s3"];
   function agentReset() {
     AGENT_STEPS.forEach(function (id) { $(id).classList.remove("shown", "working"); });
@@ -308,6 +338,14 @@
     if (reduceMotion) { agentFinal(); return; }
     var run = ++agent.run;
     var alive = function () { return run === agent.run; };
+    agent.playing = true;
+    try {
+      await agentSteps(alive);
+    } finally {
+      if (alive()) agent.playing = false;
+    }
+  }
+  async function agentSteps(alive) {
     agentReset();
     await sleep(400); if (!alive()) return;
     for (var i = 0; i < AGENT_STEPS.length; i++) {
@@ -327,17 +365,105 @@
     agentFinal();
   } else {
     var agentIo = new IntersectionObserver(function (entries) {
-      if (entries[0].isIntersecting) { agentIo.disconnect(); playAgent(); }
+      if (entries[0].isIntersecting) { agentIo.disconnect(); if (!agent.playing) playAgent(); }
     }, { threshold: 0.55 });
     agentIo.observe($("agent-mock"));
   }
-  $("agent-replay").addEventListener("click", playAgent);
+  $("agent-mock").addEventListener("click", function () { if (!agent.playing) playAgent(); });
 
-  // ---------- Sign-up, step 1 ----------
-  var form = $("signup-form");
+  // ---------- Order form ----------
+  // A "fake door" for the pilot: the visitor orders with real prices and choices, but pays nothing and signs nothing.
+  // After sending, the page thanks them for their interest in the pilot and says we will get back to them.
+  // Prices: keep them in step with the plan cards and the comparison table in index.html.
+  var PRICES = {
+    start: { monthly: 790, setup: 2900, offsite: 90 },
+    business: { monthly: 1890, setup: 6900, offsite: 140 },
+    pro: { monthly: 2890, setup: 8900, offsite: 240 }
+  };
+  var ADDON_PRICES = { ai: 590, storage: 190 };
+  var PILOT_DISCOUNT = 0.3; // pilot customers, first year
+  // The choices an order needs, with the fieldset that holds each.
+  var GROUPS = { plan: "q-plan", payment_pref: "q-pay", start: "q-start" };
+
+  var form = $("order-form");
   var errorEl = $("form-error");
   var submitBtn = $("submit-btn");
   var signupRef = null;
+  var sentOrder = null;
+
+  function chf(n) { return "CHF " + money(n); }
+  function picked(name) {
+    var el = form.querySelector('input[name="' + name + '"]:checked');
+    return el ? el.value : "";
+  }
+  function pickedAll(name) {
+    return Array.prototype.map.call(form.querySelectorAll('input[name="' + name + '"]:checked'), function (el) { return el.value; });
+  }
+
+  // The summary: what the chosen plan and options cost per month, per month in the pilot's first year, and once for setup.
+  function renderSummary() {
+    var plan = picked("plan");
+    var p = PRICES[plan];
+    $("offsite-price").textContent = p ? chf(p.offsite) : MSG[lang].from + " " + chf(PRICES.start.offsite);
+    $("summary-empty").hidden = !!p;
+    $("summary-body").hidden = !p;
+    if (!p) return;
+    var rows = [[PLAN_NAMES[plan], p.monthly]];
+    pickedAll("options").forEach(function (o) {
+      rows.push([MSG[lang]["opt_" + o], o === "offsite" ? p.offsite : ADDON_PRICES[o]]);
+    });
+    var lines = $("summary-lines");
+    lines.textContent = "";
+    var total = 0;
+    rows.forEach(function (r) {
+      total += r[1];
+      var tr = document.createElement("tr");
+      var th = document.createElement("th");
+      th.scope = "row";
+      th.textContent = r[0];
+      var td = document.createElement("td");
+      td.textContent = chf(r[1]);
+      tr.append(th, td);
+      lines.appendChild(tr);
+    });
+    $("sum-total").textContent = chf(total);
+    $("sum-pilot").textContent = chf(total * (1 - PILOT_DISCOUNT));
+    $("sum-setup").textContent = chf(p.setup);
+    var note = MSG[lang]["payNote_" + picked("payment_pref")] || "";
+    $("summary-pay").textContent = note;
+    $("summary-pay").hidden = !note;
+  }
+
+  function clearGroup(fieldset) {
+    fieldset.classList.remove("invalid");
+    fieldset.querySelectorAll("input").forEach(function (el) { el.removeAttribute("aria-invalid"); });
+  }
+  form.addEventListener("change", function (ev) {
+    var group = ev.target.closest(".q");
+    if (group) clearGroup(group);
+    renderSummary();
+  });
+  // A marked field loses its mark as soon as it has an answer; the check on sending runs again anyway.
+  form.addEventListener("input", function (ev) {
+    if (ev.target.getAttribute("aria-invalid") === "true" && ev.target.value.trim()) ev.target.removeAttribute("aria-invalid");
+  });
+
+  // The plan buttons and the recommender lead to the form with that plan chosen.
+  function goToForm(plan) {
+    var input = plan ? form.querySelector('input[name="plan"][value="' + plan + '"]') : null;
+    if (input) {
+      input.checked = true;
+      clearGroup($("q-plan"));
+      renderSummary();
+    }
+    $("bestellen").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
+    var target = input || form.querySelector('input[name="plan"]');
+    setTimeout(function () { target.focus({ preventScroll: true }); }, reduceMotion ? 0 : 450);
+  }
+  $("calc-cta").addEventListener("click", function () { goToForm(recommendedPlan); });
+  document.querySelectorAll("[data-plan-select]").forEach(function (btn) {
+    btn.addEventListener("click", function () { goToForm(btn.getAttribute("data-plan-select")); });
+  });
 
   function showError(el, msg, field) {
     el.textContent = msg;
@@ -348,14 +474,16 @@
   function collect() {
     var fd = new FormData(form);
     return {
+      plan: fd.get("plan") || "",
+      options: fd.getAll("options"),
+      payment_pref: fd.get("payment_pref") || "",
+      start: fd.get("start") || "",
       name: (fd.get("name") || "").trim(),
       company: (fd.get("company") || "").trim(),
       email: (fd.get("email") || "").trim(),
       phone: (fd.get("phone") || "").trim(),
       industry: fd.get("industry") || "",
       size: fd.get("size") || "",
-      plan: fd.get("plan") || "undecided",
-      wants_call: fd.get("wants_call") === "yes",
       consent: fd.get("consent") === "on",
       website: fd.get("website") || "", // honeypot
       recommended_plan: recommendedPlan,
@@ -363,19 +491,45 @@
     };
   }
 
+  // Marks every missing answer and returns the first one, in the order of the form.
   function validate(data) {
     form.querySelectorAll("[aria-invalid]").forEach(function (el) { el.removeAttribute("aria-invalid"); });
-    var missing = ["name", "company", "email", "industry", "size"].filter(function (n) { return !data[n]; }).map(function (n) { return form.elements[n]; });
-    if (missing.length) {
-      missing.forEach(function (el) { el.setAttribute("aria-invalid", "true"); });
-      return { msg: MSG[lang].required, field: missing[0] };
-    }
+    form.querySelectorAll(".q.invalid").forEach(function (el) { el.classList.remove("invalid"); });
+    var missing = [];
+    Object.keys(GROUPS).forEach(function (n) {
+      if (data[n]) return;
+      var group = $(GROUPS[n]);
+      group.classList.add("invalid");
+      group.querySelectorAll("input").forEach(function (el) { el.setAttribute("aria-invalid", "true"); });
+      missing.push(group.querySelector("input"));
+    });
+    ["name", "company", "email", "industry", "size"].forEach(function (n) {
+      if (data[n]) return;
+      form.elements[n].setAttribute("aria-invalid", "true");
+      missing.push(form.elements[n]);
+    });
+    if (missing.length) return { msg: MSG[lang].required, field: missing[0] };
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(data.email)) {
       form.elements.email.setAttribute("aria-invalid", "true");
       return { msg: MSG[lang].email, field: form.elements.email };
     }
     if (!data.consent) return { msg: MSG[lang].consent, field: $("f-consent") };
     return null;
+  }
+
+  function listOf(items) {
+    return items.length < 2 ? items.join("") : items.slice(0, -1).join(", ") + MSG[lang].and + items[items.length - 1];
+  }
+  // The confirmation repeats what was ordered.
+  function renderRecap() {
+    if (!sentOrder) return;
+    var o = sentOrder;
+    var what = PLAN_NAMES[o.plan];
+    if (o.options.length) what += MSG[lang].with + listOf(o.options.map(function (k) { return MSG[lang]["inline_" + k] || MSG[lang]["opt_" + k]; }));
+    $("success-recap").textContent = MSG[lang].recap
+      .replace("{what}", what)
+      .replace("{pay}", MSG[lang]["pay_" + o.payment_pref])
+      .replace("{start}", MSG[lang]["start_" + o.start]);
   }
 
   form.addEventListener("submit", function (ev) {
@@ -392,13 +546,9 @@
       .then(function (res) { if (!res.ok) throw new Error("server"); return res.json(); })
       .then(function (json) {
         signupRef = json && json.ref ? json.ref : null;
+        sentOrder = data;
+        renderRecap();
         form.hidden = true;
-        var book = $("booking-link");
-        if (CONFIG.bookingUrl) {
-          book.href = CONFIG.bookingUrl;
-        } else {
-          book.hidden = true;
-        }
         if (!signupRef) $("details-form").hidden = true;
         var ok = $("form-success");
         ok.hidden = false;
@@ -413,7 +563,7 @@
       .finally(function () { submitBtn.disabled = false; submitBtn.textContent = label; });
   });
 
-  // ---------- Sign-up, step 2: optional details ----------
+  // ---------- After the order: optional questions ----------
   var details = $("details-form");
   var detailsErr = $("details-error");
   var detailsBtn = $("details-btn");
@@ -433,8 +583,6 @@
       ref: signupRef,
       current_it: fd.getAll("current_it"),
       pains: fd.getAll("pains"),
-      timeline: fd.get("timeline") || "",
-      payment_pref: fd.get("payment_pref") || "",
       price_view: fd.get("price_view") || "",
       message: (fd.get("message") || "").trim()
     };
