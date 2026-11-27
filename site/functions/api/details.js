@@ -1,10 +1,9 @@
-// POST /api/details — optional answers sent after a sign-up (second form step).
+// POST /api/details — optional answers sent after an order (second form step).
 // Identified by the private reference returned from /api/signup; accepted once.
+// Payment and start come with the order itself, so this step leaves them alone.
 import { readJson, json, sameOrigin, str, oneOf } from "../../lib/http.js";
 
-const TIMELINES = ["lt6", "6to12", "gt12", "info"];
 const PRICE_VIEWS = ["cheap", "fair", "expensive", "unsure"];
-const PAYMENT_PREFS = ["monthly", "prepay", "purchase", "undecided"];
 const CURRENT_IT = ["own_server", "m365", "nas", "swiss_cloud", "it_partner", "unknown"];
 const PAINS = ["confidentiality", "ransomware", "server_eol", "cost", "ai", "performance"];
 const REF_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
@@ -19,16 +18,14 @@ export async function onRequestPost({ request, env }) {
   if (!b || typeof b.ref !== "string" || !REF_RE.test(b.ref)) return json({ error: "bad request" }, 400);
 
   const result = await env.DB.prepare(
-    `UPDATE signups SET current_it = ?2, pains = ?3, timeline = ?4, payment_pref = ?5, price_view = ?6,
-            message = COALESCE(?7, message), details_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
+    `UPDATE signups SET current_it = ?2, pains = ?3, price_view = ?4,
+            message = COALESCE(?5, message), details_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
      WHERE token = ?1 AND details_at IS NULL
        AND ts > strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '-1 day')`
   ).bind(
     b.ref,
     JSON.stringify(pick(b.current_it, CURRENT_IT)),
     JSON.stringify(pick(b.pains, PAINS)),
-    oneOf(b.timeline, TIMELINES),
-    oneOf(b.payment_pref, PAYMENT_PREFS),
     oneOf(b.price_view, PRICE_VIEWS),
     str(b.message, 2000)
   ).run();

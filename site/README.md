@@ -1,14 +1,14 @@
 # Engagement-test website
 
-A German landing page (with an English toggle) at [rechenbox.ch](https://rechenbox.ch) that tests demand for Rechenbox before any hardware is bought. It shows real prices, lets visitors "reserve a pilot slot" (a fake door that says plainly it is a free, non-binding pilot reservation), and asks qualifying questions. The go/no-go thresholds are in the business plan, section 1b.
+A German landing page (with an English toggle) at [rechenbox.ch](https://rechenbox.ch) that tests demand for Rechenbox before any hardware is bought. It shows real prices and lets visitors order a Rechenbox for the 2027 pilot. The order is a fake door: visitors choose plan, options, payment and start, see the price and send the order with their contact details; nothing is paid and no contract is made. The page then thanks them for their interest in the pilot and says we will get back to them within two working days, and asks a few optional questions. Before sending, the note under the button and the FAQ say that nothing is paid now and that an order only becomes binding with a signed contract. The go/no-go thresholds are in the business plan, section 1b (written for the earlier reservation form: see [Reading the results](#reading-the-results)).
 
 - `public/`: static site: `index.html`, `datenschutz.html` (privacy and legal notice), `assets/`
 - `functions/_middleware.js`: pre-launch password gate and `noindex` (see below)
-- `functions/api/`: Cloudflare Pages Functions: `signup` (form step 1), `details` (optional answers, form step 2)
+- `functions/api/`: Cloudflare Pages Functions: `signup` (the order), `details` (optional answers after the order)
 - `lib/http.js`: shared helpers for the functions
-- `schema.sql`: D1 table `signups`
+- `schema.sql`: D1 tables `signups` (one row per order) and `order_details` (options and preferred start of each order)
 
-The picture of the box on the first screen is a rendering, not a photo, and the page says so ("Visualisierung"). There is one file per colour scheme, `public/assets/img/rack-light.webp` and `rack-dark.webp`, made with [`docs/rack.py`](../docs/rack.py):
+The picture of the box on the first screen is a rendering, not a photo. There is one file per colour scheme, `public/assets/img/rack-light.webp` and `rack-dark.webp`, made with [`docs/rack.py`](../docs/rack.py):
 
 ```sh
 python3 docs/rack.py --shot studio-light --samples 192 --scale 1.0 --out out/studio-light.png   # about 11 minutes on 3 cores
@@ -39,32 +39,39 @@ Everything is in the Cloudflare dashboard, behind your Cloudflare login. Nothing
 | What | Where |
 | --- | --- |
 | Visits, sources, countries, pages, devices | [Web Analytics](https://dash.cloudflare.com/a1121094b30551cad6cd3d7681e5018a/web-analytics) → rechenbox.ch |
-| Sign-ups: browse, filter, edit, delete | [D1 → rechenbox](https://dash.cloudflare.com/a1121094b30551cad6cd3d7681e5018a/workers/d1/databases/04a95002-a17e-4d1d-9f9c-0aff3d9c9333) → Tables → `signups` |
+| Orders: browse, filter, edit, delete | [D1 → rechenbox](https://dash.cloudflare.com/a1121094b30551cad6cd3d7681e5018a/workers/d1/databases/04a95002-a17e-4d1d-9f9c-0aff3d9c9333) → Tables → `signups`, with options and start in `order_details` |
 | Funnel numbers | Same database → Console, with the queries below |
 
-Each sign-up row holds the contact details, the plan chosen, what the plan picker recommended (`recommended_plan`), the optional answers (pains, timeline, payment preference, price view) and the lead source (`utm_source`, `utm_campaign`, `ref`). Visit-to-sign-up conversion = sign-ups ÷ visits in Web Analytics for the same period.
+Each order is a row in `signups` with the contact details, the plan (`plan`), the payment chosen (`payment_pref`: `monthly`, `prepay` or `purchase`), what the plan picker recommended (`recommended_plan`), the optional answers (current IT, pains, price view, message) and the lead source (`utm_source`, `utm_campaign`, `ref`). The options (`offsite` for the backup copy in a Swiss data centre, `ai`, `storage`) and the preferred start (`2027h1`, `2027h2`, `2028`: first or second half of 2027, 2028 or later) are in `order_details`, joined on `token`. If the same email orders again within 10 minutes, the row keeps the latest choices. The start choices are calendar half-years because the pilot discount is for customers who start in 2027 (the price summary leaves it out for 2028); if the campaign runs past mid-2027, change them in `public/index.html`, `public/assets/app.js`, `public/assets/i18n-en.js` and `functions/api/signup.js`. Visit-to-order conversion = orders ÷ visits in Web Analytics for the same period.
+
+Rows from before 27 November 2026 come from the earlier form, which reserved a free pilot slot: they have `wants_call` (whether the visitor wanted a call) and `timeline` (when a decision was due), and no row in `order_details`. The order form asks neither, so the go/no-go figure "share wanting a call" has no successor in the data. The closest measure of buying intent is now the number of orders, by plan, and how many of them want to start in 2027. Update section 1b of the business plan accordingly.
 
 Queries for the D1 console:
 
 ```sql
--- Sign-ups, newest first
-SELECT ts, name, company, email, phone, industry, size, plan, recommended_plan, wants_call FROM signups ORDER BY ts DESC;
+-- Orders, newest first
+SELECT s.ts, s.name, s.company, s.email, s.phone, s.industry, s.size, s.plan, o.options, s.payment_pref, o.start, s.recommended_plan
+FROM signups s JOIN order_details o ON o.token = s.token ORDER BY s.ts DESC;
 
--- Go/no-go: total, share wanting a call, share calling the price too expensive
-SELECT COUNT(*) AS signups,
-       ROUND(100.0 * SUM(wants_call) / COUNT(*), 1) AS pct_want_call,
-       ROUND(100.0 * SUM(price_view = 'expensive') / NULLIF(SUM(price_view IS NOT NULL), 0), 1) AS pct_too_expensive
-FROM signups;
+-- Go/no-go: orders, orders that want to start in 2027 (pilot candidates), share calling the price too expensive
+SELECT COUNT(*) AS orders,
+       SUM(o.start IN ('2027h1', '2027h2')) AS start_2027,
+       ROUND(100.0 * SUM(s.price_view = 'expensive') / NULLIF(SUM(s.price_view IS NOT NULL), 0), 1) AS pct_too_expensive
+FROM signups s JOIN order_details o ON o.token = s.token;
+
+-- How often each option is ordered
+SELECT j.value AS option, COUNT(*) AS n FROM order_details, json_each(order_details.options) j GROUP BY option ORDER BY n DESC;
 
 -- Which pains come up most
 SELECT j.value AS pain, COUNT(*) AS n FROM signups, json_each(signups.pains) j GROUP BY pain ORDER BY n DESC;
 
--- By industry, plan, payment preference or lead source (swap the column)
-SELECT industry, COUNT(*) AS n FROM signups GROUP BY industry ORDER BY n DESC;
-SELECT COALESCE(utm_source, ref, 'direct') AS source, COUNT(*) AS n FROM signups GROUP BY source ORDER BY n DESC;
+-- By plan, payment, industry or lead source (swap the column)
+SELECT plan, COUNT(*) AS n FROM signups s JOIN order_details o ON o.token = s.token GROUP BY plan ORDER BY n DESC;
+SELECT payment_pref, COUNT(*) AS n FROM signups s JOIN order_details o ON o.token = s.token GROUP BY payment_pref ORDER BY n DESC;
+SELECT COALESCE(s.utm_source, s.ref, 'direct') AS source, COUNT(*) AS n FROM signups s JOIN order_details o ON o.token = s.token GROUP BY source ORDER BY n DESC;
 ```
 
-Optional: get a chat message for every new sign-up (Slack or Teams incoming webhook, no email or phone in the message):
+Optional: get a chat message for every new order (Slack or Teams incoming webhook, no name, email or phone in the message):
 `npx wrangler pages secret put NOTIFY_WEBHOOK_URL --project-name rechenbox`.
 
 ## Running the test
@@ -77,7 +84,7 @@ Use `?lang=en` to link to the English version.
 
 Every push to `main` that touches `site/` deploys automatically via `.github/workflows/deploy-site.yml`: it checks the JavaScript, applies `schema.sql` to the remote database (idempotent), deploys to Cloudflare Pages and smoke-tests the result. It can also be started by hand under Actions → Deploy site → Run workflow.
 
-Every pull request that touches `site/` gets a preview via `.github/workflows/preview-site.yml`, at `https://<branch>.rechenbox.pages.dev`. The workflow posts the link as a comment on the pull request and updates it on each push. Previews use the separate D1 database `rechenbox-preview` (EU), so test sign-ups never mix with real ones, and the same password gate as production. Pull requests from forks are skipped, because they get no secrets.
+Every pull request that touches `site/` gets a preview via `.github/workflows/preview-site.yml`, at `https://<branch>.rechenbox.pages.dev`. The workflow posts the link as a comment on the pull request and updates it on each push. Previews use the separate D1 database `rechenbox-preview` (EU), so test orders never mix with real ones, and the same password gate as production. Pull requests from forks are skipped, because they get no secrets.
 
 Set up in Cloudflare (account `a1121094b30551cad6cd3d7681e5018a`):
 
@@ -101,12 +108,13 @@ npx wrangler pages dev
 ## Before launch
 
 - [ ] Fill in the legal notice placeholders in `public/datenschutz.html` and have the privacy text checked
-- [ ] Set `bookingUrl` and `contactPhone` in `public/assets/config.js`, and make sure the mailbox `hallo@rechenbox.ch` exists
+- [ ] Set `contactPhone` in `public/assets/config.js`, and make sure the mailbox `hallo@rechenbox.ch` exists
 - [ ] Check the name "Rechenbox" in Zefix and Swissreg
 - [ ] Add an "About us" section with the founders' names, photos and background: the page review flagged this as the biggest trust gap for this audience
 - [ ] Check four statements the page makes as given, which `docs/hardware.md` describes as planned: the sync app for PC, Mac and phone with sharing by link, sign-in for remote access confirmed on the phone, business software (accounting, practice, CAD licence server) running on the box, and that files stay with the old provider until the customer has checked the move
-- [ ] The task durations in the portal section are labelled as targets and the portal picture as a draft: measure them once the portal exists
+- [ ] The task durations in the portal section are labelled as targets: measure them once the portal exists. The portal and agent demos no longer carry a "draft" or "example" label (removed on request in November 2026), so they should match the real interfaces closely before launch
 - [ ] Measure power draw and noise in the lab; the page gives the design target for power and says both are not measured yet
-- [ ] Confirm what the "Private KI" section says beyond `docs/hardware.md` (section 7 covers only the device and the price): AI agents come with the CHF 590 option and are available in the 2027 pilot; the example tasks (filing receipts in client folders, reading amounts off invoices, summarising documents); an answer names the document it comes from; the AI answers each person only from folders that person can open; a person approves before an agent files documents or changes data, and every step is logged; staff start agents and approve their steps themselves (in which interface). The agent demo is labelled as an example and a draft
-- [ ] Decide whether "I'd like a short call" in the form stays pre-ticked: it raises the share of sign-ups that ask for a call, which is one of the go/no-go figures
-- [ ] Submit a test sign-up on the live site, find it in the D1 table, then delete it there
+- [ ] Confirm what the "Private KI" section says beyond `docs/hardware.md` (section 7 covers only the device and the price): AI agents come with the CHF 590 option and are available in the 2027 pilot; the example tasks (filing receipts in client folders, reading amounts off invoices, summarising documents); an answer names the document it comes from; the AI answers each person only from folders that person can open; a person approves before an agent files documents or changes data, and every step is logged; staff start agents and approve their steps themselves (in which interface).
+- [ ] Have the order form checked: it asks visitors to "order" (Bestellung absenden) although no contract is made. The note under the button and the FAQ say that nothing is paid now and that an order only becomes binding with the signed contract; the confirmation thanks them for their interest in the pilot
+- [ ] Confirm how the pilot discount works: the price summary in the order form takes 30 % off the whole monthly price (plan and options) for the first year, nothing off the setup fee, and shows no pilot price for a start in 2028 or later
+- [ ] Submit a test order on the live site, find it in the D1 tables `signups` and `order_details`, then delete it in both

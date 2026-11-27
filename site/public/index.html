@@ -69,7 +69,7 @@
           <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sun"/></svg>
         </button>
         <button type="button" class="lang-toggle" id="lang-toggle" aria-label="EN: Switch to English" lang="en">EN</button>
-        <a class="btn btn-primary btn-small" href="#anmelden"><span class="label-long" data-i18n="cta.reserve">Pilotplatz reservieren</span><span class="label-short" data-i18n="cta.reserveNav">Reservieren</span></a>
+        <a class="btn btn-primary btn-small" href="#bestellen"><span class="label-long" data-i18n="cta.order">Jetzt bestellen</span><span class="label-short" data-i18n="cta.orderNav">Bestellen</span></a>
       </div>
     </div>
   </header>
@@ -83,15 +83,15 @@
           <h1><span data-i18n="hero.title1">Ihr Server steht im Büro.</span> <span data-i18n="hero.title2">Den Betrieb übernehmen wir.</span></h1>
           <p class="lead" data-i18n="hero.lead">Die Rechenbox ersetzt Server, Netzwerkspeicher (NAS), Backup und Firewall in Treuhandbüros, Kanzleien, Praxen und Planungsbüros mit 10 bis 100 Mitarbeitenden. Updates, Backup-Tests und den Ersatz defekter Hardware übernehmen wir.</p>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="#anmelden" data-i18n="cta.reserve">Pilotplatz reservieren</a>
+            <a class="btn btn-primary" href="#bestellen" data-i18n="cta.order">Jetzt bestellen</a>
             <a class="btn btn-secondary" href="#preise" data-i18n="cta.pricing">Preise ansehen</a>
           </div>
-          <p class="cta-note" data-i18n="cta.note">Kostenlos und unverbindlich. Zuerst kommen wir für eine Stunde zur Analyse zu Ihnen.</p>
+          <p class="cta-note" data-i18n="cta.note">Pilotkunden erhalten im ersten Jahr 30&nbsp;% Rabatt. Bevor Sie unterschreiben, kommen wir für eine Stunde zur Analyse zu Ihnen.</p>
         </div>
 
       </div>
 
-      <!-- The box, rendered (not a photo: the caption says so). It fills the height of the first screen.
+      <!-- The box, rendered from docs/rack.py. It fills the height of the first screen.
            Sheen and status lights are drawn over the picture; their positions are shares of the picture's size. -->
       <figure class="hero-visual">
         <div class="rack">
@@ -114,7 +114,6 @@
             <i class="led-status" style="--x:50.9;--y:71.5;--d:6"></i>
           </span>
         </div>
-        <figcaption data-i18n="hero.caption">Visualisierung</figcaption>
       </figure>
       <div class="container hero-foot">
         <ul class="proof" aria-label="Das Wichtigste in Kürze" data-i18n-attr="aria-label:hero.proofLabel">
@@ -219,7 +218,7 @@
         </div>
 
         <figure class="portal-demo">
-          <div class="portal" id="portal-mock" role="img" aria-label="Beispiel: Im Portal wird eine neue Mitarbeiterin angelegt und erhält Zugriff auf die Ordner Buchhaltung und Mandanten." data-i18n-attr="aria-label:portal.mockLabel">
+          <div class="portal" id="portal-mock" role="img" aria-label="Im Portal wird eine neue Mitarbeiterin angelegt und erhält Zugriff auf die Ordner Buchhaltung und Mandanten." data-i18n-attr="aria-label:portal.mockLabel">
             <div class="portal-bar" aria-hidden="true">
               <span class="portal-firm" data-i18n="hero.card.title">Muster Treuhand AG</span>
               <span class="ok-chip"><span class="led-dot"></span><span data-i18n="hero.card.ok">Alles in Ordnung</span></span>
@@ -257,7 +256,6 @@
               <div class="portal-toast" id="portal-toast" data-i18n="mock.toast">Anna Meier ist angelegt. Die Zugangsdaten sind per E-Mail unterwegs.</div>
             </div>
           </div>
-          <figcaption><span data-i18n="portal.caption">Entwurf des Portals</span> <button type="button" class="link-btn" id="portal-replay" data-i18n="portal.replay">Nochmals zeigen</button></figcaption>
         </figure>
       </div>
     </section>
@@ -269,7 +267,7 @@
         <p class="section-lead" data-i18n="ai.lead">Wer einen Vertrag in einen Chatbot im Internet kopiert, gibt ihn aus der Hand. Mit der Option Private KI läuft ein Sprachmodell (LLM) auf einem eigenen Gerät in Ihrem Büro. Es beantwortet Fragen zu Ihren Dokumenten, und KI-Agenten erledigen damit wiederkehrende Arbeit.</p>
         <div class="ai-grid">
           <figure class="portal-demo ai-demo">
-            <div class="portal" id="agent-mock" role="img" aria-label="Beispiel: Ein KI-Agent liest 14 neue Belege und ordnet 12 davon den Mandanten zu. Zwei unklare Belege bleiben im Eingang. Eine Mitarbeiterin gibt die Ablage der zwölf Belege frei." data-i18n-attr="aria-label:ai.mockLabel">
+            <div class="portal" id="agent-mock" role="img" aria-label="Ein KI-Agent liest 14 neue Belege und ordnet 12 davon den Mandanten zu. Zwei unklare Belege bleiben im Eingang. Eine Mitarbeiterin gibt die Ablage der zwölf Belege frei." data-i18n-attr="aria-label:ai.mockLabel">
               <div class="portal-bar" aria-hidden="true">
                 <span class="portal-firm" data-i18n="ai.mock.title">Private KI</span>
                 <span class="ok-chip"><span class="led-dot"></span><span data-i18n="ai.mock.local">Läuft im Büro</span></span>
@@ -295,7 +293,6 @@
                 <p class="agent-result" id="agent-result" data-i18n="ai.mock.toast">12 Belege abgelegt. Der Schritt steht im Protokoll.</p>
               </div>
             </div>
-            <figcaption><span data-i18n="ai.caption">Beispiel, Entwurf der Oberfläche</span> <button type="button" class="link-btn" id="agent-replay" data-i18n="portal.replay">Nochmals zeigen</button></figcaption>
           </figure>
 
           <dl class="features">
@@ -340,12 +337,12 @@
       <div class="container">
         <h2 data-i18n="how.title">So läuft es ab</h2>
         <ol class="steps">
-          <li><h3 data-i18n="how.s1.t">Analyse</h3><p data-i18n="how.s1.d">Wir kommen für eine Stunde zu Ihnen, kostenlos. Danach wissen Sie, welches Paket passt.</p></li>
+          <li><h3 data-i18n="how.s1.t">Analyse</h3><p data-i18n="how.s1.d">Nach Ihrer Bestellung kommen wir für eine Stunde zu Ihnen, kostenlos. Dabei prüfen wir, ob das Paket passt.</p></li>
           <li><h3 data-i18n="how.s2.t">Einbau</h3><p data-i18n="how.s2.d">Wir liefern die Box fertig eingerichtet und ziehen Ihre Daten um. Den Umzug planen wir auf ein Wochenende, damit Ihr Büro am Montag wieder arbeiten kann.</p></li>
           <li><h3 data-i18n="how.s3.t">Betrieb</h3><p data-i18n="how.s3.d">Sie verwalten Personen und Zugriffe im Portal. Überwachung und Updates laufen automatisch.</p></li>
           <li><h3 data-i18n="how.s4.t">Erneuerung</h3><p data-i18n="how.s4.d">Nach fünf Jahren ersetzen wir die Hardware. Das ist im Monatspreis enthalten.</p></li>
         </ol>
-        <p class="section-cta"><span data-i18n="how.cta">Mit der Reservation vereinbaren wir die kostenlose Analyse in Ihrem Büro.</span> <a class="btn btn-primary" href="#anmelden" data-i18n="cta.reserve">Pilotplatz reservieren</a></p>
+        <p class="section-cta"><span data-i18n="how.cta">Für den Pilot 2027 nehmen wir höchstens zehn Kunden an.</span> <a class="btn btn-primary" href="#bestellen" data-i18n="cta.order">Jetzt bestellen</a></p>
       </div>
     </section>
 
@@ -406,7 +403,7 @@
               <li data-i18n="pricing.start.f3">Lokales Backup, reicht 30 Tage zurück</li>
             </ul>
             <p class="setup" data-i18n="pricing.start.setup">Einrichtung einmalig CHF 2'900</p>
-            <button type="button" class="btn btn-secondary plan-btn" data-plan-select="start" data-i18n="pricing.start.cta">Mit Start reservieren</button>
+            <button type="button" class="btn btn-secondary plan-btn" data-plan-select="start" data-i18n="pricing.start.cta">Start bestellen</button>
           </article>
 
           <article class="plan plan-featured" data-plan="business">
@@ -421,7 +418,7 @@
               <li data-i18n="pricing.business.f3">Lokales Backup, reicht 90 Tage zurück</li>
             </ul>
             <p class="setup" data-i18n="pricing.business.setup">Einrichtung einmalig CHF 6'900</p>
-            <button type="button" class="btn btn-primary plan-btn" data-plan-select="business" data-i18n="pricing.business.cta">Mit Business reservieren</button>
+            <button type="button" class="btn btn-primary plan-btn" data-plan-select="business" data-i18n="pricing.business.cta">Business bestellen</button>
           </article>
 
           <article class="plan" data-plan="pro">
@@ -435,7 +432,7 @@
               <li data-i18n="pricing.pro.f3">Lokales Backup, reicht 1 Jahr zurück, jährlicher Notfalltest</li>
             </ul>
             <p class="setup" data-i18n="pricing.pro.setup">Einrichtung einmalig CHF 8'900</p>
-            <button type="button" class="btn btn-secondary plan-btn" data-plan-select="pro" data-i18n="pricing.pro.cta">Mit Pro reservieren</button>
+            <button type="button" class="btn btn-secondary plan-btn" data-plan-select="pro" data-i18n="pricing.pro.cta">Pro bestellen</button>
           </article>
         </div>
         <p class="all-plans" data-i18n="pricing.all">In allen Paketen: Web-Portal, automatische Überwachung rund um die Uhr, lokales Backup mit monatlichem Wiederherstellungstest, Firewall und USV. Optional pro Monat: Backup-Kopie im Schweizer Rechenzentrum CHF&nbsp;90 mit Start, CHF&nbsp;140 mit Business, CHF&nbsp;240 mit Pro; Private KI CHF&nbsp;590; 6&nbsp;TB mehr Speicher CHF&nbsp;190.</p>
@@ -481,18 +478,72 @@
         <details data-faq="noise"><summary data-i18n="faq.q8">Wie laut ist die Box, und was kostet der Strom?</summary><p data-i18n="faq.a8">In der Box arbeiten kompakte Rechner statt Rackserver. Ausgelegt ist sie auf rund 150 Watt im Betrieb, das wären etwa CHF&nbsp;30 Strom im Monat. Lautstärke und Verbrauch haben wir noch nicht gemessen.</p></details>
         <details data-faq="buy"><summary data-i18n="faq.q9">Müssen wir die Hardware kaufen?</summary><p data-i18n="faq.a9">Nein, sie ist im Monatspreis enthalten. Wer jährlich im Voraus zahlt, erhält 4&nbsp;% Rabatt. Wer die Hardware lieber kauft, zahlt danach einen tieferen Monatspreis.</p></details>
         <details data-faq="exit"><summary data-i18n="faq.q10">Was passiert, wenn wir kündigen?</summary><p data-i18n="faq.a10">Sie erhalten einen vollständigen Export Ihrer Daten. Die Hardware können Sie zum vertraglich festgelegten Restwert übernehmen.</p></details>
-        <details data-faq="pilot"><summary data-i18n="faq.q11">Was bedeutet Pilotphase?</summary><p data-i18n="faq.a11">Wir starten 2027 mit höchstens zehn Pilotkunden in der Region St. Gallen. Sie erhalten im ersten Jahr 30&nbsp;% Rabatt. Mit der Reservation merken wir einen Platz für Sie vor, verbindlich wird es erst mit Ihrer Unterschrift unter dem Vertrag.</p></details>
+        <details data-faq="pilot"><summary data-i18n="faq.q11">Was bedeutet Pilotphase?</summary><p data-i18n="faq.a11">Wir starten 2027 mit höchstens zehn Pilotkunden in der Region St. Gallen. Sie erhalten im ersten Jahr 30&nbsp;% Rabatt. Nach Ihrer Bestellung kommen wir zur Analyse vorbei und schicken Ihnen danach den Vertrag. Verbindlich wird die Bestellung erst mit Ihrer Unterschrift. Bis dahin zahlen Sie nichts.</p></details>
       </div>
     </section>
 
-    <!-- SIGNUP -->
-    <section class="section section-signup" id="anmelden">
+    <!-- ORDER: a "fake door". The order carries real prices and choices, but nothing is paid and no contract is made;
+         after sending, the page thanks the visitor for the interest in the pilot and says we get back to them. -->
+    <section class="section" id="bestellen">
       <div class="container narrow">
-        <h2 data-i18n="form.title">Pilotplatz reservieren</h2>
-        <p class="section-lead" data-i18n="form.lead">Die Reservation ist kostenlos und unverbindlich. Wir melden uns innert zwei Arbeitstagen und vereinbaren die Analyse bei Ihnen vor Ort.</p>
+        <h2 data-i18n="form.title">Rechenbox bestellen</h2>
+        <p class="section-lead" data-i18n="form.lead">Nach Ihrer Bestellung melden wir uns innert zwei Arbeitstagen und vereinbaren die Analyse bei Ihnen vor Ort.</p>
 
-        <noscript><p>Das Formular braucht JavaScript. Schreiben Sie uns an <a href="mailto:hallo@rechenbox.ch">hallo@rechenbox.ch</a>.</p></noscript>
-        <form id="signup-form" novalidate>
+        <noscript><p>Das Bestellformular braucht JavaScript. Bestellen Sie per E-Mail an <a href="mailto:hallo@rechenbox.ch">hallo@rechenbox.ch</a>.</p></noscript>
+        <form id="order-form" novalidate>
+          <h3 class="order-part" data-i18n="order.box">Ihre Rechenbox</h3>
+          <fieldset class="q" id="q-plan">
+            <legend class="q-label"><span data-i18n="order.plan">Paket</span> <span class="q-missing" data-i18n="order.missing">bitte wählen</span></legend>
+            <div class="picks">
+              <label class="pick"><input type="radio" name="plan" value="start"><span class="pick-card"><span class="pick-label">Start</span><span class="pick-sub">CHF&nbsp;<span class="amount-plain">790</span> <span data-i18n="pricing.perMonth">pro Monat</span></span></span></label>
+              <label class="pick"><input type="radio" name="plan" value="business"><span class="pick-card"><span class="pick-label">Business</span><span class="pick-sub">CHF&nbsp;<span class="amount-plain">1'890</span> <span data-i18n="pricing.perMonth">pro Monat</span></span></span></label>
+              <label class="pick"><input type="radio" name="plan" value="pro"><span class="pick-card"><span class="pick-label">Pro</span><span class="pick-sub">CHF&nbsp;<span class="amount-plain">2'890</span> <span data-i18n="pricing.perMonth">pro Monat</span></span></span></label>
+            </div>
+          </fieldset>
+          <fieldset class="q">
+            <legend class="q-label" data-i18n="order.options">Optionen pro Monat</legend>
+            <div class="addons">
+              <label class="addon"><input type="checkbox" name="options" value="offsite"><span data-i18n="order.opt.offsite">Backup-Kopie im Schweizer Rechenzentrum</span><span class="addon-price" id="offsite-price">ab CHF&nbsp;90</span></label>
+              <label class="addon"><input type="checkbox" name="options" value="ai"><span data-i18n="order.opt.ai">Private KI</span><span class="addon-price">CHF&nbsp;590</span></label>
+              <label class="addon"><input type="checkbox" name="options" value="storage"><span data-i18n="order.opt.storage">6&nbsp;TB mehr Speicher</span><span class="addon-price">CHF&nbsp;190</span></label>
+            </div>
+          </fieldset>
+          <fieldset class="q" id="q-pay">
+            <legend class="q-label"><span data-i18n="order.pay">Zahlung</span> <span class="q-missing" data-i18n="order.missing">bitte wählen</span></legend>
+            <div class="picks">
+              <label class="pick"><input type="radio" name="payment_pref" value="monthly"><span class="pick-card"><span class="pick-label" data-i18n="order.pay.monthly">Monatlich</span><span class="pick-sub" data-i18n="order.pay.monthly.sub">Hardware inbegriffen</span></span></label>
+              <label class="pick"><input type="radio" name="payment_pref" value="prepay"><span class="pick-card"><span class="pick-label" data-i18n="order.pay.prepay">Jährlich</span><span class="pick-sub" data-i18n="order.pay.prepay.sub">im Voraus, 4&nbsp;% Rabatt</span></span></label>
+              <label class="pick"><input type="radio" name="payment_pref" value="purchase"><span class="pick-card"><span class="pick-label" data-i18n="order.pay.purchase">Hardware kaufen</span><span class="pick-sub" data-i18n="order.pay.purchase.sub">tieferer Monatspreis</span></span></label>
+            </div>
+          </fieldset>
+          <fieldset class="q" id="q-start">
+            <legend class="q-label"><span data-i18n="order.start">Gewünschter Beginn</span> <span class="q-missing" data-i18n="order.missing">bitte wählen</span></legend>
+            <div class="picks">
+              <label class="pick"><input type="radio" name="start" value="2027h1"><span class="pick-card"><span class="pick-label" data-i18n="order.start.2027h1">1. Halbjahr 2027</span></span></label>
+              <label class="pick"><input type="radio" name="start" value="2027h2"><span class="pick-card"><span class="pick-label" data-i18n="order.start.2027h2">2. Halbjahr 2027</span></span></label>
+              <label class="pick"><input type="radio" name="start" value="2028"><span class="pick-card"><span class="pick-label" data-i18n="order.start.2028">2028 oder später</span></span></label>
+            </div>
+          </fieldset>
+
+          <div class="order-summary" id="order-summary">
+            <p class="sr-only" id="summary-live" aria-live="polite"></p>
+            <p class="summary-empty" id="summary-empty" data-i18n="order.sum.empty">Wählen Sie ein Paket, dann steht hier Ihr Preis.</p>
+            <div id="summary-body" hidden>
+              <table class="summary-table">
+                <caption class="sr-only" data-i18n="order.sum.caption">Ihre Bestellung</caption>
+                <tbody id="summary-lines"></tbody>
+                <tfoot>
+                  <tr class="summary-total"><th scope="row" data-i18n="order.sum.total">Total pro Monat</th><td id="sum-total"></td></tr>
+                  <tr class="summary-pilot"><th scope="row" data-i18n="order.sum.pilot">Pro Monat im ersten Jahr (30&nbsp;% Pilotrabatt)</th><td id="sum-pilot"></td></tr>
+                  <tr><th scope="row" data-i18n="order.sum.setup">Einrichtung einmalig</th><td id="sum-setup"></td></tr>
+                </tfoot>
+              </table>
+              <p class="summary-note" id="summary-pay" hidden></p>
+              <p class="summary-note" data-i18n="order.sum.note">Alle Preise exkl. MWST, Laufzeit 36 Monate.</p>
+            </div>
+          </div>
+
+          <h3 class="order-part" data-i18n="order.you">Ihre Angaben</h3>
           <div class="field-row">
             <div class="field">
               <label for="f-name" data-i18n="form.name">Name</label>
@@ -537,38 +588,31 @@
               </select>
             </div>
           </div>
-          <div class="field">
-            <label for="f-plan" data-i18n="form.plan">Welches Paket interessiert Sie?</label>
-            <select id="f-plan" name="plan">
-              <option value="undecided" data-i18n="form.plan.undecided">Noch offen</option>
-              <option value="start">Start – CHF 790</option>
-              <option value="business">Business – CHF 1'890</option>
-              <option value="pro">Pro – CHF 2'890</option>
-            </select>
-          </div>
 
-          <label class="check"><input type="checkbox" name="wants_call" value="yes" checked> <span data-i18n="form.call">Ich wünsche ein kurzes Gespräch von etwa 20 Minuten</span></label>
           <label class="check consent"><input type="checkbox" name="consent" id="f-consent" required> <span data-i18n-html="form.consent">Ich bin einverstanden, dass meine Angaben zur Kontaktaufnahme gespeichert werden. Details in der <a href="/datenschutz">Datenschutzerklärung</a>.</span></label>
 
           <!-- Honeypot: humans never see or fill this -->
           <div class="hp" aria-hidden="true"><label for="f-website">Website</label><input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
 
           <p class="form-error" id="form-error" role="alert" hidden></p>
-          <button type="submit" class="btn btn-primary btn-wide" id="submit-btn" data-i18n="form.submit">Unverbindlich reservieren</button>
+          <div class="order-submit">
+            <button type="submit" class="btn btn-primary btn-wide" id="submit-btn" data-i18n="form.submit">Bestellung absenden</button>
+            <p class="order-note" data-i18n="form.note">Sie zahlen jetzt nichts. Verbindlich wird die Bestellung erst mit Ihrer Unterschrift unter dem Vertrag.</p>
+          </div>
         </form>
 
         <div class="form-success" id="form-success" hidden tabindex="-1">
           <div class="success-head">
             <svg class="success-check" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"/></svg>
             <div>
-              <h3 data-i18n="form.success.t">Danke, Ihr Pilotplatz ist vorgemerkt.</h3>
-              <p data-i18n="form.success.d">Wir melden uns innert zwei Arbeitstagen.</p>
-              <a class="btn btn-secondary btn-small" id="booking-link" href="#" target="_blank" rel="noopener" data-i18n="form.success.book">Termin direkt wählen</a>
+              <h3 data-i18n="form.success.t">Danke für Ihr Interesse am Pilot.</h3>
+              <p data-i18n="form.success.d">Wir melden uns innert zwei Arbeitstagen bei Ihnen.</p>
+              <p class="success-recap" id="success-recap"></p>
             </div>
           </div>
 
           <form id="details-form" novalidate>
-            <p class="details-intro" data-i18n="details.intro">Ein paar kurze Fragen helfen uns, das Gespräch vorzubereiten. Alle sind freiwillig.</p>
+            <p class="details-intro" data-i18n="details.intro">Ein paar kurze Fragen helfen uns, die Analyse vorzubereiten. Alle sind freiwillig.</p>
             <fieldset>
               <legend data-i18n="details.it">Wie ist Ihre IT heute organisiert?</legend>
               <div class="chips">
@@ -591,28 +635,6 @@
                 <label class="chip-opt"><input type="checkbox" name="pains" value="performance"><span data-i18n="form.pain.perf">Grosse Dateien, langsamer Zugriff</span></label>
               </div>
             </fieldset>
-            <div class="field-row">
-              <div class="field">
-                <label for="d-timeline" data-i18n="form.timeline">Wann steht eine Entscheidung an?</label>
-                <select id="d-timeline" name="timeline">
-                  <option value="" data-i18n="form.choose">Bitte wählen</option>
-                  <option value="lt6" data-i18n="form.tl.lt6">In den nächsten 6 Monaten</option>
-                  <option value="6to12" data-i18n="form.tl.6to12">In 6–12 Monaten</option>
-                  <option value="gt12" data-i18n="form.tl.gt12">Später als in 12 Monaten</option>
-                  <option value="info" data-i18n="form.tl.info">Ich informiere mich nur</option>
-                </select>
-              </div>
-              <div class="field">
-                <label for="d-payment" data-i18n="form.pay">Wie würden Sie lieber bezahlen?</label>
-                <select id="d-payment" name="payment_pref">
-                  <option value="" data-i18n="form.choose">Bitte wählen</option>
-                  <option value="monthly" data-i18n="form.pay.monthly">Monatlich, Hardware inbegriffen</option>
-                  <option value="prepay" data-i18n="form.pay.prepay">Jährlich im Voraus, 4 % Rabatt</option>
-                  <option value="purchase" data-i18n="form.pay.purchase">Hardware kaufen, tieferer Monatspreis</option>
-                  <option value="undecided" data-i18n="form.pay.undecided">Weiss noch nicht</option>
-                </select>
-              </div>
-            </div>
             <fieldset>
               <legend data-i18n="form.price">Wie beurteilen Sie die Preise?</legend>
               <div class="chips">
