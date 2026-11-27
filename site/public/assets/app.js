@@ -1,58 +1,55 @@
-/* Rechenbox landing page: language and theme switches, plan picker and two-step sign-up form.
- * Visitor statistics come from Cloudflare Web Analytics (injected at the edge, no cookies), not from this file. */
+/* Rechenbox landing page: language and theme switches, plan recommender,
+ * portal demo and two-step sign-up form. Visitor statistics come from
+ * Cloudflare Web Analytics (injected at the edge, no cookies), not from this file. */
 (function () {
   "use strict";
 
   var CONFIG = window.RECHENBOX_CONFIG || {};
   var EN = window.RECHENBOX_EN || {};
   var root = document.documentElement;
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // Strings that only exist in JavaScript. The script keeps the key of what it shows, not the sentence,
-  // so everything it has written can be written again when the language changes.
+  // Strings that only exist in JavaScript.
   var MSG = {
     de: {
       langToggle: "EN: Switch to English",
       themeToDark: "Dunkles Design einschalten",
       themeToLight: "Helles Design einschalten",
-      missing: "Bitte ausfüllen.",
-      choose: "Bitte wählen.",
+      required: "Bitte füllen Sie die markierten Felder aus.",
       email: "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
       consent: "Bitte bestätigen Sie, dass wir Ihre Angaben speichern dürfen.",
-      check: "Bitte prüfen Sie die markierten Felder.",
       network: "Die Übermittlung hat nicht geklappt. Bitte prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
       server: "Die Übermittlung hat nicht geklappt. Bitte versuchen Sie es später erneut oder schreiben Sie uns an {email}.",
       sending: "Wird gesendet…",
-      answered: "Danke für Ihre Antworten.",
-      skipped: "In Ordnung, das klären wir in der Analyse.",
-      calcResult: "Zu Ihren Antworten passt {plan}.",
-      rStart: "Einen Tag Ausfall können Sie verkraften. Dann genügt ein Server, den wir bei einem Defekt am nächsten Arbeitstag ersetzen.",
-      rSize: "Start ist für Betriebe bis 20 Mitarbeitende gedacht.",
-      rDowntime: "Fällt bei Business ein Server aus, übernehmen die zwei anderen.",
-      rHours: "Auf Störungen reagieren wir bei Business am selben Arbeitstag.",
+      skipped: "In Ordnung, das klären wir im Gespräch.",
+      calcCta: "Pilotplatz mit {plan} reservieren",
+      typedName: "Anna Meier",
+      rStart: "Ein Tag Ausfall ist für Sie verkraftbar. Dann genügt ein Server, den wir bei einem Defekt am nächsten Arbeitstag ersetzen.",
+      rSize: "Mit mehr als 20 Mitarbeitenden lohnt sich die Ausfallsicherheit von drei Servern.",
+      rDowntime: "Ein Ausfall kostet Sie Umsatz oder Arbeitszeit. Mit drei Servern arbeiten Sie weiter, wenn einer ausfällt.",
+      rHours: "Bei Business reagieren wir am selben Arbeitstag.",
       rNow: "Bei Pro erreichen uns Alarme rund um die Uhr, und wir reagieren am selben Tag, auch am Wochenende.",
-      rCritical: "Defekte Hardware ersetzen wir bei Pro innert eines Tages."
+      rCritical: "Ihr Betrieb steht ohne IT still. Bei Pro ersetzen wir defekte Hardware innert eines Tages, auch am Wochenende."
     },
     en: {
       langToggle: "DE: Auf Deutsch wechseln",
       themeToDark: "Switch to dark mode",
       themeToLight: "Switch to light mode",
-      missing: "Please fill this in.",
-      choose: "Please choose.",
+      required: "Please fill in the highlighted fields.",
       email: "Please enter a valid email address.",
       consent: "Please confirm that we may store your details.",
-      check: "Please check the highlighted fields.",
       network: "Sending failed. Please check your connection and try again.",
       server: "Sending failed. Please try again later or write to us at {email}.",
       sending: "Sending…",
-      answered: "Thank you for your answers.",
-      skipped: "All right, we will cover that in the assessment.",
-      calcResult: "Your answers point to {plan}.",
-      rStart: "You can cope with a day's outage. One server is then enough, and if it fails we replace it on the next working day.",
-      rSize: "Start is meant for firms with up to 20 staff.",
-      rDowntime: "If a server fails on Business, the other two take over.",
-      rHours: "On Business we respond to incidents on the same working day.",
-      rNow: "On Pro, alerts reach us around the clock and we respond the same day, weekends included.",
-      rCritical: "On Pro we replace faulty hardware within a day."
+      skipped: "All right, we will cover that in the call.",
+      calcCta: "Reserve a pilot slot with {plan}",
+      typedName: "Anna Meier",
+      rStart: "You can cope with a day of downtime. One server is then enough, and we replace it on the next working day if it fails.",
+      rSize: "With more than 20 staff, the failover of three servers pays off.",
+      rDowntime: "Downtime costs you revenue or working time. With three servers you keep working when one fails.",
+      rHours: "With Business we respond on the same working day.",
+      rNow: "With Pro, alerts reach us around the clock and we respond the same day, weekends included.",
+      rCritical: "Your business stops without IT. With Pro we replace faulty hardware within a day, weekends included."
     }
   };
 
@@ -71,81 +68,79 @@
   var referrerHost = "";
   try { referrerHost = document.referrer ? new URL(document.referrer).hostname : ""; } catch (e) { /* ignore */ }
 
+  function money(n) {
+    return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, lang === "en" ? "," : "'");
+  }
+  function serverMsg() { return MSG[lang].server.replace("{email}", CONFIG.contactEmail || "hallo@rechenbox.ch"); }
+  function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
   function $(id) { return document.getElementById(id); }
-  function msg(key) { return MSG[lang][key].replace("{email}", CONFIG.contactEmail || "hallo@rechenbox.ch"); }
 
   // ---------- Theme ----------
-  // Follows the system until the visitor picks one. The pick is kept for this visit only (sessionStorage, no cookie),
-  // so that a reload and the privacy page show the same theme; the script in the head applies it before the first paint.
+  // Follows the system until the visitor picks one. Not stored: the page keeps nothing on the device.
   var systemDark = window.matchMedia("(prefers-color-scheme: dark)");
-  function pickedTheme() {
-    var t = root.getAttribute("data-theme");
-    return t === "dark" || t === "light" ? t : "";
-  }
   function isDark() {
-    var picked = pickedTheme();
-    return picked ? picked === "dark" : systemDark.matches;
+    var t = root.getAttribute("data-theme");
+    return t ? t === "dark" : systemDark.matches;
   }
-  function updateTheme() {
-    // The dark render is chosen by a media query. Once the visitor has picked a theme, that choice replaces the query.
-    var picked = pickedTheme();
+  function updateThemeButton() {
+    $("theme-toggle").setAttribute("aria-label", isDark() ? MSG[lang].themeToLight : MSG[lang].themeToDark);
+    // The dark picture of the box is chosen by a media query. Once the visitor has picked a theme, the pick replaces it.
+    var picked = root.getAttribute("data-theme");
     $("hero-dark").media = picked ? (picked === "dark" ? "all" : "not all") : "(prefers-color-scheme: dark)";
-    $("theme-toggle").setAttribute("aria-label", msg(isDark() ? "themeToLight" : "themeToDark"));
-    document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) {
-      m.setAttribute("content", isDark() ? "#0e0f10" : "#ffffff");
-      m.removeAttribute("media");
-    });
+    var meta = document.querySelectorAll('meta[name="theme-color"]');
+    meta.forEach(function (m) { m.setAttribute("content", isDark() ? "#0e0f10" : "#ffffff"); m.removeAttribute("media"); });
   }
   $("theme-toggle").addEventListener("click", function () {
-    var next = isDark() ? "light" : "dark";
-    root.setAttribute("data-theme", next);
-    try { sessionStorage.setItem("theme", next); } catch (e) { /* storage is blocked: the pick lasts until the page is left */ }
-    updateTheme();
+    root.setAttribute("data-theme", isDark() ? "light" : "dark");
+    updateThemeButton();
   });
-  systemDark.addEventListener("change", updateTheme);
+  systemDark.addEventListener("change", updateThemeButton);
 
   // ---------- Language ----------
-  // German is in the markup. English replaces it from the dictionary and is undone from what was remembered.
   var originals = new Map();
-  function remember(el, kind, read) {
+  function remember(el, kind) {
     if (!originals.has(el)) originals.set(el, {});
     var store = originals.get(el);
-    if (!(kind in store)) store[kind] = read();
-    return store[kind];
-  }
-  // The text of an element with a data-i18n key, in the language in use.
-  function textOf(el) {
-    var de = remember(el, "text", function () { return el.textContent; });
-    return (lang === "en" && EN[el.getAttribute("data-i18n")]) || de;
+    if (!(kind in store)) {
+      if (kind === "text") store.text = el.textContent;
+      else if (kind === "html") store.html = el.innerHTML;
+      else store[kind] = el.getAttribute(kind.slice(5));
+    }
+    return store;
   }
 
   function applyLang() {
     var en = lang === "en";
     root.lang = en ? "en" : "de-CH";
-    document.querySelectorAll("[data-i18n]").forEach(function (el) { el.textContent = textOf(el); });
+    document.querySelectorAll("[data-i18n]").forEach(function (el) {
+      var store = remember(el, "text");
+      var val = EN[el.getAttribute("data-i18n")];
+      el.textContent = en && val ? val : store.text;
+    });
     document.querySelectorAll("[data-i18n-html]").forEach(function (el) {
-      var de = remember(el, "html", function () { return el.innerHTML; });
-      el.innerHTML = (en && EN[el.getAttribute("data-i18n-html")]) || de; // values come from our own static dictionary
+      var store = remember(el, "html");
+      var val = EN[el.getAttribute("data-i18n-html")];
+      el.innerHTML = en && val ? val : store.html; // values come from our own static dictionary
     });
     document.querySelectorAll("[data-i18n-attr]").forEach(function (el) {
       el.getAttribute("data-i18n-attr").split(";").forEach(function (pair) {
-        var attr = pair.split(":")[0];
-        var de = remember(el, attr, function () { return el.getAttribute(attr); });
-        el.setAttribute(attr, (en && EN[pair.split(":")[1]]) || de);
+        var parts = pair.split(":");
+        var store = remember(el, "attr:" + parts[0]);
+        var val = EN[parts[1]];
+        el.setAttribute(parts[0], en && val ? val : store["attr:" + parts[0]]);
       });
+    });
+    document.querySelectorAll(".amount, .amount-plain, #f-plan option").forEach(function (el) {
+      el.textContent = en ? el.textContent.replace(/(\d)'(\d)/g, "$1,$2") : el.textContent.replace(/(\d),(\d)/g, "$1'$2");
     });
     var toggle = $("lang-toggle");
     toggle.textContent = en ? "DE" : "EN";
     toggle.setAttribute("lang", en ? "de" : "en");
-    toggle.setAttribute("aria-label", msg("langToggle")); // starts with the visible text
-    updateTheme();
-    // Everything the script has written follows the switch as well.
-    updateCalc();
-    form.querySelectorAll("[aria-invalid]").forEach(function (field) { mark(field, problemOf(field)); });
-    showMessage(errorEl, errorEl.dataset.msg);
-    showMessage(detailsErr, detailsErr.dataset.msg);
-    if (doneEl.dataset.msg) doneEl.textContent = msg(doneEl.dataset.msg);
-    if (sendingBtn) sendingBtn.textContent = msg("sending");
+    toggle.setAttribute("aria-label", MSG[lang].langToggle);
+    document.title = en ? "Rechenbox – your server in your office, run by us" : "Rechenbox – Ihr Server im Büro, von uns betrieben";
+    updateThemeButton();
+    updateCalc(false);
+    if (portal.done) $("portal-typed").textContent = MSG[lang].typedName;
   }
 
   $("lang-toggle").addEventListener("click", function () {
@@ -157,8 +152,8 @@
     applyLang();
   });
 
-  // ---------- Plan picker ----------
-  // Start is one server; Business and Pro share the same hardware and differ in support.
+  // ---------- Recommender ----------
+  // Start is one box; Business and Pro share the same hardware and differ in support.
   var QUESTIONS = ["size", "downtime", "response"];
   var recommendedPlan = "";
 
@@ -188,106 +183,126 @@
 
   function updateCalc() {
     var a = {};
-    var done = true;
-    QUESTIONS.forEach(function (q) { a[q] = answer(q); if (!a[q]) done = false; });
-    var r = done ? recommend(a) : null;
-    recommendedPlan = r ? r.plan : "";
+    var answered = 0;
+    QUESTIONS.forEach(function (q) { a[q] = answer(q); if (a[q]) answered++; });
+    var done = answered === QUESTIONS.length;
     $("calc-pending").hidden = done;
     $("calc-done").hidden = !done;
-    // Mark the plan in the table: its cells get the ink line and the words beside the name, its button is the filled one.
-    document.querySelectorAll("#plans [data-plan]").forEach(function (cell) {
-      cell.classList.toggle("is-recommended", cell.getAttribute("data-plan") === recommendedPlan);
-    });
-    document.querySelectorAll("[data-plan-select]").forEach(function (link) {
-      var fits = link.getAttribute("data-plan-select") === recommendedPlan;
-      link.classList.toggle("btn-primary", fits);
-      link.classList.toggle("btn-secondary", !fits);
+
+    var r = done ? recommend(a) : null;
+    recommendedPlan = r ? r.plan : "";
+    document.querySelectorAll(".plan").forEach(function (card) {
+      var plan = card.getAttribute("data-plan");
+      var lead = r ? plan === r.plan : plan === "business";
+      card.classList.toggle("recommended", !!r && plan === r.plan);
+      var btn = card.querySelector(".plan-btn");
+      btn.classList.toggle("btn-primary", lead);
+      btn.classList.toggle("btn-secondary", !lead);
     });
     if (!r) return;
 
-    var sentences = [msg("calcResult").replace("{plan}", PLAN_NAMES[r.plan])];
-    r.reasons.forEach(function (key) { sentences.push(msg(key)); });
-    $("calc-text").textContent = sentences.join(" ");
-    // The button carries the same words as the plan's button in the table.
-    $("calc-cta").textContent = document.querySelector('[data-plan-select="' + r.plan + '"]').textContent;
+    $("calc-plan-name").textContent = PLAN_NAMES[r.plan];
+    $("calc-cta").textContent = MSG[lang].calcCta.replace("{plan}", PLAN_NAMES[r.plan]);
+    var list = $("calc-reasons");
+    list.textContent = "";
+    r.reasons.forEach(function (key) {
+      var li = document.createElement("li");
+      li.textContent = MSG[lang][key];
+      list.appendChild(li);
+    });
   }
 
   QUESTIONS.forEach(function (q) {
     document.querySelectorAll('input[name="calc-' + q + '"]').forEach(function (el) {
-      el.addEventListener("change", updateCalc);
+      el.addEventListener("change", function () { updateCalc(true); });
     });
   });
 
-  // ---------- Plan buttons ----------
-  // Plain links to the form; on the way they preselect the plan there.
+  // ---------- Plan buttons ("fake door") ----------
   var planSelect = $("f-plan");
-  function choosePlan(plan) {
+  function goToForm(plan) {
     if (plan && planSelect.querySelector('option[value="' + plan + '"]')) planSelect.value = plan;
+    $("anmelden").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
+    setTimeout(function () { $("f-name").focus({ preventScroll: true }); }, reduceMotion ? 0 : 450);
   }
-  $("calc-cta").addEventListener("click", function () { choosePlan(recommendedPlan); });
-  document.querySelectorAll("[data-plan-select]").forEach(function (link) {
-    link.addEventListener("click", function () { choosePlan(link.getAttribute("data-plan-select")); });
+  $("calc-cta").addEventListener("click", function () { goToForm(recommendedPlan); });
+  document.querySelectorAll("[data-plan-select]").forEach(function (btn) {
+    btn.addEventListener("click", function () { goToForm(btn.getAttribute("data-plan-select")); });
   });
 
-  // ---------- Messages and buttons the script writes ----------
-  // A message line shows the text of a key from MSG, or nothing.
-  function showMessage(el, key) {
-    el.dataset.msg = key || "";
-    el.textContent = key ? msg(key) : "";
-    el.hidden = !key;
+  // ---------- Portal demo: the page's one orchestrated moment ----------
+  var portal = { run: 0, done: false };
+  function portalReset() {
+    $("portal-dialog").classList.remove("open");
+    $("portal-typed").textContent = "";
+    $("portal-c1").classList.remove("on");
+    $("portal-c2").classList.remove("on");
+    $("portal-new").classList.remove("added");
+    $("portal-toast").classList.remove("show");
   }
-  // A button that is sending is disabled and says so; afterwards it gets its own label back, in the language in use.
-  var sendingBtn = null;
-  function setSending(btn, on) {
-    sendingBtn = on ? btn : null;
-    btn.disabled = on;
-    btn.textContent = on ? msg("sending") : textOf(btn);
+  function portalFinal() {
+    portalReset();
+    $("portal-typed").textContent = MSG[lang].typedName;
+    $("portal-new").classList.add("added");
+    portal.done = true;
   }
-  function failure(err) { return err && err.message === "server" ? "server" : "network"; }
+  async function press(id) {
+    var el = $(id);
+    el.classList.add("pressed");
+    await sleep(180);
+    el.classList.remove("pressed");
+  }
+  async function playPortal() {
+    if (reduceMotion) { portalFinal(); return; }
+    var run = ++portal.run;
+    var alive = function () { return run === portal.run; };
+    portalReset();
+    portal.done = false;
+    await sleep(500); if (!alive()) return;
+    await press("portal-add"); if (!alive()) return;
+    $("portal-dialog").classList.add("open");
+    await sleep(450);
+    var name = MSG[lang].typedName;
+    for (var i = 1; i <= name.length; i++) {
+      if (!alive()) return;
+      $("portal-typed").textContent = name.slice(0, i);
+      await sleep(70);
+    }
+    await sleep(350); if (!alive()) return;
+    $("portal-c1").classList.add("on");
+    await sleep(380); if (!alive()) return;
+    $("portal-c2").classList.add("on");
+    await sleep(500); if (!alive()) return;
+    await press("portal-create"); if (!alive()) return;
+    $("portal-dialog").classList.remove("open");
+    await sleep(250); if (!alive()) return;
+    $("portal-new").classList.add("added");
+    $("portal-toast").classList.add("show");
+    portal.done = true;
+    await sleep(2800); if (!alive()) return;
+    $("portal-toast").classList.remove("show");
+  }
+  if ("IntersectionObserver" in window) {
+    var portalIo = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) { portalIo.disconnect(); playPortal(); }
+    }, { threshold: 0.55 });
+    portalIo.observe($("portal-mock"));
+  } else {
+    portalFinal();
+  }
+  $("portal-replay").addEventListener("click", playPortal);
 
   // ---------- Sign-up, step 1 ----------
   var form = $("signup-form");
   var errorEl = $("form-error");
   var submitBtn = $("submit-btn");
   var signupRef = null;
-  var REQUIRED = ["name", "company", "email", "industry", "size", "consent"].map(function (n) { return form.elements[n]; });
 
-  // What is wrong with a required field: the key of its message, or "" when it is fine.
-  function problemOf(field) {
-    if (field.type === "checkbox") return field.checked ? "" : "consent";
-    var value = field.value.trim();
-    if (!value) return field.tagName === "SELECT" ? "choose" : "missing";
-    if (field.type === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)) return "email";
-    return "";
+  function showError(el, msg, field) {
+    el.textContent = msg;
+    el.hidden = false;
+    if (field) field.focus();
   }
-  // A field with a problem gets a red border and a sentence under it. Both stay until the field is valid.
-  function mark(field, key) {
-    var note = $(field.id + "-error");
-    if (!key) {
-      field.removeAttribute("aria-invalid");
-      field.removeAttribute("aria-describedby");
-      if (note) note.remove();
-      return;
-    }
-    if (!note) {
-      note = document.createElement("p");
-      note.id = field.id + "-error";
-      note.className = "field-error";
-      (field.closest(".check") || field).after(note);
-    }
-    note.textContent = msg(key);
-    field.setAttribute("aria-invalid", "true");
-    field.setAttribute("aria-describedby", note.id);
-  }
-  function clearWhenValid(ev) {
-    var field = ev.target;
-    if (!field.hasAttribute("aria-invalid") || problemOf(field)) return;
-    mark(field, "");
-    // The line above the button goes with the last marked field.
-    if (errorEl.dataset.msg === "check" && !form.querySelector("[aria-invalid]")) showMessage(errorEl, "");
-  }
-  form.addEventListener("input", clearWhenValid);
-  form.addEventListener("change", clearWhenValid);
 
   function collect() {
     var fd = new FormData(form);
@@ -307,63 +322,71 @@
     };
   }
 
+  function validate(data) {
+    form.querySelectorAll("[aria-invalid]").forEach(function (el) { el.removeAttribute("aria-invalid"); });
+    var missing = ["name", "company", "email", "industry", "size"].filter(function (n) { return !data[n]; }).map(function (n) { return form.elements[n]; });
+    if (missing.length) {
+      missing.forEach(function (el) { el.setAttribute("aria-invalid", "true"); });
+      return { msg: MSG[lang].required, field: missing[0] };
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(data.email)) {
+      form.elements.email.setAttribute("aria-invalid", "true");
+      return { msg: MSG[lang].email, field: form.elements.email };
+    }
+    if (!data.consent) return { msg: MSG[lang].consent, field: $("f-consent") };
+    return null;
+  }
+
   form.addEventListener("submit", function (ev) {
     ev.preventDefault();
-    var invalid = REQUIRED.filter(function (field) {
-      var key = problemOf(field);
-      mark(field, key);
-      return key;
-    });
-    showMessage(errorEl, invalid.length ? "check" : "");
-    if (invalid.length) { invalid[0].focus(); return; }
+    errorEl.hidden = true;
+    var data = collect();
+    var problem = validate(data);
+    if (problem) { showError(errorEl, problem.msg, problem.field); return; }
 
-    setSending(submitBtn, true);
-    fetch("/api/signup", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(collect()) })
+    var label = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = MSG[lang].sending;
+    fetch("/api/signup", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) })
       .then(function (res) { if (!res.ok) throw new Error("server"); return res.json(); })
       .then(function (json) {
         signupRef = json && json.ref ? json.ref : null;
         form.hidden = true;
-        $("anmelden").classList.add("is-sent");
         var book = $("booking-link");
         if (CONFIG.bookingUrl) {
           book.href = CONFIG.bookingUrl;
         } else {
-          book.parentNode.hidden = true;
+          book.hidden = true;
         }
-        if (!signupRef) details.hidden = true;
-        showConfirmation($("form-success"));
+        if (!signupRef) $("details-form").hidden = true;
+        var ok = $("form-success");
+        ok.hidden = false;
+        // Bring the confirmation to the top of the window first: the questions below it are long, and a plain
+        // focus() leaves its heading above the window on phones and small laptops.
+        ok.scrollIntoView({ block: "start", behavior: "auto" });
+        ok.focus({ preventScroll: true });
       })
-      .catch(function (err) { showMessage(errorEl, failure(err)); })
-      .finally(function () { setSending(submitBtn, false); });
+      .catch(function (err) {
+        showError(errorEl, err && err.message === "server" ? serverMsg() : MSG[lang].network);
+      })
+      .finally(function () { submitBtn.disabled = false; submitBtn.textContent = label; });
   });
-
-  // The confirmation has to be seen: its top goes under the header (scroll-padding on <html> leaves the room),
-  // and the focus moves to the given element without scrolling a second time.
-  function showConfirmation(focusEl) {
-    var ok = $("form-success");
-    ok.hidden = false;
-    ok.scrollIntoView({ block: "start" });
-    focusEl.focus({ preventScroll: true });
-  }
 
   // ---------- Sign-up, step 2: optional details ----------
   var details = $("details-form");
   var detailsErr = $("details-error");
   var detailsBtn = $("details-btn");
-  var doneEl = $("details-done");
 
-  // After the answers are sent or skipped, one line closes the follow-up and takes the focus.
-  function finishDetails(key) {
+  function finishDetails(text) {
     details.hidden = true;
-    doneEl.dataset.msg = key;
-    doneEl.textContent = msg(key);
-    doneEl.hidden = false;
-    showConfirmation(doneEl);
+    var done = $("details-done");
+    if (text) { done.removeAttribute("data-i18n"); done.textContent = text; }
+    done.hidden = false;
   }
 
   details.addEventListener("submit", function (ev) {
     ev.preventDefault();
-    showMessage(detailsErr, "");
+    detailsErr.hidden = true;
     var fd = new FormData(details);
     var body = {
       ref: signupRef,
@@ -374,14 +397,16 @@
       price_view: fd.get("price_view") || "",
       message: (fd.get("message") || "").trim()
     };
-    setSending(detailsBtn, true);
+    var label = detailsBtn.textContent;
+    detailsBtn.disabled = true;
+    detailsBtn.textContent = MSG[lang].sending;
     fetch("/api/details", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
       .then(function (res) { if (!res.ok) throw new Error("server"); })
-      .then(function () { finishDetails("answered"); })
-      .catch(function (err) { showMessage(detailsErr, failure(err)); })
-      .finally(function () { setSending(detailsBtn, false); });
+      .then(function () { finishDetails(); })
+      .catch(function (err) { showError(detailsErr, err && err.message === "server" ? serverMsg() : MSG[lang].network); })
+      .finally(function () { detailsBtn.disabled = false; detailsBtn.textContent = label; });
   });
-  $("details-skip").addEventListener("click", function () { finishDetails("skipped"); });
+  $("details-skip").addEventListener("click", function () { finishDetails(MSG[lang].skipped); });
 
   // ---------- Footer contact ----------
   if (CONFIG.contactEmail) $("contact-link").href = "mailto:" + CONFIG.contactEmail;
@@ -394,5 +419,6 @@
 
   // ---------- Start ----------
   applyLang();
-  root.classList.add("app"); // the script has taken over: the switches show, and the guard in the head steps aside
+  // From here on the forms are handled above; the small script in the page head stops blocking them.
+  root.classList.add("app");
 })();

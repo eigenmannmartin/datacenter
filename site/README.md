@@ -15,7 +15,7 @@ python3 docs/rack.py --shot studio-light --samples 192 --scale 1.0 --out out/stu
 python3 docs/rack.py --shot studio-dark  --samples 192 --scale 1.0 --out out/studio-dark.png
 ```
 
-then resize to 1200 x 1500 px and save as WebP with the alpha channel. The names of the parts on the picture are text in the page; their positions are in one commented block of `public/assets/styles.css` and have to be set again if the camera or the order of the devices changes.
+then resize to 1200 x 1500 px and save as WebP with the alpha channel. On load the box settles into place, a sheen crosses its glass door and the status lights come on; after that only the lights keep moving (nothing moves for visitors who ask for reduced motion). Sheen and lights are drawn over the picture: the lights' positions are the `--x` / `--y` values in `public/index.html`, the outline of the door is the `clip-path` of `.rack-sheen` in `public/assets/styles.css`. Both are shares of the picture's size and have to be set again if the camera or the order of the devices changes.
 
 No cookies. The Schibsted Grotesk font is self-hosted in `public/assets/fonts/` (SIL Open Font License, licence file alongside). Visitor statistics come from Cloudflare Web Analytics, which Cloudflare injects at the edge; the site code contains no tracking. Light and dark mode follow the system; the switch in the header overrides it for the current visit only.
 
@@ -104,7 +104,8 @@ npx wrangler pages dev
 - [ ] Set `bookingUrl` and `contactPhone` in `public/assets/config.js`, and make sure the mailbox `hallo@rechenbox.ch` exists
 - [ ] Check the name "Rechenbox" in Zefix and Swissreg
 - [ ] Add an "About us" section with the founders' names, photos and background: the page review flagged this as the biggest trust gap for this audience
-- [ ] Confirm two statements the page words as plans: a sync program for PC, Mac and phone ("Vorgesehen ist ..."), and that files stay with the old provider until the customer has checked the move ("sollen ... bleiben")
-- [ ] Confirm the call of "about 20 minutes" offered in the form, and decide what the page says about business software (accounting, practice, CAD) on the box: it now says nothing
-- [ ] Measure power draw and noise in the lab; the page gives the design targets and says both are not measured yet
+- [ ] Check four statements the page makes as given, which `docs/hardware.md` describes as planned: the sync app for PC, Mac and phone with sharing by link, sign-in for remote access confirmed on the phone, business software (accounting, practice, CAD licence server) running on the box, and that files stay with the old provider until the customer has checked the move
+- [ ] The task durations in the portal section are labelled as targets and the portal picture as a draft: measure them once the portal exists
+- [ ] Measure power draw and noise in the lab; the page gives the design target for power and says both are not measured yet
+- [ ] Decide whether "I'd like a short call" in the form stays pre-ticked: it raises the share of sign-ups that ask for a call, which is one of the go/no-go figures
 - [ ] Submit a test sign-up on the live site, find it in the D1 table, then delete it there
