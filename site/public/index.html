@@ -269,7 +269,7 @@
         <p class="section-lead" data-i18n="ai.lead">Wer einen Vertrag in einen Chatbot im Internet kopiert, gibt ihn aus der Hand. Mit der Option Private KI läuft ein Sprachmodell (LLM) auf einem eigenen Gerät in Ihrem Büro. Es beantwortet Fragen zu Ihren Dokumenten, und KI-Agenten erledigen damit wiederkehrende Arbeit.</p>
         <div class="ai-grid">
           <figure class="portal-demo ai-demo">
-            <div class="portal" id="agent-mock" role="img" aria-label="Beispiel: Ein KI-Agent ordnet 14 neue Belege den Mandanten zu. Zwei unklare Belege bleiben im Eingang, die Ablage der übrigen zwölf gibt eine Mitarbeiterin frei." data-i18n-attr="aria-label:ai.mockLabel">
+            <div class="portal" id="agent-mock" role="img" aria-label="Beispiel: Ein KI-Agent liest 14 neue Belege und ordnet 12 davon den Mandanten zu. Zwei unklare Belege bleiben im Eingang. Eine Mitarbeiterin gibt die Ablage der zwölf Belege frei." data-i18n-attr="aria-label:ai.mockLabel">
               <div class="portal-bar" aria-hidden="true">
                 <span class="portal-firm" data-i18n="ai.mock.title">Private KI</span>
                 <span class="ok-chip"><span class="led-dot"></span><span data-i18n="ai.mock.local">Läuft im Büro</span></span>
@@ -281,8 +281,8 @@
                 </div>
                 <ol class="agent-steps">
                   <li id="agent-s1"><span class="step-icon"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg><span class="spin"></span></span><span data-i18n="ai.mock.s1">14 neue Belege im Ordner «Eingang» gelesen</span></li>
-                  <li id="agent-s2"><span class="step-icon"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg><span class="spin"></span></span><span><span data-i18n="ai.mock.s2">12 Belege einem Mandanten zugeordnet</span><small>Muster Bau AG 7, Muster Immobilien GmbH 5</small></span></li>
-                  <li id="agent-s3"><span class="step-icon"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg><span class="spin"></span></span><span data-i18n="ai.mock.s3">2 Belege unklar, sie bleiben im Eingang</span></li>
+                  <li id="agent-s2"><span class="step-icon"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg><span class="spin"></span></span><span><span data-i18n="ai.mock.s2">12 Belege den Mandanten zugeordnet</span><small data-i18n="ai.mock.s2sub">Muster&nbsp;Bau&nbsp;AG: 7, Muster&nbsp;Immobilien&nbsp;GmbH: 5</small></span></li>
+                  <li id="agent-s3"><span class="step-icon"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg><span class="spin"></span></span><span data-i18n="ai.mock.s3">2 unklare Belege im Eingang belassen</span></li>
                 </ol>
                 <div class="agent-approve" id="agent-approve">
                   <p data-i18n="ai.mock.ask">12 Belege in die Mandantenordner ablegen?</p>
@@ -292,7 +292,7 @@
                     <span class="chip chip-new" data-i18n="ai.mock.done">Freigegeben</span>
                   </span>
                 </div>
-                <div class="portal-toast" id="agent-toast" data-i18n="ai.mock.toast">12 Belege abgelegt. Der Schritt steht im Protokoll.</div>
+                <p class="agent-result" id="agent-result" data-i18n="ai.mock.toast">12 Belege abgelegt. Der Schritt steht im Protokoll.</p>
               </div>
             </div>
             <figcaption><span data-i18n="ai.caption">Beispiel, Entwurf der Oberfläche</span> <button type="button" class="link-btn" id="agent-replay" data-i18n="portal.replay">Nochmals zeigen</button></figcaption>
@@ -300,8 +300,8 @@
 
           <dl class="features">
             <div><dt data-i18n="ai.f1.t">Fragen an Ihre Dokumente</dt><dd data-i18n="ai.f1.d">Ihre Mitarbeitenden fragen in normalen Sätzen, zum Beispiel nach der Kündigungsfrist in einem Mietvertrag oder dem Total einer Offerte. Die Antwort nennt das Dokument, aus dem sie stammt.</dd></div>
-            <div><dt data-i18n="ai.f2.t">KI-Agenten für wiederkehrende Arbeit</dt><dd data-i18n="ai.f2.d">Ein Agent arbeitet eine Aufgabe in mehreren Schritten ab. Zum Beispiel ordnet er neue Belege den Mandantenordnern zu, erfasst die Beträge aus Rechnungen oder fasst ein langes Dokument zusammen.</dd></div>
-            <div><dt data-i18n="ai.f3.t">Zugriffsrechte und Freigaben</dt><dd data-i18n="ai.f3.d">Die KI hält sich an die Zugriffsrechte aus dem Portal. Eine Lernende erhält also keine Antworten aus dem Ordner der Geschäftsleitung. Bevor ein Agent etwas versendet oder Daten ändert, gibt eine Person frei, und jeder Schritt wird protokolliert.</dd></div>
+            <div><dt data-i18n="ai.f2.t">KI-Agenten für wiederkehrende Arbeit</dt><dd data-i18n="ai.f2.d">Ein Agent arbeitet eine Aufgabe in mehreren Schritten ab. Zum Beispiel ordnet er neue Belege den Mandantenordnern zu, liest die Beträge aus Rechnungen heraus oder fasst ein langes Dokument zusammen.</dd></div>
+            <div><dt data-i18n="ai.f3.t">Zugriffsrechte und Freigabe durch eine Person</dt><dd data-i18n="ai.f3.d">Die KI hält sich an die Zugriffsrechte aus dem Portal. Eine Lernende erhält also keine Antworten aus dem Ordner der Geschäftsleitung. Bevor ein Agent Dateien ablegt oder Daten ändert, muss eine Person den Schritt freigeben. Jeder Schritt wird protokolliert.</dd></div>
             <div><dt data-i18n="ai.f4.t">Eigenes Gerät, fester Preis</dt><dd data-i18n="ai.f4.d">Das Sprachmodell läuft auf einem eigenen Gerät, damit eine aufwendige KI-Aufgabe die Anwendungen auf der Box nicht bremst. Die Option kostet CHF&nbsp;590 pro Monat und lässt sich zu jedem Paket dazunehmen.</dd></div>
           </dl>
         </div>

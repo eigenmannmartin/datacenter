@@ -298,7 +298,6 @@
   function agentReset() {
     AGENT_STEPS.forEach(function (id) { $(id).classList.remove("shown", "working"); });
     $("agent-approve").classList.remove("shown", "approved");
-    $("agent-toast").classList.remove("show");
   }
   function agentFinal() {
     agentReset();
@@ -322,9 +321,6 @@
     await sleep(1200); if (!alive()) return;
     await press("agent-ok"); if (!alive()) return;
     $("agent-approve").classList.add("approved");
-    $("agent-toast").classList.add("show");
-    await sleep(2800); if (!alive()) return;
-    $("agent-toast").classList.remove("show");
   }
   // With reduced motion the finished state shows at once; otherwise the demo starts when the card is in view.
   if (reduceMotion || !("IntersectionObserver" in window)) {
